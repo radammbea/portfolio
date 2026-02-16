@@ -185,6 +185,57 @@
             color: #777;
             font-size: 14px;
         }
+        #contact {
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+#contact h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+#contact ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+#contact ul li {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+#contact form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+    gap: 10px;
+}
+
+#contact input, #contact textarea {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#contact button {
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#contact button:hover {
+    background-color: #0056b3;
+}
+
     </style>
 </head>
 
@@ -372,6 +423,31 @@
             </div>
         </div>
     </div>
+</section>
+
+<section id="contact">
+    <h2>Me contacter</h2>
+    <p>Vous pouvez me joindre via les moyens suivants :</p>
+
+    <ul>
+        <li>Email : <a href="mailto:r.adammbea@gmailcom">r.adammbea@gmail.Com</a></li>
+        <li>Téléphone : <a href="tel:+33753022871">+33 07 53 02 28 71</a></li>
+        <li>LinkedIn : <a href="https://www.linkedin.com/in/adam-mbea/" target="_blank">Mon profil LinkedIn</a></li>
+    </ul>
+
+    <h3>Ou envoyez-moi un message :</h3>
+    <form action="https://formspree.io/f/xxxxx" method="POST">
+        <label for="name">Nom :</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message :</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Envoyer</button>
+    </form>
 </section>
 
 <footer>

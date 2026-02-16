@@ -2,47 +2,100 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Portfolio – Ton Nom</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple – Accueil</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f4f6f8;
-        }
-        h1 { color: #2c3e50; }
-        section {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
+        body { margin: 0; font-family: Arial, sans-serif; }
+        header, footer { background: #f8f8f8; padding: 10px 20px; }
+        nav ul { list-style: none; display: flex; gap: 15px; padding: 0; margin: 0; }
+        nav a { text-decoration: none; color: black; font-weight: bold; }
+        .hero { padding: 40px; text-align: center; background: #fff; }
+        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 40px; }
+        .product-card { text-align: center; }
+        .product-card img { max-width: 100%; height: auto; }
+        footer { font-size: 14px; line-height: 1.5; }
+        .footer-section { margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-<h1>Ton Nom</h1>
-<p>Étudiant(e) en comptabilité & finance | Audit | Conseil</p>
+<!-- HEADER / NAVIGATION -->
+<header>
+    <nav>
+        <ul>
+            <li><a href="#">Store</a></li>
+            <li><a href="#">Mac</a></li>
+            <li><a href="#">iPad</a></li>
+            <li><a href="#">iPhone</a></li>
+            <li><a href="#">Watch</a></li>
+            <li><a href="#">AirPods</a></li>
+            <li><a href="#">TV & Maison</a></li>
+            <li><a href="#">Accessoires</a></li>
+            <li><a href="#">Assistance</a></li>
+        </ul>
+    </nav>
+</header>
 
-<section>
-    <h2>À propos</h2>
-    <p>Présentation courte de ton profil, ton projet pro, ce que tu recherches.</p>
+<!-- HERO / GRAND BANNIÈRE -->
+<section class="hero">
+    <h1>Bienvenue chez Apple</h1>
+    <p>Découvrez nos derniers produits — iPhone, Mac, iPad, Watch et plus encore.</p>
 </section>
 
-<section>
-    <h2>Projets</h2>
-    <ul>
-        <li>Analyse financière – cas pratique</li>
-        <li>Audit – mission universitaire</li>
-    </ul>
+<!-- PRODUITS PHARES -->
+<section class="products">
+    <div class="product-card">
+        <h2>iPhone</h2>
+        <!-- Exemple image (à remplacer) -->
+        <img src="iphone-placeholder.jpg" alt="iPhone">
+        <p><a href="#">En savoir plus</a></p>
+    </div>
+
+    <div class="product-card">
+        <h2>MacBook Pro</h2>
+        <img src="macbook-placeholder.jpg" alt="MacBook Pro">
+        <p><a href="#">En savoir plus</a></p>
+    </div>
+
+    <div class="product-card">
+        <h2>Apple Watch</h2>
+        <img src="watch-placeholder.jpg" alt="Apple Watch">
+        <p><a href="#">En savoir plus</a></p>
+    </div>
+
+    <div class="product-card">
+        <h2>AirPods</h2>
+        <img src="airpods-placeholder.jpg" alt="AirPods">
+        <p><a href="#">En savoir plus</a></p>
+    </div>
 </section>
 
-<section>
-    <h2>Contact</h2>
-    <p>Email : tonemail@email.com</p>
-    <p>LinkedIn : lien vers ton profil</p>
-</section>
+<!-- FOOTER COMPLÈTE -->
+<footer>
+    <div class="footer-section">
+        <strong>Apple</strong><br>
+        <a href="#">À propos d'Apple</a> •
+        <a href="#">Responsabilité</a> •
+        <a href="#">Presse</a>
+    </div>
+
+    <div class="footer-section">
+        <strong>Magasin en ligne</strong><br>
+        <a href="#">Store</a> •
+        <a href="#">Financement</a> •
+        <a href="#">Reprise</a>
+    </div>
+
+    <div class="footer-section">
+        <strong>Assistance</strong><br>
+        <a href="#">Support</a> •
+        <a href="#">Contact</a>
+    </div>
+
+    <div class="footer-section">
+        <small>© 2026 Apple Inc. Tous droits réservés.</small>
+    </div>
+</footer>
 
 </body>
 </html>
-

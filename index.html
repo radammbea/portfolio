@@ -2,75 +2,360 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Adam Mbea</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            color: #333;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: #1f2933;
+            color: white;
+            padding: 40px 20px;
+            display: flex;            /* Flexbox pour aligner photo et texte */
+            align-items: center;      /* Centrer verticalement */
+            gap: 20px;                /* Espace entre photo et texte */
+            text-align: left;         /* Texte aligné à gauche */
+        }
+
+        header .profile-photo {
+            width: 120px;
+            height: 150px;
+            border-radius: 0%;
+            object-fit: cover;
+            margin: 0;                /* Supprime le centrage */
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        header .header-text h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        header .header-text p {
+            margin: 5px 0 0 0;
+            font-size: 1rem;
+        }
+
+        header .btn-cv {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #f59e0b;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        header .btn-cv:hover {
+            background-color: #d97706;
+            transform: translateY(-2px);
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        /* ===== CARTES ===== */
+        .cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+            background: #e0f0ff;
+        }
+
+        /* ===== HEADER DES CARDS ===== */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .titles {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .titles h3,
+        .titles h4 {
+            margin: 0;
+        }
+
+        .titles .year {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* ===== CHEVRON ===== */
+        .chevron {
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid #6b7280;
+            border-bottom: 2px solid #6b7280;
+            transform: rotate(45deg);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .chevron {
+            transform: rotate(225deg);
+        }
+
+        /* ===== CONTENU MASQUÉ ===== */
+        .card-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+        }
+
+        .card:hover .card-content {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 10px;
+        }
+
+        /* ===== AVATARS ===== */
+        .avatar {
+            min-width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card:hover .avatar {
+            transform: scale(1.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
 </head>
+
 <body>
 
-    <!-- Navigation -->
-    <header>
-        <nav class="navbar">
-            <div class="logo">MonLogo</div>
-            <ul class="menu">
-                <li><a href="#accueil">Accueil</a></li>
-                <li><a href="#projets">Projets</a></li>
-                <li><a href="#skills">Compétences</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+    <img src="C:\Users\Lenovo\Pictures\c3971179-816e-4f8d-b977-3d145fa7c37c.jpg" alt="Photo d'Adam Mbea" class="profile-photo">
+    <div class="header-text">
+        <h1>Adam Mbea</h1>
+        <p>Accompagner l'optimisation de la performance | Soutenir la prise de décision des entreprises</p>
+        <a href="cv/Adam_Mbea_CV.pdf" download class="btn-cv">Télécharger le CV</a>
+    </div>
+</header>
 
-    <!-- Section Héros (produits / présentation) -->
-    <section id="accueil" class="hero">
-        <div class="hero-content">
-            <h1>Bienvenue sur mon Portfolio</h1>
-            <p>Étudiant | Développeur | Finance & Audit</p>
-            <a href="#projets" class="btn">Voir mes projets</a>
+<section id="about">
+    <h2>À propos de moi</h2>
+    <p style="text-align: justify;">
+        Après une formation en comptabilité et finance d'entreprise, durant laquelle j'ai acquis de solides bases en
+        comptabilité et en analyse financière, j'ai décidé de me spécialiser dans l'audit interne et le contrôle de 
+        gestion pour approfondir mes compétences et transformer les 
+        données financières et extra-financières en informations stratégiques.
+    </p>
+</section>
+
+<section id="works">
+    <h2>Expériences</h2>
+    <div class="cards">
+        <!-- Card 1 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="header-left">
+                    <div class="avatar">
+                        <img src="images/kactus.jpg" alt="Kactus">
+                    </div>
+                    <div class="titles">
+                        <h3>Chargé de facturation</h3>
+                        <h4>Kactus</h4>
+                        <span class="year">2022</span>
+                    </div>
+                </div>
+                <span class="chevron"></span>
+            </div>
+            <div class="card-content">
+                <p>
+                    Kactus est une entreprise spécialisée qui aide les organisations à organiser facilement leurs 
+                    évènements professionnels. En tant que stagiaire chargé de facturation mes missions 
+                    consistaient à éditer les factures.
+                </p>
+            </div>
         </div>
-    </section>
 
-    <!-- Section Produits / Projets -->
-    <section id="projets" class="grid-section">
-        <h2>Projets en Vedette</h2>
-        <div class="grid-container">
-            <div class="grid-item">
-                <h3>Projet 1</h3>
-                <p>Description courte du projet 1.</p>
+        <!-- Card 2 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="header-left">
+                    <div class="avatar">
+                        <img src="images/compta.jpg" alt="Comptabilité">
+                    </div>
+                    <div class="titles">
+                        <h3>Collaborateur comptable</h3>
+                        <h4>Entreprise</h4>
+                        <span class="year">2021</span>
+                    </div>
+                </div>
+                <span class="chevron"></span>
             </div>
-            <div class="grid-item">
-                <h3>Projet 2</h3>
-                <p>Description courte du projet 2.</p>
-            </div>
-            <div class="grid-item">
-                <h3>Projet 3</h3>
-                <p>Description courte du projet 3.</p>
+            <div class="card-content">
+                <p>
+                    Analyse complète d’un groupe, étude de la rentabilité, structure financière
+                    et recommandations stratégiques.
+                </p>
             </div>
         </div>
-    </section>
 
-    <!-- Section Compétences -->
-    <section id="skills" class="skills-section">
-        <h2>Compétences</h2>
-        <ul class="skills-list">
-            <li>HTML & CSS</li>
-            <li>Javascript</li>
-            <li>Audit & Finance</li>
-            <li>Git & GitHub</li>
-        </ul>
-    </section>
+        <!-- Card 3 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="header-left">
+                    <div class="avatar">
+                        <img src="images/admin.jpg" alt="Administratif">
+                    </div>
+                    <div class="titles">
+                        <h3>Job étudiant – Gestion administrative</h3>
+                        <h4>Entreprise</h4>
+                        <span class="year">2020</span>
+                    </div>
+                </div>
+                <span class="chevron"></span>
+            </div>
+            <div class="card-content">
+                <p>
+                    Suivi administratif, gestion de données et organisation des tâches.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <!-- Section Contact -->
-    <section id="contact" class="contact-section">
-        <h2>Contact</h2>
-        <p>Email : tonemail@example.com</p>
-        <p>LinkedIn : <a href="#">Ton Profil LinkedIn</a></p>
-    </section>
+<section id="education">
+    <h2>Formation</h2>
+    <div class="cards">
+        <!-- Formation 1 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="header-left">
+                    <div class="avatar">
+                        <img src="images/tbs.jpg" alt="TBS">
+                    </div>
+                    <div class="titles">
+                        <h3>Mastère Audit interne & Contrôle de Gestion</h3>
+                        <h4>TBS Education</h4>
+                        <span class="year">2023</span>
+                    </div>
+                </div>
+                <span class="chevron"></span>
+            </div>
+            <div class="card-content">
+                <p>Formation spécialisée</p>
+            </div>
+        </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>© 2026 Mon Portfolio • Tous droits réservés</p>
-    </footer>
+        <!-- Formation 2 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="header-left">
+                    <div class="avatar">
+                        <img src="images/edc.jpg" alt="EDC">
+                    </div>
+                    <div class="titles">
+                        <h3>Programme Grande École – 4e année</h3>
+                        <h4>EDC Paris Business School</h4>
+                        <span class="year">2022</span>
+                    </div>
+                </div>
+                <span class="chevron"></span>
+            </div>
+        </div>
+
+        <!-- Formation 3 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="header-left">
+                    <div class="avatar">
+                        <img src="images/ucac.jpg" alt="UCAC">
+                    </div>
+                    <div class="titles">
+                        <h3>Master Comptabilité et Finance d'Entreprise</h3>
+                        <h4>Université Catholique d'Afrique Centrale</h4>
+                        <span class="year">2020-2022</span>
+                    </div>
+                </div>
+                <span class="chevron"></span>
+            </div>
+            <div class="card-content">
+                <p>
+                    Formation de 2 ans orientée comptabilité, finance d’entreprise,
+                    audit et contrôle de gestion.
+                </p>
+                <ul>
+                    <li>Comptabilité financière</li>
+                    <li>Analyse financière</li>
+                    <li>Excel avancé</li>
+                    <li>Travail en équipe</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 – Page étudiante | GitHub Pages</p>
+</footer>
 
 </body>
 </html>

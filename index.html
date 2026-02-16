@@ -3,99 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apple – Accueil</title>
-    <style>
-        body { margin: 0; font-family: Arial, sans-serif; }
-        header, footer { background: #f8f8f8; padding: 10px 20px; }
-        nav ul { list-style: none; display: flex; gap: 15px; padding: 0; margin: 0; }
-        nav a { text-decoration: none; color: black; font-weight: bold; }
-        .hero { padding: 40px; text-align: center; background: #fff; }
-        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 40px; }
-        .product-card { text-align: center; }
-        .product-card img { max-width: 100%; height: auto; }
-        footer { font-size: 14px; line-height: 1.5; }
-        .footer-section { margin-bottom: 20px; }
-    </style>
+    <title>Portfolio - Adam Mbea</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- HEADER / NAVIGATION -->
-<header>
-    <nav>
-        <ul>
-            <li><a href="#">Store</a></li>
-            <li><a href="#">Mac</a></li>
-            <li><a href="#">iPad</a></li>
-            <li><a href="#">iPhone</a></li>
-            <li><a href="#">Watch</a></li>
-            <li><a href="#">AirPods</a></li>
-            <li><a href="#">TV & Maison</a></li>
-            <li><a href="#">Accessoires</a></li>
-            <li><a href="#">Assistance</a></li>
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">MonLogo</div>
+            <ul class="menu">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#projets">Projets</a></li>
+                <li><a href="#skills">Compétences</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Section Héros (produits / présentation) -->
+    <section id="accueil" class="hero">
+        <div class="hero-content">
+            <h1>Bienvenue sur mon Portfolio</h1>
+            <p>Étudiant | Développeur | Finance & Audit</p>
+            <a href="#projets" class="btn">Voir mes projets</a>
+        </div>
+    </section>
+
+    <!-- Section Produits / Projets -->
+    <section id="projets" class="grid-section">
+        <h2>Projets en Vedette</h2>
+        <div class="grid-container">
+            <div class="grid-item">
+                <h3>Projet 1</h3>
+                <p>Description courte du projet 1.</p>
+            </div>
+            <div class="grid-item">
+                <h3>Projet 2</h3>
+                <p>Description courte du projet 2.</p>
+            </div>
+            <div class="grid-item">
+                <h3>Projet 3</h3>
+                <p>Description courte du projet 3.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Compétences -->
+    <section id="skills" class="skills-section">
+        <h2>Compétences</h2>
+        <ul class="skills-list">
+            <li>HTML & CSS</li>
+            <li>Javascript</li>
+            <li>Audit & Finance</li>
+            <li>Git & GitHub</li>
         </ul>
-    </nav>
-</header>
+    </section>
 
-<!-- HERO / GRAND BANNIÈRE -->
-<section class="hero">
-    <h1>Bienvenue chez Apple</h1>
-    <p>Découvrez nos derniers produits — iPhone, Mac, iPad, Watch et plus encore.</p>
-</section>
+    <!-- Section Contact -->
+    <section id="contact" class="contact-section">
+        <h2>Contact</h2>
+        <p>Email : tonemail@example.com</p>
+        <p>LinkedIn : <a href="#">Ton Profil LinkedIn</a></p>
+    </section>
 
-<!-- PRODUITS PHARES -->
-<section class="products">
-    <div class="product-card">
-        <h2>iPhone</h2>
-        <!-- Exemple image (à remplacer) -->
-        <img src="iphone-placeholder.jpg" alt="iPhone">
-        <p><a href="#">En savoir plus</a></p>
-    </div>
-
-    <div class="product-card">
-        <h2>MacBook Pro</h2>
-        <img src="macbook-placeholder.jpg" alt="MacBook Pro">
-        <p><a href="#">En savoir plus</a></p>
-    </div>
-
-    <div class="product-card">
-        <h2>Apple Watch</h2>
-        <img src="watch-placeholder.jpg" alt="Apple Watch">
-        <p><a href="#">En savoir plus</a></p>
-    </div>
-
-    <div class="product-card">
-        <h2>AirPods</h2>
-        <img src="airpods-placeholder.jpg" alt="AirPods">
-        <p><a href="#">En savoir plus</a></p>
-    </div>
-</section>
-
-<!-- FOOTER COMPLÈTE -->
-<footer>
-    <div class="footer-section">
-        <strong>Apple</strong><br>
-        <a href="#">À propos d'Apple</a> •
-        <a href="#">Responsabilité</a> •
-        <a href="#">Presse</a>
-    </div>
-
-    <div class="footer-section">
-        <strong>Magasin en ligne</strong><br>
-        <a href="#">Store</a> •
-        <a href="#">Financement</a> •
-        <a href="#">Reprise</a>
-    </div>
-
-    <div class="footer-section">
-        <strong>Assistance</strong><br>
-        <a href="#">Support</a> •
-        <a href="#">Contact</a>
-    </div>
-
-    <div class="footer-section">
-        <small>© 2026 Apple Inc. Tous droits réservés.</small>
-    </div>
-</footer>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Mon Portfolio • Tous droits réservés</p>
+    </footer>
 
 </body>
 </html>

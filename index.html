@@ -1,480 +1,564 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Portfolio - Adam Mbea</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      
-    <link rel="icon" type="image/png" href="images/favicon.png">
+  <meta charset="UTF-8" />
+  <title>Portfolio - Adam Mbea</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif, sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            color: #333;
-        }
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-        /* ===== HEADER ===== */
-        header {
-            background-color: #1f2933;
-            color: white;
-            padding: 40px 20px;
-            display: flex;            /* Flexbox pour aligner photo et texte */
-            align-items: center;      /* Centrer verticalement */
-            gap: 20px;                /* Espace entre photo et texte */
-            text-align: left;         /* Texte aligné à gauche */
-        }
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --text:#333;
+      --primary:#007bff;
+      --primary-2:#00c6ff;
+      --dark:#1f2933;
+      --accent:#f59e0b;
+      --accent-2:#d97706;
+      --muted:#6b7280;
 
-        header .profile-photo {
-            width: 120px;
-            height: 150px;
-            border-radius: 0%;
-            object-fit: cover;
-            margin: 0;                /* Supprime le centrage */
-            border: 3px solid white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
+      --r-lg:20px;
+      --r-md:15px;
 
-        header .header-text h1 {
-            margin: 0;
-            font-size: 1.8rem;
-        }
+      --shadow-lg:0 10px 30px rgba(0,0,0,0.08);
+      --shadow-md:0 6px 20px rgba(0,0,0,0.08);
+      --shadow-sm:0 4px 15px rgba(0,0,0,0.2);
+    }
 
-        header .header-text p {
-            margin: 5px 0 0 0;
-            font-size: 1rem;
-        }
+    *{ box-sizing:border-box; }
 
-        header .btn-cv {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background-color: #f59e0b;
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
+    body{
+      font-family:'Poppins',sans-serif;
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      scroll-behavior:smooth;
+    }
 
-        header .btn-cv:hover {
-            background-color: #d97706;
-            transform: translateY(-2px);
-        }
+    a{ color:var(--primary); }
+    a:hover{ opacity:.9; }
 
-        /* ===== SECTIONS ===== */
-        section {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        }
+    .justify{ text-align:justify; }
 
-        h2 {
-            margin-bottom: 20px;
-        }
+    /* ===== REVEAL (générique) ===== */
+    .reveal{
+      opacity:0;
+      transform:translateY(30px);
+      transition:opacity .8s ease, transform .8s ease;
+      will-change:opacity, transform;
+    }
+    .reveal.show{
+      opacity:1;
+      transform:translateY(0);
+    }
 
-        /* ===== CARTES ===== */
-        .cards {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    /* ===== MENU FIXE + GLOW ===== */
+    nav{
+      position:fixed;
+      top:20px;
+      right:20px;
+      background:rgba(31,41,51,.95);
+      padding:10px 20px;
+      border-radius:50px;
+      z-index:1000;
+      box-shadow:var(--shadow-sm);
+      backdrop-filter:blur(8px);
+    }
+    nav a{
+      position:relative;
+      color:#fff;
+      margin:0 10px;
+      text-decoration:none;
+      font-weight:600;
+      transition:color .3s ease, text-shadow .3s ease, transform .3s ease;
+      display:inline-block;
+    }
+    nav a:hover,
+    nav a.active{
+      color:var(--accent);
+      text-shadow:0 0 8px rgba(245,158,11,0.7), 0 0 12px rgba(245,158,11,0.5);
+      transform:scale(1.05);
+    }
+    nav a:focus-visible{
+      outline:2px solid var(--accent);
+      outline-offset:6px;
+      border-radius:8px;
+    }
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-6px;
+      width:0;
+      height:2px;
+      background:var(--accent);
+      transition:width .3s ease, left .3s ease;
+      border-radius:2px;
+    }
+    nav a:hover::after,
+    nav a.active::after{
+      width:100%;
+      left:0;
+    }
 
-        .card {
-            background: #f9fafb;
-            border-radius: 10px;
-            padding: 20px;
-            cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-            overflow: hidden;
-        }
+    /* ===== HEADER ===== */
+    header{
+      background:linear-gradient(135deg,var(--primary) 0%,var(--dark) 100%);
+      color:#fff;
+      padding:80px 20px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      gap:30px;
+      text-align:center;
+    }
+    header .profile-photo{
+      width:150px;
+      height:150px;
+      border-radius:50%;
+      object-fit:cover;
+      border:4px solid #fff;
+      box-shadow:0 8px 20px rgba(0,0,0,0.2);
+      transition:transform .3s ease;
+    }
+    header .profile-photo:hover{
+      transform:scale(1.05) rotate(-3deg);
+    }
+    header .header-text h1{
+      margin:0;
+      font-size:2.5rem;
+      font-weight:700;
+    }
+    header #typing-text{
+      font-size:1.1rem;
+      margin:10px 0;
+      min-height:1.5em;
+    }
+    header .btn-cv{
+      display:inline-block;
+      margin-top:15px;
+      padding:12px 25px;
+      background:var(--accent);
+      color:#fff;
+      font-weight:600;
+      text-decoration:none;
+      border-radius:50px;
+      transition:transform .3s ease, background-color .3s ease;
+    }
+    header .btn-cv:hover{
+      background:var(--accent-2);
+      transform:translateY(-3px) scale(1.05);
+    }
 
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-            background: #e0f0ff;
-        }
+    /* ===== SECTIONS ===== */
+    section{
+      max-width:1000px;
+      margin:40px auto;
+      background:#fff;
+      padding:40px;
+      border-radius:var(--r-lg);
+      box-shadow:var(--shadow-lg);
+    }
 
-        /* ===== HEADER DES CARDS ===== */
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    h2{
+      text-align:center;
+      font-size:2rem;
+      margin:0 0 30px;
+      position:relative;
+    }
+    h2::after{
+      content:"";
+      display:block;
+      width:60px;
+      height:3px;
+      background:var(--primary);
+      margin:10px auto 0;
+      border-radius:2px;
+    }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+    /* ===== CARDS ===== */
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+    .card{
+      background:#f9fafb;
+      border-radius:var(--r-md);
+      padding:25px;
+      box-shadow:var(--shadow-md);
+      cursor:pointer;
+      transition:transform .3s ease, box-shadow .3s ease, background .3s ease;
+    }
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 15px 35px rgba(0,0,0,0.12);
+      background:#e0f0ff;
+    }
+    .card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .header-left{
+      display:flex;
+      align-items:center;
+      gap:15px;
+    }
+    .titles{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .titles h3{
+      margin:0;
+      font-weight:600;
+      font-size:1.2rem;
+    }
+    .titles h4{
+      margin:0;
+      font-weight:400;
+      color:var(--muted);
+    }
 
-        .titles {display: flex;flex-direction: column;
-            justify-content: center;
-        }
+    .avatar{
+      min-width:55px;
+      height:55px;
+      border-radius:50%;
+      overflow:hidden;
+      border:2px solid #fff;
+      box-shadow:0 4px 10px rgba(0,0,0,0.15);
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .card:hover .avatar{
+      transform:scale(1.2);
+      box-shadow:0 8px 25px rgba(0,0,0,0.25);
+    }
 
-        .titles h3 {margin: 0;
-        }
-        .titles h4 {margin: 0;
-            font-weight: normal
-        }
+    /* Option : contenu qui se déroule au hover */
+    .card-content{
+      max-height:0;
+      opacity:0;
+      overflow:hidden;
+      transition:max-height .4s ease, opacity .4s ease;
+    }
+    .card:hover .card-content{
+      max-height:500px;
+      opacity:1;
+      margin-top:10px;
+    }
 
-        .titles .year {
-            font-size: 0.85rem;
-            color: #6b7280;
-            margin-top: 4px;
-        }
+    /* ===== BADGE DATE ===== */
+    .section-date{
+      display:inline-flex;
+      align-items:center;
+      font-size:.8rem;
+      font-weight:600;
+      letter-spacing:.3px;
+      color:#fff;
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      padding:5px 14px;
+      border-radius:999px;
+      white-space:nowrap;
+      margin-top:6px;
+      width:max-content;
+    }
 
-        /* ===== CHEVRON ===== */
-        .chevron {
-            width: 10px;
-            height: 10px;
-            border-right: 2px solid #6b7280;
-            border-bottom: 2px solid #6b7280;
-            transform: rotate(45deg);
-            transition: transform 0.3s ease;
-        }
+    /* ===== CONTACT ===== */
+    #contact{
+      padding:60px 20px;
+      background:#e6f2ff;
+      border-radius:var(--r-lg);
+    }
+    .contact-container{
+      display:flex;
+      gap:40px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .contact-info,
+    .contact-form{
+      flex:1 1 350px;
+      background:#fff;
+      padding:30px;
+      border-radius:var(--r-md);
+      box-shadow:0 8px 25px rgba(0,0,0,0.08);
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .contact-info:hover,
+    .contact-form:hover{
+      transform:translateY(-4px);
+      box-shadow:0 15px 35px rgba(0,0,0,0.12);
+    }
+    .contact-info ul{
+      list-style:none;
+      padding:0;
+      margin:10px 0 0;
+    }
+    .contact-info li{ margin:10px 0; }
 
-        .card:hover .chevron {
-            transform: rotate(225deg);
-        }
+    .contact-form form{
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+    }
+    .contact-form input,
+    .contact-form textarea{
+      padding:12px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      font-size:1rem;
+    }
+    .contact-form button{
+      padding:12px;
+      font-size:1rem;
+      font-weight:600;
+      background:var(--primary);
+      color:#fff;
+      border:none;
+      border-radius:50px;
+      cursor:pointer;
+      transition:transform .3s ease, background-color .3s ease;
+    }
+    .contact-form button:hover{
+      background:#0056b3;
+      transform:scale(1.03);
+    }
 
-        /* ===== CONTENU MASQUÉ ===== */
-        .card-content {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, opacity 0.4s ease;
-        }
+    /* ===== FOOTER ===== */
+    footer{
+      text-align:center;
+      padding:20px;
+      color:#777;
+      font-size:14px;
+    }
 
-        .card:hover .card-content {
-            max-height: 500px;
-            opacity: 1;
-            margin-top: 10px;
-        }
+    /* ===== RESPONSIVE ===== */
+    @media (max-width:900px){
+      header{ flex-direction:column; }
+      .contact-container{ flex-direction:column; gap:30px; }
+    }
 
-        /* ===== AVATARS ===== */
-        .avatar {
-            min-width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .card:hover .avatar {
-            transform: scale(1.15);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-            font-size: 14px;
-        }
-#contact {
-    padding: 50px 20px;
-    background-color: #f4f4f4;
-}
-
-#contact h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 30px;
-}
-
-/* Conteneur flex pour les deux blocs */
-.contact-container {
-    display: flex;
-    gap: 40px;               /* espace entre les blocs */
-    flex-wrap: wrap;         /* pour que ça s'adapte sur mobile */
-    justify-content: center; /* centrer les blocs si écran large */
-}
-
-/* Bloc infos */
-.contact-info {
-    flex: 1 1 300px;         /* prend de la place, minimum 300px */
-}
-
-.contact-info ul {
-    list-style: none;
-    padding: 0;
-}
-
-.contact-info ul li {
-    margin: 10px 0;
-}
-
-/* Bloc formulaire */
-.contact-form {
-    flex: 1 1 300px;         /* prend de la place, minimum 300px */
-}
-
-.contact-form form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.contact-form input,
-.contact-form textarea {
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.contact-form button {
-    padding: 10px;
-    font-size: 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.contact-form button:hover {
-    background-color: #0056b3;
-}
-
-    </style>
+    /* ===== ACCESSIBILITÉ ===== */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important; }
+      html{ scroll-behavior:auto; }
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-    <img src="C:\Users\Lenovo\Pictures\c3971179-816e-4f8d-b977-3d145fa7c37c.jpg" alt="Photo d'Adam Mbea" class="profile-photo">
+  <nav>
+    <a href="#about">À propos</a>
+    <a href="#projects">Projets</a>
+    <a href="#skills">Compétences</a>
+    <a href="#works">Expériences</a>
+    <a href="#education">Formation</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <header>
+    <img src="images/profile.jpg" alt="Photo d'Adam Mbea" class="profile-photo">
     <div class="header-text">
-        <h1>Adam Mbea</h1>
-        <p>Accompagner l'optimisation de la performance | Soutenir la prise de décision des entreprises</p>
-        <a href="cv/Adam_Mbea_CV.pdf" download class="btn-cv">Télécharger le CV</a>
+      <h1>Adam Mbea</h1>
+      <p id="typing-text"></p>
+      <a href="cv/Adam_Mbea_CV.pdf" download class="btn-cv">Télécharger le CV</a>
     </div>
-</header>
+  </header>
 
-<section id="about">
+  <section id="about">
     <h2>À propos de moi</h2>
-    <p style="text-align: justify;">
-        Après une formation en comptabilité et finance d'entreprise, durant laquelle j'ai acquis de solides bases en
-        comptabilité et en analyse financière, j'ai décidé de me spécialiser dans l'audit interne et le contrôle de 
-        gestion pour approfondir mes compétences et transformer les 
-        données financières et extra-financières en informations stratégiques.
+    <p class="justify">
+      Après une formation en comptabilité et finance d'entreprise, j'ai décidé de me spécialiser
+      dans l'audit interne et le contrôle de gestion pour transformer les données financières et
+      extra-financières en informations stratégiques.
     </p>
-</section>
+  </section>
 
-<section id="works">
-    <h2>Expériences</h2>
+  <section id="projects">
+    <h2>Projets</h2>
     <div class="cards">
-        <!-- Card 1 -->
         <div class="card">
             <div class="card-header">
                 <div class="header-left">
-                    <div class="avatar">
-                        <img src="images/kactus.png" alt="Kactus">
-                    </div>
                     <div class="titles">
-                        <h3>Chargé de facturation</h3>
-                        <h4>Kactus</h4>
-                        <span class="year">2022</span>
+                        <h3>Optimisation des processus de facturation</h3>
+                        <h4>Automatisation et réduction des erreurs</h4>
                     </div>
                 </div>
-                <span class="chevron"></span>
-            </div>
-            <div class="card-content">
-                <p>
-                    Kactus est une entreprise spécialisée qui aide les organisations à organiser facilement leurs 
-                    évènements professionnels. En tant que stagiaire chargé de facturation mes missions 
-                    consistaient à éditer les factures.
-                </p>
-            </div>
+            </div>      
+  </section>
+  
+  <section id="skills">
+    <h2>Compétences</h2>
+    
+    <div class="cards">
+        <div class="card">
+            <div class="card-header">
+                <div class="header-left">
+                    <div class="titles">
+                        <h3>Analyse financière avancée</h3>
+                        <h4>Maîtrise des outils d'analyse et de reporting</h4>
+                    </div>
+                </div>
         </div>
-
-        <!-- Card 2 -->
-        <div class="card">
-            <div class="card-header">
-                <div class="header-left">
-                    <div class="avatar">
-                        <img src="images/cnps.jpg" alt="CNPS">
-                    </div>
-                    <div class="titles">
-                        <h3>Collaborateur comptable</h3>
-                        <h4>Caisse Nationale de Prévoyance Sociale</h4>
-                        <span class="year">2021</span>
-                    </div>
-                </div>
-                <span class="chevron"></span>
-            </div>
-            <div class="card-content">
-                <p>
-                    Analyse complète d’un groupe, étude de la rentabilité, structure financière
-                    et recommandations stratégiques.
-                </p>
-            </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="card">
-            <div class="card-header">
-                <div class="header-left">
-                    <div class="avatar">
-                        <img src="images/pak.jpg" alt="PAK">
-                    </div>
-                    <div class="titles">
-                        <h3>Assistant contrôleur de gestion</h3>
-                        <h4>Port Autonome de Kribi</h4>
-                        <span class="year">2020</span>
-                    </div>
-                </div>
-                <span class="chevron"></span>
-            </div>
-            <div class="card-content">
-                <p>
-                    Suivi administratif, gestion de données et organisation des tâches.
-                </p>
-            </div>
-        </div>
-        <!-- Card 4 -->
-        <div class="card">
-            <div class="card-header">
-                <div class="header-left">
-                    <div class="avatar">
-                        <img src="images/palm_beach.png" alt="Palm Beach">
-                    </div>
-                    <div class="titles">
-                        <h3>Assistant comptable et reporting</h3>
-                        <h4>EDC Paris Business School</h4>
-                        <span class="year">2019</span>
-                    </div>
-                </div>
-                <span class="chevron"></span>
-            </div>
-            <div class="card-content">
-                <p>
-                    Suivi administratif, gestion de données et organisation des tâches.
-                </p>
-            </div>
     </div>
-</section>
+  </section>
 
-<section id="education">
+  <section id="works">
+    <h2>Expériences</h2>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="header-left">
+            <div class="avatar">
+              <img src="images/kactus.png" alt="Kactus">
+            </div>
+            <div class="titles">
+              <h3>Chargé de facturation</h3>
+              <h4>Kactus</h4>
+              <span class="section-date">2022</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-content">
+          <p>Edition des factures et suivi administratif.</p>
+        </div>
+      </div>
+
+      <!-- Ajoute d'autres cartes ici -->
+    </div>
+  </section>
+
+  <section id="education">
     <h2>Formation</h2>
     <div class="cards">
-        <!-- Formation 1 -->
-        <div class="card">
-            <div class="card-header">
-                <div class="header-left">
-                    <div class="avatar">
-                        <img src="images/tbs_education.png" alt="TBS">
-                    </div>
-                    <div class="titles">
-                        <h3>Mastère Audit interne & Contrôle de Gestion</h3>
-                        <h4>TBS Education</h4>
-                        <span class="year">2023</span>
-                    </div>
-                </div>
-                <span class="chevron"></span>
-            </div>
-            <div class="card-content">
-                <p>Formation spécialisée</p>
-            </div>
-        </div>
-
-        <!-- Formation 2 -->
-        <div class="card">
-            <div class="card-header">
-                <div class="header-left">
-                    <div class="avatar">
-                        <img src="images/edc.png" alt="EDC">
-                    </div>
-                    <div class="titles">
-                        <h3>Programme Grande École – 4e année</h3>
-                        <h4>EDC Paris Business School</h4>
-                        <span class="year">2022</span>
-                    </div>
-                </div>
-                <span class="chevron"></span>
-            </div>
-        </div>
-
-        <!-- Formation 3 -->
-        <div class="card">
-            <div class="card-header">
-                <div class="header-left">
-                    <div class="avatar">
-                        <img src="images/ucac.png" alt="UCAC">
-                    </div>
-                    <div class="titles">
-                        <h3>Master Comptabilité et Finance d'Entreprise</h3>
-                        <h4>Université Catholique d'Afrique Centrale</h4>
-                        <span class="year">2020-2022</span>
-                    </div>
-                </div>
-                <span class="chevron"></span>
-            </div>
-            <div class="card-content">
-                <p>
-                    Formation de 2 ans orientée comptabilité, finance d’entreprise,
-                    audit et contrôle de gestion.
-                </p>
-                <ul>
-                    <li>Comptabilité financière</li>
-                    <li>Analyse financière</li>
-                    <li>Excel avancé</li>
-                    <li>Travail en équipe</li>
-                </ul>
-            </div>
-        </div>
+      <!-- cartes formation -->
     </div>
-</section>
+  </section>
 
-<section id="contact">
+  <section id="contact">
     <h2>Me contacter</h2>
+
     <div class="contact-container">
-        <!-- Bloc gauche : infos de contact -->
-        <div class="contact-info">
-            <p>Vous pouvez me joindre via :</p>
-            <ul>
-                <li>Email : <a href="mailto:ton.email@example.com">ton.email@example.com</a></li>
-                <li>Téléphone : <a href="tel:+330123456789">+33 01 23 45 67 89</a></li>
-                <li>LinkedIn : <a href="https://www.linkedin.com/in/tonprofil" target="_blank">Mon profil LinkedIn</a></li>
-            </ul>
-        </div>
+      <div class="contact-info">
+        <p>Vous pouvez me joindre via :</p>
+        <ul>
+          <li>Email : <a href="mailto:r.adammbea@gmail.com">r.adammbea@gmail.com</a></li>
+          <li>Téléphone : <a href="tel:+330753022871">+33 07 53 02 28 71</a></li>
+          <li>LinkedIn : <a href="https://www.linkedin.com/in/adam-mbea/" target="_blank" rel="noreferrer">Mon profil LinkedIn</a></li>
+        </ul>
+      </div>
 
-        <!-- Bloc droit : formulaire -->
-        <div class="contact-form">
-            <form action="https://formspree.io/f/xxxxx" method="POST">
-                <label for="name">Nom :</label>
-                <input type="text" id="name" name="name" required>
+      <div class="contact-form">
+        <form action="https://formspree.io/f/xxxxx" method="POST">
+          <label for="name">Nom :</label>
+          <input type="text" id="name" name="name" required>
 
-                <label for="email">Email :</label>
-                <input type="email" id="email" name="email" required>
+          <label for="surname">Prénom :</label>
+          <input type="text" id="surname" name="surname" required>
 
-                <label for="message">Message :</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
+          <label for="email">Email :</label>
+          <input type="email" id="email" name="email" required>
 
-                <button type="submit">Envoyer</button>
-            </form>
-        </div>
+          <label for="message">Message :</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+
+          <button type="submit">Envoyer</button>
+        </form>
+      </div>
     </div>
-</section>
+  </section>
 
-
-<footer>
+  <footer>
     <p>© 2026 – Portfolio | Adam Mbea</p>
-</footer>
+  </footer>
 
+  <script>
+    // 1) Reveal: classe unique pour header/sections/cartes/contact
+    const revealTargets = document.querySelectorAll('header, section, .card, .contact-info, .contact-form');
+    revealTargets.forEach(el => el.classList.add('reveal'));
+
+    const revealObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('show');
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
+
+    revealTargets.forEach(el => revealObserver.observe(el));
+
+    // 2) Menu actif
+    const sections = [...document.querySelectorAll('section')];
+    const navLinks = [...document.querySelectorAll('nav a')];
+
+    function updateActiveLink(){
+      const y = window.scrollY + 120;
+      let currentId = sections[0]?.id || "";
+      for (const sec of sections){
+        if (sec.offsetTop <= y) currentId = sec.id;
+      }
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === `#${currentId}`);
+      });
+    }
+    window.addEventListener('scroll', updateActiveLink, { passive: true });
+    updateActiveLink();
+
+    // 3) Typing cyclique
+    const typingElement = document.getElementById("typing-text");
+    const phrases = [
+      "Accompagner l'optimisation de la performance",
+      "Soutenir la prise de décision des entreprises",
+      "Transformer les données financières en stratégie"
+    ];
+
+    let p = 0, i = 0;
+    let isDeleting = false;
+
+    const typingSpeed = 55;
+    const deletingSpeed = 30;
+    const pause = 1200;
+
+    function tick(){
+      if (!typingElement) return;
+
+      const phrase = phrases[p];
+
+      if (!isDeleting){
+        typingElement.textContent = phrase.slice(0, i + 1);
+        i++;
+        if (i === phrase.length){
+          isDeleting = true;
+          return setTimeout(tick, pause);
+        }
+        return setTimeout(tick, typingSpeed);
+      }
+
+      typingElement.textContent = phrase.slice(0, i - 1);
+      i--;
+      if (i === 0){
+        isDeleting = false;
+        p = (p + 1) % phrases.length;
+        return setTimeout(tick, 250);
+      }
+      setTimeout(tick, deletingSpeed);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      tick();
+    });
+  </script>
 </body>
 </html>

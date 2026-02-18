@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,348 +6,1098 @@
   <title>Portfolio - Adam Mbea</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="icon" type="image/png" href="images/favicon.png" size="32x32" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+
+  <!-- Perf: preconnect fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@v11/font/simple-icons.min.css">
 
   <style>
+    /* =========================================================
+       0) THEME (Light only) + tokens
+       ========================================================= */
     :root{
       --bg:#f4f6f8;
-      --text:#333;
-      --primary:#007bff;
-      --primary-2:#00c6ff;
-      --dark:#1f2933;
-      --accent:#f59e0b;
-      --accent-2:#d97706;
+      --card:#ffffff;
+      --text:#1f2933;
       --muted:#6b7280;
 
-      --r-lg:20px;
-      --r-md:15px;
+      --primary:#007bff;
+      --primary-2:#00c6ff;
+      --accent:#f59e0b;
 
-      --shadow-lg:0 10px 30px rgba(0,0,0,0.08);
-      --shadow-md:0 6px 20px rgba(0,0,0,0.08);
-      --shadow-sm:0 4px 15px rgba(0,0,0,0.2);
+      --r-xl:26px;
+      --r-lg:22px;
+
+      --shadow-lg:0 18px 45px rgba(0,0,0,0.10);
+      --shadow-md:0 10px 30px rgba(0,0,0,0.08);
+      --shadow-sm:0 6px 18px rgba(0,0,0,0.08);
+
+      --grad-primary: linear-gradient(135deg,var(--primary),var(--primary-2));
+      --dock-bg: rgba(17,24,39,0.80);
+      --dock-bd: rgba(255,255,255,0.12);
+
+      --section-gap: 44px;
+      --max: 1080px;
     }
 
     *{ box-sizing:border-box; }
-
+    html{ scroll-behavior:smooth; }
     body{
-      font-family:'Poppins',sans-serif;
       margin:0;
+      font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:var(--bg);
       color:var(--text);
-      scroll-behavior:smooth;
+      line-height:1.5;
+      overflow-x:hidden;
     }
 
-    a{ color:var(--primary); }
-    a:hover{ opacity:.9; }
-
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ opacity:.95; }
+    .muted{ color:var(--muted); }
     .justify{ text-align:justify; }
+    section{ scroll-margin-top: 100px; }
 
-    /* ===== REVEAL (générique) ===== */
+    :where(a, button, input, textarea):focus-visible{
+      outline:2px solid var(--accent);
+      outline-offset:4px;
+      border-radius:12px;
+    }
+
+    /* =========================================================
+       1) UX: Skip link + Progress bar + ToTop
+       ========================================================= */
+    .skip-link{
+      position:absolute; left:-999px; top:10px;
+      background:#fff; color:#000;
+      padding:10px 14px;
+      border-radius:12px;
+      box-shadow:var(--shadow-md);
+      z-index:9999;
+    }
+    .skip-link:focus{ left:10px; }
+
+    .scroll-progress{
+      position:fixed;
+      top:0; left:0;
+      height:4px;
+      width:0%;
+      background: var(--grad-primary);
+      z-index:3000;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+
+    .to-top{
+      position:fixed;
+      right:18px;
+      bottom:92px; /* au-dessus du dock */
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.16);
+      background: var(--dock-bg);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(10px);
+      transform: translateY(18px);
+      opacity:0;
+      pointer-events:none;
+      transition: transform .25s ease, opacity .25s ease;
+      z-index:2600;
+    }
+    .to-top.show{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       2) Reveal animations (scroll)
+       ========================================================= */
     .reveal{
       opacity:0;
-      transform:translateY(30px);
-      transition:opacity .8s ease, transform .8s ease;
-      will-change:opacity, transform;
+      transform: translateY(22px);
+      transition: opacity .75s ease, transform .75s ease;
+      will-change: opacity, transform;
     }
     .reveal.show{
       opacity:1;
-      transform:translateY(0);
+      transform: translateY(0);
     }
 
-    /* ===== MENU FIXE + GLOW ===== */
-    nav{
-      position:fixed;
-      top:20px;
-      right:20px;
-      background:rgba(31,41,51,.95);
-      padding:10px 20px;
-      border-radius:50px;
-      z-index:1000;
-      box-shadow:var(--shadow-sm);
-      backdrop-filter:blur(8px);
+    /* =========================================================
+       2bis) Hover reveal content (sur hover du HEADER)
+       ========================================================= */
+    .hover-card .hover-content{
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transform: translateY(6px);
+      transition: max-height .35s ease, opacity .35s ease, transform .35s ease;
     }
-    nav a{
+
+    .hover-card .hover-header:hover + .hover-content,
+    .hover-card .hover-header:focus + .hover-content,
+    .hover-card:focus-within .hover-content{
+      max-height: 1200px;
+      opacity: 1;
+      transform: translateY(0);
+      margin-top: 10px;
+    }
+
+    .hover-header{
+      cursor: pointer;
+      user-select: none;
+    }
+    .hover-header:focus{ outline:none; }
+
+    /* =========================================================
+       3) HERO ultra visuel + fond animé (light-only)
+       ========================================================= */
+    .hero{
       position:relative;
-      color:#fff;
-      margin:0 10px;
-      text-decoration:none;
-      font-weight:600;
-      transition:color .3s ease, text-shadow .3s ease, transform .3s ease;
-      display:inline-block;
+      min-height: 86vh;
+      padding: 90px 18px 110px;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      isolation:isolate;
     }
-    nav a:hover,
-    nav a.active{
-      color:var(--accent);
-      text-shadow:0 0 8px rgba(245,158,11,0.7), 0 0 12px rgba(245,158,11,0.5);
-      transform:scale(1.05);
-    }
-    nav a:focus-visible{
-      outline:2px solid var(--accent);
-      outline-offset:6px;
-      border-radius:8px;
-    }
-    nav a::after{
+    .hero::before{
       content:"";
       position:absolute;
-      left:50%;
-      bottom:-6px;
-      width:0;
-      height:2px;
-      background:var(--accent);
-      transition:width .3s ease, left .3s ease;
-      border-radius:2px;
+      inset:-40%;
+      background:
+        radial-gradient(900px 420px at 18% 20%, rgba(0,123,255,0.45), transparent 60%),
+        radial-gradient(700px 350px at 78% 25%, rgba(0,198,255,0.28), transparent 55%),
+        radial-gradient(800px 420px at 55% 80%, rgba(245,158,11,0.22), transparent 60%),
+        linear-gradient(135deg, rgba(17,24,39,0.88), rgba(3,7,18,0.88));
+      animation: heroShift 14s ease-in-out infinite alternate;
+      z-index:-2;
     }
-    nav a:hover::after,
-    nav a.active::after{
-      width:100%;
-      left:0;
+    @keyframes heroShift{
+      from{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
+      to{ transform: translate3d(2%, 1%, 0) scale(1.06); }
     }
 
-    /* ===== HEADER ===== */
-    header{
-      background:linear-gradient(135deg,var(--primary) 0%,var(--dark) 100%);
-      color:#fff;
-      padding:80px 20px;
-      display:flex;
-      flex-wrap:wrap;
+    .particles{
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      opacity:.55;
+      mask-image: radial-gradient(closest-side, rgba(0,0,0,1), rgba(0,0,0,0));
+    }
+    .particle{
+      position:absolute;
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 0 18px rgba(255,255,255,0.14);
+      animation: float 9s ease-in-out infinite;
+    }
+    .particle:nth-child(2n){ width:6px; height:6px; opacity:.35; }
+    .particle:nth-child(3n){ width:10px; height:10px; opacity:.25; }
+    @keyframes float{
+      0%{ transform: translateY(0) translateX(0); }
+      50%{ transform: translateY(-18px) translateX(10px); }
+      100%{ transform: translateY(0) translateX(0); }
+    }
+
+    .hero-card{
+      width:min(var(--max), 100%);
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: var(--r-xl);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.35);
+      backdrop-filter: blur(14px);
+      padding: 26px;
+      display:grid;
+      grid-template-columns: 170px 1fr;
+      gap: 22px;
       align-items:center;
-      justify-content:center;
-      gap:30px;
-      text-align:center;
-    }
-    header .profile-photo{
-      width:150px;
-      height:150px;
-      border-radius:50%;
-      object-fit:cover;
-      border:4px solid #fff;
-      box-shadow:0 8px 20px rgba(0,0,0,0.2);
-      transition:transform .3s ease;
-    }
-    header .profile-photo:hover{
-      transform:scale(1.05) rotate(-3deg);
-    }
-    header .header-text h1{
-      margin:0;
-      font-size:2.5rem;
-      font-weight:700;
-    }
-    header #typing-text{
-      font-size:1.1rem;
-      margin:10px 0;
-      min-height:1.5em;
-    }
-    header .btn-cv{
-      display:inline-block;
-      margin-top:15px;
-      padding:12px 25px;
-      background:var(--accent);
-      color:#fff;
-      font-weight:600;
-      text-decoration:none;
-      border-radius:50px;
-      transition:transform .3s ease, background-color .3s ease;
-    }
-    header .btn-cv:hover{
-      background:var(--accent-2);
-      transform:translateY(-3px) scale(1.05);
     }
 
-    /* ===== SECTIONS ===== */
-    section{
-      max-width:1000px;
-      margin:40px auto;
-      background:#fff;
-      padding:40px;
-      border-radius:var(--r-lg);
-      box-shadow:var(--shadow-lg);
+    .hero-photo{
+      width:170px; height:170px;
+      border-radius: 32px;
+      overflow:hidden;
+      position:relative;
+      box-shadow: 0 22px 55px rgba(0,0,0,0.35);
+      border: 2px solid rgba(255,255,255,0.25);
+    }
+    .hero-photo img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .hero-title{
+      margin:0;
+      font-size: clamp(1.7rem, 2.8vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: .2px;
+      color: #fff;
+    }
+    .hero-sub{
+      margin:10px 0 0;
+      color: rgba(255,255,255,0.85);
+      font-size: 1.05rem;
+      min-height: 1.7em;
+    }
+    .hero-meta{
+      margin:8px 0 0;
+      color: rgba(255,255,255,0.72);
+      font-size: .95rem;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 16px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.10);
+      color: #fff;
+      cursor:pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      backdrop-filter: blur(12px);
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.22);
+      background: rgba(255,255,255,0.14);
+    }
+    .btn.primary{
+      background: var(--grad-primary);
+      border-color: rgba(255,255,255,0.10);
+    }
+
+    .hero-stats{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin-top: 16px;
+    }
+    .stat{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.92);
+      font-weight: 700;
+    }
+    .stat i{
+      width:34px; height:34px;
+      border-radius: 12px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* =========================================================
+       4) Layout sections
+       ========================================================= */
+    .wrap{
+      width:min(var(--max), calc(100% - 36px));
+      margin: 0 auto;
+      display:flex;
+      flex-direction:column;
+      gap: 44px;
+      padding-bottom: 120px;
+    }
+
+    .panel{
+      background: var(--card);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-lg);
+      padding: 34px;
     }
 
     h2{
+      margin: 0 0 18px;
+      font-size: 1.9rem;
+      font-weight: 900;
+      letter-spacing: .2px;
       text-align:center;
-      font-size:2rem;
-      margin:0 0 30px;
-      position:relative;
     }
-    h2::after{
-      content:"";
-      display:block;
-      width:60px;
-      height:3px;
-      background:var(--primary);
-      margin:10px auto 0;
-      border-radius:2px;
+    .h2-line{
+      width: 70px;
+      height: 4px;
+      margin: 0 auto 26px;
+      border-radius: 999px;
+      background: var(--grad-primary);
     }
 
-    /* ===== CARDS ===== */
-    .cards{
+    /* Pills */
+    .pills{
       display:flex;
-      flex-direction:column;
-      gap:20px;
-    }
-    .card{
-      background:#f9fafb;
-      border-radius:var(--r-md);
-      padding:25px;
-      box-shadow:var(--shadow-md);
-      cursor:pointer;
-      transition:transform .3s ease, box-shadow .3s ease, background .3s ease;
-    }
-    .card:hover{
-      transform:translateY(-5px);
-      box-shadow:0 15px 35px rgba(0,0,0,0.12);
-      background:#e0f0ff;
-    }
-    .card-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-    .header-left{
-      display:flex;
-      align-items:center;
-      gap:15px;
-    }
-    .titles{
-      display:flex;
-      flex-direction:column;
+      flex-wrap:wrap;
+      gap:10px;
       justify-content:center;
+      margin-top:18px;
     }
-    .titles h3{
-      margin:0;
-      font-weight:600;
-      font-size:1.2rem;
-    }
-    .titles h4{
-      margin:0;
-      font-weight:400;
-      color:var(--muted);
-    }
-
-    .avatar{
-      min-width:55px;
-      height:55px;
-      border-radius:50%;
-      overflow:hidden;
-      border:2px solid #fff;
-      box-shadow:0 4px 10px rgba(0,0,0,0.15);
-      transition:transform .3s ease, box-shadow .3s ease;
-    }
-    .avatar img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-    .card:hover .avatar{
-      transform:scale(1.2);
-      box-shadow:0 8px 25px rgba(0,0,0,0.25);
-    }
-
-    /* Option : contenu qui se déroule au hover */
-    .card-content{
-      max-height:0;
-      opacity:0;
-      overflow:hidden;
-      transition:max-height .4s ease, opacity .4s ease;
-    }
-    .card:hover .card-content{
-      max-height:500px;
-      opacity:1;
-      margin-top:10px;
-    }
-
-    /* ===== BADGE DATE ===== */
-    .section-date{
+    .pill{
       display:inline-flex;
       align-items:center;
-      font-size:.8rem;
-      font-weight:600;
-      letter-spacing:.3px;
+      gap:8px;
+      font-size:.78rem;
+      font-weight: 900;
       color:#fff;
-      background:linear-gradient(135deg,var(--primary),var(--primary-2));
-      padding:5px 14px;
-      border-radius:999px;
+      background: var(--grad-primary);
+      padding: 8px 12px;
+      border-radius: 999px;
       white-space:nowrap;
-      margin-top:6px;
-      width:max-content;
     }
 
-    /* ===== CONTACT ===== */
-    #contact{
-      padding:60px 20px;
-      background:#e6f2ff;
-      border-radius:var(--r-lg);
-    }
-    .contact-container{
+    /* =========================================================
+       5) Projects
+       ========================================================= */
+    .filters{
       display:flex;
-      gap:40px;
+      gap:10px;
       flex-wrap:wrap;
       justify-content:center;
+      margin: 0 0 18px;
     }
-    .contact-info,
-    .contact-form{
-      flex:1 1 350px;
-      background:#fff;
-      padding:30px;
-      border-radius:var(--r-md);
-      box-shadow:0 8px 25px rgba(0,0,0,0.08);
-      transition:transform .3s ease, box-shadow .3s ease;
+    .chip{
+      border:none;
+      cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      background: rgba(0,0,0,0.06);
+      color: var(--text);
+      transition: transform .18s ease, background .18s ease;
     }
-    .contact-info:hover,
-    .contact-form:hover{
-      transform:translateY(-4px);
-      box-shadow:0 15px 35px rgba(0,0,0,0.12);
+    .chip:hover{ transform: translateY(-1px); }
+    .chip.active{
+      background: var(--grad-primary);
+      color:#fff;
     }
-    .contact-info ul{
-      list-style:none;
-      padding:0;
-      margin:10px 0 0;
-    }
-    .contact-info li{ margin:10px 0; }
 
-    .contact-form form{
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .project{
+      position:relative;
+      border-radius: var(--r-lg);
+      overflow:hidden;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-md);
+      transition: transform .25s ease, box-shadow .25s ease;
+      min-height: 240px;
+      display:block;
+    }
+    .project:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 20px 44px rgba(0,0,0,0.14);
+    }
+    .project img{
+      width:100%;
+      height: 240px;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.05) contrast(1.02);
+      transform: scale(1.02);
+      transition: transform .35s ease;
+    }
+    .project:hover img{ transform: scale(1.07); }
+
+    .project-overlay{
+      position:absolute;
+      inset:0;
       display:flex;
       flex-direction:column;
-      gap:15px;
-    }
-    .contact-form input,
-    .contact-form textarea{
-      padding:12px;
-      border:1px solid #ccc;
-      border-radius:10px;
-      font-size:1rem;
-    }
-    .contact-form button{
-      padding:12px;
-      font-size:1rem;
-      font-weight:600;
-      background:var(--primary);
+      justify-content:flex-end;
+      padding: 14px;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.72) 100%);
       color:#fff;
+      gap:8px;
+    }
+    .project-title{ margin:0; font-weight: 900; font-size: 1.05rem; }
+    .project-desc{ margin:0; opacity:.85; font-size: .92rem; }
+    .project-meta{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top: 8px;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      font-size: .78rem;
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+    .project-cta{
+      margin-top: 10px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      width:max-content;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--grad-primary);
+      color:#fff;
+      font-weight: 900;
+      border: none;
+    }
+    .project[hidden]{ display:none !important; }
+
+    /* =========================================================
+       6) Skills : Skills en action (cards preuves)
+       ========================================================= */
+    .skills-action{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .s-card{
+      position:relative;
+      padding: 18px;
+      border-radius: var(--r-lg);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+      overflow:hidden;
+    }
+
+    .s-card:hover{
+      transform: translateY(-4px);
+      background: rgba(0,123,255,0.06);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+    }
+
+    .s-top{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .s-ico{
+      width:48px; height:48px;
+      border-radius: 16px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      background: var(--grad-primary);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+      flex: 0 0 auto;
+    }
+
+    .s-title{
+      margin:0;
+      font-weight: 900;
+      line-height:1.15;
+    }
+
+    .s-sub{
+      margin:4px 0 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .s-proof{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .proof{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.06);
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .s-tools{
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(0,0,0,0.10);
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+    }
+
+    .toolchip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(0,0,0,0.06);
+      font-size: .78rem;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+
+    .s-desc{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    /* =========================================================
+       7) Timeline (Experiences + Education)
+       ========================================================= */
+    .timeline{
+      position:relative;
+      margin-top: 8px;
+      padding-left: 22px;
+    }
+    .timeline::before{
+      content:"";
+      position:absolute;
+      left:10px;
+      top:0;
+      bottom:0;
+      width: 4px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(0,123,255,0.0), rgba(0,123,255,0.55), rgba(0,198,255,0.40), rgba(245,158,11,0.0));
+    }
+    .t-item{
+      position:relative;
+      padding: 16px 16px 16px 18px;
+      margin: 0 0 14px;
+      border-radius: var(--r-lg);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s ease, background .2s ease;
+    }
+    .t-item:hover{ transform: translateY(-3px); background: rgba(0,123,255,0.06); }
+    .t-item::before{
+      content:"";
+      position:absolute;
+      left:-18px;
+      top: 22px;
+      width: 14px; height:14px;
+      border-radius: 999px;
+      background: #fff;
+      border: 4px solid rgba(0,123,255,0.30);
+      box-shadow: 0 12px 22px rgba(0,0,0,0.12);
+    }
+
+    .t-head{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .logo{
+      width:48px; height:48px;
+      border-radius: 16px;
+      overflow:hidden;
+      border:2px solid rgba(255,255,255,0.6);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.14);
+      flex: 0 0 auto;
+      background: rgba(255,255,255,0.4);
+    }
+    .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .t-title{ margin:0; font-weight: 900; }
+    .t-sub{ margin:2px 0 0; color:var(--muted); font-size:.92rem; }
+
+    .t-date{
+      margin-left:auto;
+      font-weight: 900;
+      font-size: .78rem;
+      color:#fff;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: var(--grad-primary);
+      white-space:nowrap;
+    }
+
+    .result-badges{
+      margin-top: 10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+    }
+    .result{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.06);
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .detail-list{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .detail-list li{ margin: 6px 0; }
+
+    /* =========================================================
+       8) Contact
+       ========================================================= */
+    #contact{
+      background:
+        radial-gradient(1200px 380px at 10% 10%, rgba(0,123,255,0.18), transparent 60%),
+        radial-gradient(900px 320px at 90% 20%, rgba(0,198,255,0.18), transparent 55%),
+        radial-gradient(900px 360px at 50% 90%, rgba(245,158,11,0.12), transparent 55%);
+    }
+    .contact-grid{
+      display:grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 18px;
+      align-items:start;
+    }
+    .glass{
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--r-xl);
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(12px);
+      position:relative;
+      overflow:hidden;
+    }
+    .glass::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: linear-gradient(135deg, rgba(0,123,255,0.18), rgba(245,158,11,0.12));
+      filter: blur(18px);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .glass > *{ position:relative; z-index:1; }
+
+    .contact-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 12px 0 10px;
+    }
+    .quick{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
       border:none;
-      border-radius:50px;
+      border-radius: 16px;
+      font-weight: 900;
       cursor:pointer;
-      transition:transform .3s ease, background-color .3s ease;
+      background: rgba(17,24,39,0.90);
+      color:#fff;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s ease, opacity .2s ease;
     }
-    .contact-form button:hover{
-      background:#0056b3;
-      transform:scale(1.03);
+    .quick:hover{ transform: translateY(-2px); }
+
+    .toast{
+      min-height: 1.2em;
+      color: var(--muted);
+      font-size: .9rem;
+      margin-top: 6px;
     }
 
-    /* ===== FOOTER ===== */
-    footer{
-      text-align:center;
-      padding:20px;
-      color:#777;
-      font-size:14px;
+    .contact-cards{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top: 12px;
+    }
+    .c-card{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      will-change: transform;
+    }
+    .c-card:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.14);
+      background: rgba(255,255,255,0.96);
     }
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width:900px){
-      header{ flex-direction:column; }
-      .contact-container{ flex-direction:column; gap:30px; }
+    .c-ico{
+      width: 54px; height: 54px;
+      border-radius: 18px;
+      display:grid; place-items:center;
+      color:#fff;
+      background: var(--grad-primary);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.15);
+      flex: 0 0 auto;
+    }
+    .c-ico.phone{ background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .c-ico.linkedin{ background: linear-gradient(135deg, #0A66C2, #0077B5); }
+    .c-ico.loc{ background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+    .c-text{ min-width:0; }
+    .c-title{ font-weight: 900; }
+    .c-value{
+      display:block;
+      font-size: .92rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .c-action{
+      margin-left:auto;
+      opacity:.55;
+      transition: transform .2s ease, opacity .2s ease;
+    }
+    .c-card:hover .c-action{ opacity:.85; transform: translateY(-1px); }
+
+    .qr-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(0,0,0,0.06);
+      margin-top: 14px;
+    }
+    .qr-img{
+      width: 96px; height: 96px;
+      border-radius: 16px;
+      background:#fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+    }
+    .qr-title{ font-weight: 900; margin:0; }
+    .qr-sub{ margin:4px 0 0; color: var(--muted); font-size:.9rem; }
+
+    .contact-form{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .field label{ display:block; font-weight: 900; font-size:.86rem; margin:0 0 6px; color: var(--muted); }
+    .field input, .field textarea{
+      width:100%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.92);
+      color: var(--text);
+      transition: box-shadow .2s ease, border-color .2s ease;
+      font-size: 1rem;
+    }
+    .field input:focus, .field textarea:focus{
+      border-color: rgba(0,123,255,0.50);
+      box-shadow: 0 0 0 5px rgba(0,123,255,0.14);
+    }
+    .send{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 16px;
+      border:none;
+      border-radius: 999px;
+      font-weight: 900;
+      cursor:pointer;
+      color:#fff;
+      background: var(--grad-primary);
+      box-shadow: 0 18px 42px rgba(0,0,0,0.14);
+      transition: transform .2s ease;
+    }
+    .send:hover{ transform: translateY(-2px) scale(1.01); }
+
+    /* =========================================================
+       9) Dock navigation
+       ========================================================= */
+    .dock{
+      position:fixed;
+      left:50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      display:flex;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--dock-bg);
+      border: 1px solid var(--dock-bd);
+      box-shadow: 0 26px 70px rgba(0,0,0,0.22);
+      backdrop-filter: blur(14px);
+      z-index:2500;
+    }
+    .dock a{
+      width:46px; height:46px;
+      border-radius: 18px;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      background: rgba(255,255,255,0.10);
+      color:#fff;
+      transition: transform .18s ease, background .18s ease;
+      position:relative;
+    }
+    .dock a:hover{
+      transform: translateY(-4px) scale(1.06);
+      background: rgba(255,255,255,0.16);
+    }
+    .dock a.active{
+      background: var(--grad-primary);
+      color:#fff;
+    }
+    .dock a span{
+      position:absolute;
+      top:-30px;
+      left:50%;
+      transform: translateX(-50%);
+      font-size:.75rem;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(17,24,39,0.90);
+      color:#fff;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      white-space:nowrap;
+    }
+    .dock a:hover span{
+      opacity:1;
+      transform: translateX(-50%) translateY(-2px);
     }
 
-    /* ===== ACCESSIBILITÉ ===== */
+    /* =========================================================
+       10) SOFT SKILLS — ICONS + MICRO-SITUATIONS (NEW)
+       ========================================================= */
+    .soft-icons{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .soft-icon-card{
+      appearance:none;
+      border:none;
+      text-align:left;
+      cursor:pointer;
+      padding: 16px;
+      border-radius: var(--r-xl);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .soft-icon-card:hover{
+      transform: translateY(-4px);
+      background: rgba(0,123,255,0.06);
+      border-color: rgba(0,123,255,0.18);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.12);
+    }
+
+    .sic-top{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+    }
+
+    .sic-ico{
+      width: 52px; height: 52px;
+      border-radius: 18px;
+      display:grid; place-items:center;
+      color:#fff;
+      background: var(--grad-primary);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.14);
+      flex:0 0 auto;
+    }
+
+    .sic-title{
+      display:block;
+      font-weight: 900;
+      line-height:1.15;
+    }
+
+    .sic-sub{
+      display:block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: .9rem;
+    }
+
+    .sic-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top: 12px;
+      font-size: .78rem;
+      font-weight: 900;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.06);
+      width: max-content;
+    }
+
+    /* Drawer (modal) */
+    .soft-drawer{
+      position:fixed;
+      inset:0;
+      display:grid;
+      place-items:center;
+      padding: 18px;
+      background: rgba(17,24,39,0.55);
+      backdrop-filter: blur(8px);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease;
+      z-index: 5000;
+    }
+    .soft-drawer[aria-hidden="false"]{
+      opacity:1;
+      pointer-events:auto;
+    }
+    .soft-drawer-card{
+      width: min(720px, 100%);
+      border-radius: var(--r-xl);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.55);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.28);
+      overflow:hidden;
+    }
+    .sd-head{
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      padding: 18px;
+      background:
+        radial-gradient(900px 380px at 15% 20%, rgba(0,123,255,0.18), transparent 60%),
+        radial-gradient(700px 320px at 85% 25%, rgba(0,198,255,0.12), transparent 55%),
+        rgba(255,255,255,0.65);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .sd-ico{
+      width:54px; height:54px;
+      border-radius: 20px;
+      display:grid; place-items:center;
+      color:#fff;
+      background: var(--grad-primary);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.14);
+      flex:0 0 auto;
+    }
+    .sd-title{ margin:0; font-weight: 950; }
+    .sd-sub{ margin:4px 0 0; color: var(--muted); font-weight: 700; }
+    .sd-close{
+      margin-left:auto;
+      width:44px; height:44px;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.70);
+      cursor:pointer;
+      transition: transform .18s ease;
+    }
+    .sd-close:hover{ transform: translateY(-2px); }
+
+    .sd-body{
+      padding: 16px 18px 18px;
+      display:grid;
+      gap: 12px;
+    }
+    .sd-row{
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .sd-label{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 950;
+      font-size: .9rem;
+    }
+    .sd-text{
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+    .sd-foot{
+      padding: 12px 18px 16px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .sd-tip{
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    /* =========================================================
+       Responsive
+       ========================================================= */
+    @media (max-width: 980px){
+      .hero-card{ grid-template-columns: 1fr; text-align:center; }
+      .hero-photo{ margin: 0 auto; }
+      .gallery{ grid-template-columns: repeat(2, 1fr); }
+      .contact-grid{ grid-template-columns: 1fr; }
+      .skills-action{ grid-template-columns: 1fr; }
+      .soft-icons{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px){
+      .gallery{ grid-template-columns: 1fr; }
+      .dock{ gap:8px; padding: 10px; }
+      .dock a{ width:44px; height:44px; border-radius: 16px; }
+      .to-top{ right:14px; bottom:88px; }
+      .soft-icons{ grid-template-columns: 1fr; }
+    }
+
     @media (prefers-reduced-motion: reduce){
       *{ transition:none !important; animation:none !important; }
       html{ scroll-behavior:auto; }
@@ -355,209 +1106,1029 @@
 </head>
 
 <body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <a class="skip-link" href="#about">Aller au contenu</a>
 
-  <nav>
-    <a href="#about">À propos</a>
-    <a href="#projects">Projets</a>
-    <a href="#skills">Compétences</a>
-    <a href="#works">Expériences</a>
-    <a href="#education">Formation</a>
-    <a href="#contact">Contact</a>
-  </nav>
+  <button class="to-top" id="toTop" aria-label="Remonter en haut">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 
-  <header>
-    <img src="images/profile.jpg" alt="Photo d'Adam Mbea" class="profile-photo">
-    <div class="header-text">
-      <h1>Adam Mbea</h1>
-      <p id="typing-text"></p>
-      <a href="cv/Adam_Mbea_CV.pdf" download class="btn-cv">Télécharger le CV</a>
+  <!-- HERO -->
+  <header class="hero" id="top">
+    <div class="particles" aria-hidden="true">
+      <span class="particle"></span><span class="particle"></span><span class="particle"></span><span class="particle"></span>
+      <span class="particle"></span><span class="particle"></span><span class="particle"></span><span class="particle"></span>
+      <span class="particle"></span><span class="particle"></span><span class="particle"></span><span class="particle"></span>
+      <span class="particle"></span><span class="particle"></span><span class="particle"></span><span class="particle"></span>
+    </div>
+
+    <div class="hero-card reveal">
+      <div class="hero-photo">
+        <img src="images/profile.jpg" alt="Photo d'Adam Mbea" loading="lazy">
+      </div>
+
+      <div>
+        <h1 class="hero-title">Adam Mbea</h1>
+        <p class="hero-sub" id="typingText" aria-live="polite"></p>
+        <p class="hero-meta">Toulouse (31000) • Permis B • Stage fin d’études (6 mois) dès Mai 2026</p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="cv/Adam_Mbea_CV.pdf" download>
+            <i class="fa-solid fa-download"></i> Télécharger le CV
+          </a>
+          <a class="btn" href="#projects">
+            <i class="fa-solid fa-grid-2"></i> Voir mes projets
+          </a>
+        </div>
+
+        <div class="hero-stats" aria-label="Chiffres clés">
+          <span class="stat"><i class="fa-solid fa-bolt"></i> 400+ bookings gérés</span>
+          <span class="stat"><i class="fa-solid fa-award"></i> TOEIC 810</span>
+          <span class="stat"><i class="fa-solid fa-chart-simple"></i> Excel + BI (Power BI)</span>
+        </div>
+      </div>
     </div>
   </header>
 
-  <section id="about">
-    <h2>À propos de moi</h2>
-    <p class="justify">
-      Après une formation en comptabilité et finance d'entreprise, j'ai décidé de me spécialiser
-      dans l'audit interne et le contrôle de gestion pour transformer les données financières et
-      extra-financières en informations stratégiques.
-    </p>
-  </section>
+  <main class="wrap" id="content">
 
-  <section id="projects">
-    <h2>Projets</h2>
-    <div class="cards">
-        <div class="card">
-            <div class="card-header">
-                <div class="header-left">
-                    <div class="titles">
-                        <h3>Optimisation des processus de facturation</h3>
-                        <h4>Automatisation et réduction des erreurs</h4>
-                    </div>
-                </div>
-            </div>      
-  </section>
-  
-  <section id="skills">
-    <h2>Compétences</h2>
-    
-    <div class="cards">
-        <div class="card">
-            <div class="card-header">
-                <div class="header-left">
-                    <div class="titles">
-                        <h3>Analyse financière avancée</h3>
-                        <h4>Maîtrise des outils d'analyse et de reporting</h4>
-                    </div>
-                </div>
-        </div>
-    </div>
-  </section>
+    <!-- ABOUT -->
+    <section id="about" class="panel reveal">
+      <h2>À propos</h2>
+      <div class="h2-line"></div>
 
-  <section id="works">
-    <h2>Expériences</h2>
+      <p class="justify">
+        Formé à l’audit, au contrôle de gestion et à la comptabilité, je combine vision stratégique,
+        adaptabilité et esprit d’analyse. Animé par l’apprentissage continu et doté d’un bon sens relationnel,
+        je souhaite accompagner les transformations des organisations dans un environnement fondé sur la confiance,
+        la bienveillance et le collectif.
+      </p>
 
-    <div class="cards">
-      <div class="card">
-        <div class="card-header">
-          <div class="header-left">
-            <div class="avatar">
-              <img src="images/kactus.png" alt="Kactus">
+      <div class="pills">
+        <span class="pill"><i class="fa-solid fa-shield-halved"></i> Audit interne & risques</span>
+        <span class="pill"><i class="fa-solid fa-chart-line"></i> Contrôle de gestion & KPI</span>
+        <span class="pill"><i class="fa-solid fa-table"></i> Excel avancé (VBA, PQ, PP)</span>
+        <span class="pill"><i class="fa-solid fa-chart-pie"></i> Power BI</span>
+        <span class="pill"><i class="fa-solid fa-building-columns"></i> IFRS & consolidation</span>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="panel reveal">
+      <h2>Projets</h2>
+      <div class="h2-line"></div>
+
+      <div class="filters" aria-label="Filtres projets">
+        <button class="chip active" data-filter="all">Tous</button>
+        <button class="chip" data-filter="excel">Excel</button>
+        <button class="chip" data-filter="bi">BI</button>
+        <button class="chip" data-filter="audit">Audit</button>
+        <button class="chip" data-filter="process">Process</button>
+        <button class="chip" data-filter="data">Data</button>
+      </div>
+
+      <div class="gallery" id="gallery">
+        <a class="project reveal" href="https://ton-lien-projet-1" target="_blank" rel="noreferrer" data-tags="excel,process">
+          <img src="images/projets/projet1.jpg" alt="Projet — Automatisation facturation" loading="lazy">
+          <div class="project-overlay">
+            <h3 class="project-title">Automatisation facturation</h3>
+            <p class="project-desc">Fiabilisation + suivi paiements (process de facturation).</p>
+            <div class="project-meta">
+              <span class="tag"><i class="fa-solid fa-table"></i> Excel</span>
+              <span class="tag"><i class="fa-solid fa-gear"></i> Process</span>
             </div>
-            <div class="titles">
-              <h3>Chargé de facturation</h3>
-              <h4>Kactus</h4>
-              <span class="section-date">2022</span>
+            <span class="project-cta"><i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le projet</span>
+          </div>
+        </a>
+
+        <a class="project reveal" href="https://ton-lien-projet-2" target="_blank" rel="noreferrer" data-tags="bi,data">
+          <img src="images/projets/projet2.jpg" alt="Projet — Dashboard KPI" loading="lazy">
+          <div class="project-overlay">
+            <h3 class="project-title">Dashboard KPI</h3>
+            <p class="project-desc">Visualisations, indicateurs et reporting (Power BI).</p>
+            <div class="project-meta">
+              <span class="tag"><i class="fa-solid fa-chart-pie"></i> BI</span>
+              <span class="tag"><i class="fa-solid fa-database"></i> Data</span>
+            </div>
+            <span class="project-cta"><i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le projet</span>
+          </div>
+        </a>
+
+        <a class="project reveal" href="https://ton-lien-projet-3" target="_blank" rel="noreferrer" data-tags="audit,process">
+          <img src="images/projets/projet3.jpg" alt="Projet — Audit & cartographie des risques" loading="lazy">
+          <div class="project-overlay">
+            <h3 class="project-title">Audit & cartographie des risques</h3>
+            <p class="project-desc">Identification des risques clés + recommandations.</p>
+            <div class="project-meta">
+              <span class="tag"><i class="fa-solid fa-shield-halved"></i> Audit</span>
+              <span class="tag"><i class="fa-solid fa-gear"></i> Process</span>
+            </div>
+            <span class="project-cta"><i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le projet</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="panel reveal">
+      <h2>Compétences</h2>
+      <div class="h2-line"></div>
+
+      <p class="muted" style="text-align:center;margin:0 0 18px;">
+        Des compétences expliquées par ce que je fais concrètement (preuves + outils).
+      </p>
+
+      <div class="skills-action" data-reveal-group>
+        <!-- Excel -->
+        <article class="s-card reveal hover-card">
+          <div class="s-top hover-header" tabindex="0">
+            <div class="s-ico"><i class="fa-solid fa-table"></i></div>
+            <div>
+              <h3 class="s-title">Excel avancé</h3>
+              <p class="s-sub">Automatisation, fiabilisation, analyse</p>
             </div>
           </div>
+          <div class="hover-content">
+            <p class="s-desc">
+              Je transforme des fichiers “manuels” en process fiables : contrôle, nettoyage, calculs, consolidation, reporting.
+            </p>
+            <div class="s-proof">
+              <span class="proof"><i class="fa-solid fa-bolt"></i> Optimisation process</span>
+              <span class="proof"><i class="fa-solid fa-circle-check"></i> Fiabilisation données</span>
+              <span class="proof"><i class="fa-solid fa-clock"></i> Gain de temps</span>
+            </div>
+            <div class="s-tools">
+              <span class="toolchip"><i class="devicon-microsoft-excel-plain colored"></i> Excel</span>
+              <span class="toolchip"><i class="fa-solid fa-gears"></i> Power Query</span>
+              <span class="toolchip"><i class="fa-solid fa-cubes"></i> Power Pivot</span>
+              <span class="toolchip"><i class="fa-solid fa-code"></i> VBA</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Power BI -->
+        <article class="s-card reveal hover-card">
+          <div class="s-top hover-header" tabindex="0">
+            <div class="s-ico"><i class="fa-solid fa-chart-pie"></i></div>
+            <div>
+              <h3 class="s-title">Power BI / Data Viz</h3>
+              <p class="s-sub">KPI, dashboards, storytelling</p>
+            </div>
+          </div>
+
+          <div class="hover-content">
+            <p class="s-desc">
+              Je conçois des tableaux de bord pour piloter : indicateurs, tendances, analyse, restitution claire.
+            </p>
+
+            <div class="s-proof">
+              <span class="proof"><i class="fa-solid fa-gauge-high"></i> KPI pilotage</span>
+              <span class="proof"><i class="fa-solid fa-chart-line"></i> Analyse & tendances</span>
+              <span class="proof"><i class="fa-solid fa-comments"></i> Restitution</span>
+            </div>
+
+            <div class="s-tools">
+              <span class="toolchip"><i class="devicon-powerbi-plain colored"></i> Power BI</span>
+              <span class="toolchip"><i class="fa-solid fa-database"></i> Modèle data</span>
+              <span class="toolchip"><i class="fa-solid fa-calculator"></i> DAX</span>
+              <span class="toolchip"><i class="fa-solid fa-table"></i> Excel</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Audit / Risques -->
+        <article class="s-card reveal hover-card">
+          <div class="s-top hover-header" tabindex="0">
+            <div class="s-ico"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+              <h3 class="s-title">Audit & Risques</h3>
+              <p class="s-sub">Cartographie, tests, recommandations</p>
+            </div>
+          </div>
+
+          <div class="hover-content">
+            <p class="s-desc">
+              J’analyse les processus, j’identifie les risques clés, je réalise des tests et je formalise des recommandations actionnables.
+            </p>
+
+            <div class="s-proof">
+              <span class="proof"><i class="fa-solid fa-sitemap"></i> Cartographie</span>
+              <span class="proof"><i class="fa-solid fa-clipboard-check"></i> Tests & contrôles</span>
+              <span class="proof"><i class="fa-solid fa-lightbulb"></i> Recos</span>
+            </div>
+
+            <div class="s-tools">
+              <span class="toolchip"><i class="fa-solid fa-file-lines"></i> Workpapers</span>
+              <span class="toolchip"><i class="fa-solid fa-diagram-project"></i> Process</span>
+              <span class="toolchip"><i class="fa-solid fa-table"></i> Excel</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Contrôle de gestion -->
+        <article class="s-card reveal hover-card">
+          <div class="s-top hover-header" tabindex="0">
+            <div class="s-ico"><i class="fa-solid fa-chart-simple"></i></div>
+            <div>
+              <h3 class="s-title">Contrôle de gestion</h3>
+              <p class="s-sub">Budgets, écarts, performance</p>
+            </div>
+          </div>
+
+          <div class="hover-content">
+            <p class="s-desc">
+              Je suis la performance via budgets, écarts, KPI et analyses (coûts, marges, rentabilité).
+            </p>
+
+            <div class="s-proof">
+              <span class="proof"><i class="fa-solid fa-scale-balanced"></i> Suivi budgétaire</span>
+              <span class="proof"><i class="fa-solid fa-arrows-left-right"></i> Analyse écarts</span>
+              <span class="proof"><i class="fa-solid fa-coins"></i> Coûts & marges</span>
+            </div>
+
+            <div class="s-tools">
+              <span class="toolchip"><i class="fa-solid fa-table"></i> Excel</span>
+              <span class="toolchip"><i class="fa-solid fa-chart-line"></i> KPI</span>
+              <span class="toolchip"><i class="devicon-sap-plain colored"></i> SAP</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Comptabilité -->
+        <article class="s-card reveal hover-card">
+          <div class="s-top hover-header" tabindex="0">
+            <div class="s-ico"><i class="fa-solid fa-file-invoice"></i></div>
+            <div>
+              <h3 class="s-title">Comptabilité</h3>
+              <p class="s-sub">Saisie, contrôle, clôture</p>
+            </div>
+          </div>
+
+          <div class="hover-content">
+            <p class="s-desc">
+              Je sécurise la qualité comptable : contrôle des pièces, rapprochements, inventaires, préparation des états.
+            </p>
+
+            <div class="s-proof">
+              <span class="proof"><i class="fa-solid fa-circle-check"></i> Contrôle pièces</span>
+              <span class="proof"><i class="fa-solid fa-building-columns"></i> Clôture</span>
+              <span class="proof"><i class="fa-solid fa-table"></i> Rapprochements</span>
+            </div>
+
+            <div class="s-tools">
+              <span class="toolchip"><i class="si si-sage" style="font-size:18px;"></i> Sage</span>
+              <span class="toolchip"><i class="fa-solid fa-table"></i> Excel</span>
+              <span class="toolchip"><i class="fa-solid fa-folder-open"></i> Justificatifs</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Collaboration -->
+        <article class="s-card reveal hover-card">
+          <div class="s-top hover-header" tabindex="0">
+            <div class="s-ico"><i class="fa-solid fa-people-group"></i></div>
+            <div>
+              <h3 class="s-title">Collaboration</h3>
+              <p class="s-sub">Coordination, communication, suivi</p>
+            </div>
+          </div>
+
+          <div class="hover-content">
+            <p class="s-desc">
+              Je coordonne avec des équipes pluridisciplinaires (évènementiel, supply, support) pour résoudre, fluidifier, livrer.
+            </p>
+
+            <div class="s-proof">
+              <span class="proof"><i class="fa-solid fa-handshake"></i> Coordination</span>
+              <span class="proof"><i class="fa-solid fa-comment-dots"></i> Communication</span>
+              <span class="proof"><i class="fa-solid fa-clipboard-list"></i> Suivi & priorités</span>
+            </div>
+
+            <div class="s-tools">
+              <span class="toolchip"><i class="devicon-slack-plain colored"></i> Slack</span>
+              <span class="toolchip"><i class="devicon-microsoftteams-plain colored"></i> Teams</span>
+              <span class="toolchip"><i class="fa-solid fa-list-check"></i> Organisation</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SOFT SKILLS (ICÔNES + MICRO-SITUATIONS) -->
+    <section id="softskills" class="panel reveal">
+      <h2>Soft skills</h2>
+      <div class="h2-line"></div>
+
+      <p class="muted" style="text-align:center;margin:0 0 18px;">
+        Des soft skills prouvées par des situations concrètes (hover/clic pour voir le détail).
+      </p>
+
+      <div class="soft-icons" data-reveal-group>
+        <button class="soft-icon-card reveal" type="button"
+          data-title="Rigueur"
+          data-icon="fa-solid fa-magnifying-glass"
+          data-situation="CNPS — contrôle des justificatifs & rapprochements bancaires."
+          data-action="Vérifier les pièces, recouper les montants, corriger les écarts."
+          data-impact="Données fiabilisées pour la clôture et les états financiers.">
+          <div class="sic-top">
+            <span class="sic-ico"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <div class="sic-text">
+              <span class="sic-title">Rigueur</span>
+              <span class="sic-sub">Fiabiliser sans compromis</span>
+            </div>
+          </div>
+          <span class="sic-pill"><i class="fa-solid fa-hand-pointer"></i> Détails</span>
+        </button>
+
+        <button class="soft-icon-card reveal" type="button"
+          data-title="Esprit d’analyse"
+          data-icon="fa-solid fa-chart-line"
+          data-situation="Port de Kribi — analyse des écarts & suivi budgétaire."
+          data-action="Structurer les données, identifier les drivers, synthétiser les tendances."
+          data-impact="Lecture claire des écarts pour mieux piloter coûts & performance.">
+          <div class="sic-top">
+            <span class="sic-ico"><i class="fa-solid fa-chart-line"></i></span>
+            <div class="sic-text">
+              <span class="sic-title">Esprit d’analyse</span>
+              <span class="sic-sub">Synthèse → décision</span>
+            </div>
+          </div>
+          <span class="sic-pill"><i class="fa-solid fa-hand-pointer"></i> Détails</span>
+        </button>
+
+        <button class="soft-icon-card reveal" type="button"
+          data-title="Communication"
+          data-icon="fa-solid fa-comments"
+          data-situation="Kactus — échanges clients/partenaires sur factures & paiements."
+          data-action="Expliquer clairement, reformuler, sécuriser les infos importantes."
+          data-impact="Litiges réduits et suivi de paiement plus fluide.">
+          <div class="sic-top">
+            <span class="sic-ico"><i class="fa-solid fa-comments"></i></span>
+            <div class="sic-text">
+              <span class="sic-title">Communication</span>
+              <span class="sic-sub">Clarté & diplomatie</span>
+            </div>
+          </div>
+          <span class="sic-pill"><i class="fa-solid fa-hand-pointer"></i> Détails</span>
+        </button>
+
+        <button class="soft-icon-card reveal" type="button"
+          data-title="Esprit d’équipe"
+          data-icon="fa-solid fa-people-group"
+          data-situation="Kactus — coordination évènementiel, supply & support."
+          data-action="Partager l’info, aligner les priorités, débloquer rapidement."
+          data-impact="Résolution plus rapide des sujets et meilleure expérience client.">
+          <div class="sic-top">
+            <span class="sic-ico"><i class="fa-solid fa-people-group"></i></span>
+            <div class="sic-text">
+              <span class="sic-title">Esprit d’équipe</span>
+              <span class="sic-sub">Coopération transverse</span>
+            </div>
+          </div>
+          <span class="sic-pill"><i class="fa-solid fa-hand-pointer"></i> Détails</span>
+        </button>
+
+        <button class="soft-icon-card reveal" type="button"
+          data-title="Adaptabilité"
+          data-icon="fa-solid fa-arrows-rotate"
+          data-situation="Kactus — forte volumétrie (400+ bookings) + priorités changeantes."
+          data-action="Reprioriser, standardiser, garder la qualité sous pression."
+          data-impact="Délais tenus même en pics d’activité.">
+          <div class="sic-top">
+            <span class="sic-ico"><i class="fa-solid fa-arrows-rotate"></i></span>
+            <div class="sic-text">
+              <span class="sic-title">Adaptabilité</span>
+              <span class="sic-sub">Contexte mouvant</span>
+            </div>
+          </div>
+          <span class="sic-pill"><i class="fa-solid fa-hand-pointer"></i> Détails</span>
+        </button>
+
+        <button class="soft-icon-card reveal" type="button"
+          data-title="Initiative"
+          data-icon="fa-solid fa-lightbulb"
+          data-situation="Kactus — amélioration du fonctionnement de l’outil de facturation."
+          data-action="Proposer une optimisation, tester, documenter, déployer."
+          data-impact="Process plus simple et moins d’erreurs.">
+          <div class="sic-top">
+            <span class="sic-ico"><i class="fa-solid fa-lightbulb"></i></span>
+            <div class="sic-text">
+              <span class="sic-title">Initiative</span>
+              <span class="sic-sub">Force de proposition</span>
+            </div>
+          </div>
+          <span class="sic-pill"><i class="fa-solid fa-hand-pointer"></i> Détails</span>
+        </button>
+
+        <button class="soft-icon-card reveal" type="button"
+          data-title="Curiosité"
+          data-icon="fa-solid fa-brain"
+          data-situation="TBS / projets — exploration d’outils (Power Query, DAX, BI)."
+          data-action="Tester, apprendre vite, appliquer sur des cas concrets."
+          data-impact="Montée en compétence continue et livrables plus solides.">
+          <div class="sic-top">
+            <span class="sic-ico"><i class="fa-solid fa-brain"></i></span>
+            <div class="sic-text">
+              <span class="sic-title">Curiosité</span>
+              <span class="sic-sub">Apprendre vite</span>
+            </div>
+          </div>
+          <span class="sic-pill"><i class="fa-solid fa-hand-pointer"></i> Détails</span>
+        </button>
+
+        <button class="soft-icon-card reveal" type="button"
+          data-title="Sens du service"
+          data-icon="fa-solid fa-heart"
+          data-situation="Facturation — objectif : sécuriser la relation et la satisfaction."
+          data-action="Anticiper les besoins, répondre vite, proposer une solution."
+          data-impact="Confiance renforcée et meilleure qualité de service.">
+          <div class="sic-top">
+            <span class="sic-ico"><i class="fa-solid fa-heart"></i></span>
+            <div class="sic-text">
+              <span class="sic-title">Sens du service</span>
+              <span class="sic-sub">Orientation client</span>
+            </div>
+          </div>
+          <span class="sic-pill"><i class="fa-solid fa-hand-pointer"></i> Détails</span>
+        </button>
+      </div>
+
+      <!-- Drawer -->
+      <div class="soft-drawer" id="softDrawer" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="soft-drawer-card" role="document">
+          <div class="sd-head">
+            <div class="sd-ico" id="sdIcon"><i class="fa-solid fa-circle-info"></i></div>
+            <div class="sd-titlewrap">
+              <h3 class="sd-title" id="sdTitle">Soft skill</h3>
+              <p class="sd-sub" id="sdSituation">Situation</p>
+            </div>
+            <button class="sd-close" type="button" id="sdClose" aria-label="Fermer">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="sd-body">
+            <div class="sd-row">
+              <span class="sd-label"><i class="fa-solid fa-bolt"></i> Action</span>
+              <p class="sd-text" id="sdAction">—</p>
+            </div>
+            <div class="sd-row">
+              <span class="sd-label"><i class="fa-solid fa-chart-simple"></i> Impact</span>
+              <p class="sd-text" id="sdImpact">—</p>
+            </div>
+          </div>
+
+          <div class="sd-foot">
+            <span class="sd-tip"><i class="fa-regular fa-keyboard"></i> Échap pour fermer</span>
+          </div>
         </div>
-        <div class="card-content">
-          <p>Edition des factures et suivi administratif.</p>
+      </div>
+    </section>
+
+    <!-- EXPERIENCES -->
+    <section id="works" class="panel reveal">
+      <h2>Expériences</h2>
+      <div class="h2-line"></div>
+
+      <div class="timeline" data-reveal-group>
+
+        <article class="t-item reveal hover-card">
+          <div class="t-head hover-header" tabindex="0">
+            <div class="logo"><img src="images/kactus.png" alt="Kactus" loading="lazy"></div>
+            <div>
+              <h3 class="t-title">Chargé de facturation — Stage (4 mois)</h3>
+              <p class="t-sub">Kactus • Paris</p>
+            </div>
+            <span class="t-date">2025</span>
+          </div>
+
+          <div class="hover-content">
+            <div class="result-badges">
+              <span class="result"><i class="fa-solid fa-bolt"></i> 400+ bookings</span>
+              <span class="result"><i class="fa-solid fa-file-invoice"></i> Facturation</span>
+              <span class="result"><i class="fa-solid fa-handshake"></i> Litiges</span>
+            </div>
+            <ul class="detail-list">
+              <li>Gestion de 400+ bookings (Front)</li>
+              <li>Facturation clients/partenaires & suivi des paiements</li>
+              <li>Coordination avec équipes évènementiel, Supply, Support</li>
+              <li>Amélioration du fonctionnement de l’outil de facturation</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="t-item reveal hover-card">
+          <div class="t-head hover-header" tabindex="0">
+            <div class="logo"><img src="images/cnps.jpg" alt="CNPS" loading="lazy"></div>
+            <div>
+              <h3 class="t-title">Collaborateur comptable — Stage (10 mois)</h3>
+              <p class="t-sub">CNPS • Cameroun</p>
+            </div>
+            <span class="t-date">2023–2024</span>
+          </div>
+
+          <div class="hover-content">
+            <div class="result-badges">
+              <span class="result"><i class="fa-solid fa-circle-check"></i> Contrôle & saisie</span>
+              <span class="result"><i class="fa-solid fa-table"></i> Excel</span>
+              <span class="result"><i class="fa-solid fa-clipboard-list"></i> Inventaires</span>
+            </div>
+            <ul class="detail-list">
+              <li>Contrôle et enregistrement des opérations quotidiennes</li>
+              <li>Retraitement bases de données & optimisation rapprochements bancaires (Excel)</li>
+              <li>Vérification des justificatifs & soutien aux travaux d’inventaires</li>
+              <li>Participation à l’élaboration des états financiers et aux audits</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="t-item reveal hover-card">
+          <div class="t-head hover-header" tabindex="0">
+            <div class="logo"><img src="images/pak.jpg" alt="Port Autonome de Kribi" loading="lazy"></div>
+            <div>
+              <h3 class="t-title">Assistant Contrôleur de Gestion — Stage (6 mois)</h3>
+              <p class="t-sub">Port Autonome de Kribi • Cameroun</p>
+            </div>
+            <span class="t-date">2022</span>
+          </div>
+
+          <div class="hover-content">
+            <div class="result-badges">
+              <span class="result"><i class="fa-solid fa-chart-line"></i> Analyse écarts</span>
+              <span class="result"><i class="fa-solid fa-gauge-high"></i> KPI</span>
+              <span class="result"><i class="fa-solid fa-coins"></i> Coûts & marges</span>
+            </div>
+            <ul class="detail-list">
+              <li>Calcul et analyse des écarts pour le suivi budgétaire</li>
+              <li>Collecte/retraitement des données sur Excel pour fiabiliser les états</li>
+              <li>Évaluation des coûts, marges, contributions et rentabilité</li>
+              <li>Suivi des indicateurs et production de reportings</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education" class="panel reveal">
+      <h2>Formation</h2>
+      <div class="h2-line"></div>
+
+      <div class="timeline" data-reveal-group>
+
+        <article class="t-item reveal hover-card">
+          <div class="t-head hover-header" tabindex="0">
+            <div class="logo"><img src="images/tbs_education.png" alt="TBS Education" loading="lazy"></div>
+            <div>
+              <h3 class="t-title">Mastère — Audit Interne & Contrôle de Gestion</h3>
+              <p class="t-sub">TBS Education • Toulouse</p>
+            </div>
+            <span class="t-date">2025–2026</span>
+          </div>
+
+          <div class="hover-content">
+            <div class="result-badges">
+              <span class="result"><i class="fa-solid fa-shield-halved"></i> Audit & risques</span>
+              <span class="result"><i class="fa-solid fa-chart-line"></i> CDG & KPI</span>
+              <span class="result"><i class="fa-solid fa-building-columns"></i> IFRS</span>
+            </div>
+            <ul class="detail-list">
+              <li>Audit systèmes / processus & risques</li>
+              <li>Comptes consolidés & combinés</li>
+              <li>Approfondissement IFRS</li>
+              <li>BI : Excel avancé</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="t-item reveal hover-card">
+          <div class="t-head hover-header" tabindex="0">
+            <div class="logo"><img src="images/edc.png" alt="EDC Paris Business School" loading="lazy"></div>
+            <div>
+              <h3 class="t-title">Programme Grande École — Audit & CDG</h3>
+              <p class="t-sub">EDC Paris Business School • Puteaux</p>
+            </div>
+            <span class="t-date">2024–2025</span>
+          </div>
+
+          <div class="hover-content">
+            <div class="result-badges">
+              <span class="result"><i class="fa-solid fa-magnifying-glass"></i> Audit</span>
+              <span class="result"><i class="fa-solid fa-gauge-high"></i> Performance</span>
+              <span class="result"><i class="fa-solid fa-table"></i> Analyse</span>
+            </div>
+            <ul class="detail-list">
+              <li>Approfondissement en audit, contrôle de gestion et pilotage</li>
+              <li>Indicateurs & tableaux de bord</li>
+              <li>Études de cas et restitution</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="t-item reveal hover-card">
+          <div class="t-head hover-header" tabindex="0">
+            <div class="logo"><img src="images/ucac.png" alt="UCAC" loading="lazy"></div>
+            <div>
+              <h3 class="t-title">Master — Comptabilité & Finance d’Entreprises</h3>
+              <p class="t-sub">UCAC • Cameroun</p>
+            </div>
+            <span class="t-date">2021–2023</span>
+          </div>
+
+          <div class="hover-content">
+            <div class="result-badges">
+              <span class="result"><i class="fa-solid fa-file-invoice"></i> Comptabilité</span>
+              <span class="result"><i class="fa-solid fa-chart-pie"></i> Analyse fi</span>
+              <span class="result"><i class="fa-solid fa-clipboard-check"></i> Audit</span>
+            </div>
+            <ul class="detail-list">
+              <li>Comptabilité, analyse financière</li>
+              <li>Audit et contrôle de gestion</li>
+              <li>Études de cas, reporting</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="panel reveal">
+      <h2>Contact</h2>
+      <div class="h2-line"></div>
+
+      <div class="contact-grid">
+        <div class="glass reveal">
+          <p style="margin:0;">
+            Disponible pour échanger : <strong>stage fin d’études (6 mois) dès Mai 2026</strong>.
+          </p>
+
+          <div class="contact-actions">
+            <button class="quick" id="copyEmail" type="button" data-copy="r.adammbea@gmail.com">
+              <i class="fa-regular fa-copy"></i> Copier l’email
+            </button>
+            <button class="quick" id="downloadVCard" type="button">
+              <i class="fa-regular fa-address-card"></i> Ajouter au carnet (vCard)
+            </button>
+          </div>
+
+          <div class="toast" id="toast" aria-live="polite"></div>
+
+          <div class="contact-cards" data-reveal-group>
+            <a class="c-card reveal" href="mailto:r.adammbea@gmail.com" aria-label="Envoyer un email">
+              <div class="c-ico"><i class="fa-solid fa-envelope"></i></div>
+              <div class="c-text">
+                <div class="c-title">Email</div>
+                <span class="c-value">r.adammbea@gmail.com</span>
+              </div>
+              <div class="c-action"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            </a>
+
+            <a class="c-card reveal" href="tel:+330753022871" aria-label="Appeler par téléphone">
+              <div class="c-ico phone"><i class="fa-solid fa-phone"></i></div>
+              <div class="c-text">
+                <div class="c-title">Téléphone</div>
+                <span class="c-value">+33 07 53 02 28 71</span>
+              </div>
+              <div class="c-action"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            </a>
+
+            <a class="c-card reveal" href="https://linkedin.com/in/adam-mbea/" target="_blank" rel="noreferrer" aria-label="Ouvrir LinkedIn">
+              <div class="c-ico linkedin"><i class="fa-brands fa-linkedin-in"></i></div>
+              <div class="c-text">
+                <div class="c-title">LinkedIn</div>
+                <span class="c-value">linkedin.com/in/adam-mbea</span>
+              </div>
+              <div class="c-action"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            </a>
+
+            <div class="c-card reveal" role="group" aria-label="Localisation">
+              <div class="c-ico loc"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="c-text">
+                <div class="c-title">Localisation</div>
+                <span class="c-value">Toulouse (31000)</span>
+              </div>
+              <div class="c-action"><i class="fa-solid fa-circle-check"></i></div>
+            </div>
+          </div>
+
+          <div class="qr-wrap">
+            <div>
+              <p class="qr-title">QR LinkedIn</p>
+              <p class="qr-sub">Scannez pour ouvrir mon profil.</p>
+            </div>
+
+            <a href="https://linkedin.com/in/adam-mbea/" target="_blank" rel="noreferrer" aria-label="Ouvrir LinkedIn via QR">
+              <img
+                class="qr-img"
+                alt="QR code LinkedIn"
+                loading="lazy"
+                src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Flinkedin.com%2Fin%2Fadam-mbea%2F"
+              />
+            </a>
+          </div>
+        </div>
+
+        <div class="glass reveal">
+          <h3 style="margin:0;font-weight:900;">Envoyer un message</h3>
+          <p class="muted" style="margin:6px 0 0;">Je réponds rapidement.</p>
+
+          <form class="contact-form" action="https://formspree.io/f/xxxxx" method="POST">
+            <div class="field">
+              <label for="name">Nom</label>
+              <input id="name" name="name" type="text" placeholder="Votre nom" required>
+            </div>
+            <div class="field">
+              <label for="surname">Prénom</label>
+              <input id="surname" name="surname" type="text" placeholder="Votre prénom" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="votre@email.com" required>
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Votre message..." required></textarea>
+            </div>
+            <button class="send" type="submit"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>
+          </form>
         </div>
       </div>
+    </section>
 
-      <!-- Ajoute d'autres cartes ici -->
-    </div>
-  </section>
+    <footer class="muted" style="text-align:center; padding-bottom: 10px;">
+      © 2026 — Portfolio | Adam Mbea
+    </footer>
 
-  <section id="education">
-    <h2>Formation</h2>
-    <div class="cards">
-      <!-- cartes formation -->
-    </div>
-  </section>
+  </main>
 
-  <section id="contact">
-    <h2>Me contacter</h2>
-
-    <div class="contact-container">
-      <div class="contact-info">
-        <p>Vous pouvez me joindre via :</p>
-        <ul>
-          <li>Email : <a href="mailto:r.adammbea@gmail.com">r.adammbea@gmail.com</a></li>
-          <li>Téléphone : <a href="tel:+330753022871">+33 07 53 02 28 71</a></li>
-          <li>LinkedIn : <a href="https://www.linkedin.com/in/adam-mbea/" target="_blank" rel="noreferrer">Mon profil LinkedIn</a></li>
-        </ul>
-      </div>
-
-      <div class="contact-form">
-        <form action="https://formspree.io/f/xxxxx" method="POST">
-          <label for="name">Nom :</label>
-          <input type="text" id="name" name="name" required>
-
-          <label for="surname">Prénom :</label>
-          <input type="text" id="surname" name="surname" required>
-
-          <label for="email">Email :</label>
-          <input type="email" id="email" name="email" required>
-
-          <label for="message">Message :</label>
-          <textarea id="message" name="message" rows="5" required></textarea>
-
-          <button type="submit">Envoyer</button>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <p>© 2026 – Portfolio | Adam Mbea</p>
-  </footer>
+  <!-- DOCK -->
+  <nav class="dock" aria-label="Navigation">
+    <a href="#about" data-spy="about"><i class="fa-solid fa-user"></i><span>À propos</span></a>
+    <a href="#projects" data-spy="projects"><i class="fa-solid fa-grid-2"></i><span>Projets</span></a>
+    <a href="#skills" data-spy="skills"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Compétences</span></a>
+    <a href="#softskills" data-spy="softskills"><i class="fa-solid fa-people-arrows"></i><span>Soft skills</span></a>
+    <a href="#works" data-spy="works"><i class="fa-solid fa-briefcase"></i><span>Expériences</span></a>
+    <a href="#education" data-spy="education"><i class="fa-solid fa-graduation-cap"></i><span>Formation</span></a>
+    <a href="#contact" data-spy="contact"><i class="fa-solid fa-paper-plane"></i><span>Contact</span></a>
+  </nav>
 
   <script>
-    // 1) Reveal: classe unique pour header/sections/cartes/contact
-    const revealTargets = document.querySelectorAll('header, section, .card, .contact-info, .contact-form');
-    revealTargets.forEach(el => el.classList.add('reveal'));
-
-    const revealObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('show');
-        obs.unobserve(entry.target);
+    /* =========================================================
+       Particles placement
+       ========================================================= */
+    (function initParticles(){
+      const container = document.querySelector('.particles');
+      if(!container) return;
+      const ps = container.querySelectorAll('.particle');
+      ps.forEach((p)=>{
+        p.style.left = (Math.random()*100) + "%";
+        p.style.top = (Math.random()*100) + "%";
+        p.style.animationDuration = (6 + Math.random()*10) + "s";
+        p.style.animationDelay = (Math.random()*3) + "s";
+        p.style.opacity = (0.18 + Math.random()*0.35).toFixed(2);
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
+    })();
 
-    revealTargets.forEach(el => revealObserver.observe(el));
-
-    // 2) Menu actif
-    const sections = [...document.querySelectorAll('section')];
-    const navLinks = [...document.querySelectorAll('nav a')];
-
-    function updateActiveLink(){
-      const y = window.scrollY + 120;
-      let currentId = sections[0]?.id || "";
-      for (const sec of sections){
-        if (sec.offsetTop <= y) currentId = sec.id;
+    /* =========================================================
+       Reveal + stagger groups
+       ========================================================= */
+    (function reveal(){
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const items = document.querySelectorAll('.reveal');
+      if (prefersReduced) {
+        items.forEach(el => el.classList.add('show'));
+        return;
       }
-      navLinks.forEach(a => {
-        a.classList.toggle('active', a.getAttribute('href') === `#${currentId}`);
-      });
-    }
-    window.addEventListener('scroll', updateActiveLink, { passive: true });
-    updateActiveLink();
 
-    // 3) Typing cyclique
-    const typingElement = document.getElementById("typing-text");
-    const phrases = [
-      "Accompagner l'optimisation de la performance",
-      "Soutenir la prise de décision des entreprises",
-      "Transformer les données financières en stratégie"
-    ];
+      const obs = new IntersectionObserver((entries, observer) => {
+        for (const entry of entries){
+          if(!entry.isIntersecting) continue;
 
-    let p = 0, i = 0;
-    let isDeleting = false;
+          const parentGroup = entry.target.closest('[data-reveal-group]');
+          if (parentGroup){
+            const siblings = Array.from(parentGroup.querySelectorAll('.reveal'));
+            const i = siblings.indexOf(entry.target);
+            entry.target.style.transitionDelay = `${Math.min(i*90, 420)}ms`;
+          }
 
-    const typingSpeed = 55;
-    const deletingSpeed = 30;
-    const pause = 1200;
-
-    function tick(){
-      if (!typingElement) return;
-
-      const phrase = phrases[p];
-
-      if (!isDeleting){
-        typingElement.textContent = phrase.slice(0, i + 1);
-        i++;
-        if (i === phrase.length){
-          isDeleting = true;
-          return setTimeout(tick, pause);
+          entry.target.classList.add('show');
+          observer.unobserve(entry.target);
         }
-        return setTimeout(tick, typingSpeed);
-      }
+      }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
 
-      typingElement.textContent = phrase.slice(0, i - 1);
-      i--;
-      if (i === 0){
-        isDeleting = false;
-        p = (p + 1) % phrases.length;
-        return setTimeout(tick, 250);
+      items.forEach(el => obs.observe(el));
+    })();
+
+    /* =========================================================
+       Scroll progress + ToTop
+       ========================================================= */
+    const progress = document.getElementById('scrollProgress');
+    const toTop = document.getElementById('toTop');
+
+    function onScroll(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      progress.style.width = pct + "%";
+
+      if (scrollTop > doc.clientHeight * 0.25) toTop.classList.add('show');
+      else toTop.classList.remove('show');
+    }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+    toTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    /* =========================================================
+       Dock active (scroll spy)
+       ========================================================= */
+    const spyLinks = Array.from(document.querySelectorAll('.dock a[data-spy]'));
+    const sections = spyLinks.map(a => document.getElementById(a.dataset.spy)).filter(Boolean);
+
+    function updateDockActive(){
+      const y = window.scrollY + 140;
+      let current = sections[0]?.id || "";
+      for (const s of sections){
+        if (s.offsetTop <= y) current = s.id;
       }
-      setTimeout(tick, deletingSpeed);
+      spyLinks.forEach(a => a.classList.toggle('active', a.dataset.spy === current));
+    }
+    window.addEventListener('scroll', updateDockActive, { passive:true });
+    updateDockActive();
+
+    /* =========================================================
+       Typing effect
+       ========================================================= */
+    (function typing(){
+      const el = document.getElementById('typingText');
+      if(!el) return;
+
+      const phrases = [
+        "Auditeur junior — Audit interne & Contrôle de gestion",
+        "Excel avancé (VBA, Power Query, Power Pivot) • Power BI",
+        "Transformer les données en décisions opérationnelles"
+      ];
+      let p = 0, i = 0, del = false;
+      const tSpeed = 55, dSpeed = 30, pause = 1200;
+
+      function tick(){
+        const phrase = phrases[p];
+        if(!del){
+          el.textContent = phrase.slice(0, i+1);
+          i++;
+          if(i === phrase.length){ del = true; return setTimeout(tick, pause); }
+          return setTimeout(tick, tSpeed);
+        }else{
+          el.textContent = phrase.slice(0, i-1);
+          i--;
+          if(i === 0){ del = false; p = (p+1)%phrases.length; return setTimeout(tick, 250); }
+          return setTimeout(tick, dSpeed);
+        }
+      }
+      tick();
+    })();
+
+    /* =========================================================
+       Project filtering
+       ========================================================= */
+    (function projectFilter(){
+      const chips = Array.from(document.querySelectorAll('.chip'));
+      const projects = Array.from(document.querySelectorAll('.project'));
+      if(!chips.length || !projects.length) return;
+
+      chips.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.dataset.filter;
+          chips.forEach(c => c.classList.toggle('active', c === btn));
+
+          projects.forEach(card => {
+            if(filter === 'all'){ card.hidden = false; return; }
+            const tags = (card.dataset.tags || "").split(',').map(s => s.trim());
+            card.hidden = !tags.includes(filter);
+          });
+        });
+      });
+    })();
+
+    /* =========================================================
+       Contact: copy + vCard
+       ========================================================= */
+    const toast = document.getElementById('toast');
+    function showToast(msg){
+      if(!toast) return;
+      toast.textContent = msg;
+      setTimeout(()=> toast.textContent = "", 2200);
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      tick();
-    });
+    const copyBtn = document.getElementById('copyEmail');
+    if(copyBtn){
+      copyBtn.addEventListener('click', async ()=>{
+        const val = copyBtn.dataset.copy || "";
+        try{
+          await navigator.clipboard.writeText(val);
+          showToast("Email copié ✔");
+        }catch{
+          showToast("Copie impossible (navigateur).");
+        }
+      });
+    }
+
+    const vcardBtn = document.getElementById('downloadVCard');
+    if(vcardBtn){
+      vcardBtn.addEventListener('click', ()=>{
+        const vcf =
+`BEGIN:VCARD
+VERSION:3.0
+N:Mbea;Adam;;;
+FN:Adam Mbea
+EMAIL;TYPE=INTERNET;TYPE=WORK:r.adammbea@gmail.com
+TEL;TYPE=CELL:+33753022871
+ADR;TYPE=WORK:;;Toulouse;;31000;France
+URL:https://linkedin.com/in/adam-mbea/
+NOTE:Stage fin d’études (6 mois) dès Mai 2026
+END:VCARD`;
+
+        const blob = new Blob([vcf], { type:'text/vcard;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Adam_Mbea.vcf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast("vCard téléchargée ✔");
+      });
+    }
+
+    /* =========================================================
+       SOFT SKILLS — Icons + Micro-situations (drawer)
+       ========================================================= */
+    (function softIcons(){
+      const cards = Array.from(document.querySelectorAll('.soft-icon-card'));
+      const drawer = document.getElementById('softDrawer');
+      const closeBtn = document.getElementById('sdClose');
+
+      const sdTitle = document.getElementById('sdTitle');
+      const sdSituation = document.getElementById('sdSituation');
+      const sdAction = document.getElementById('sdAction');
+      const sdImpact = document.getElementById('sdImpact');
+      const sdIcon = document.getElementById('sdIcon');
+
+      if(!cards.length || !drawer || !closeBtn || !sdTitle || !sdSituation || !sdAction || !sdImpact || !sdIcon) return;
+
+      let lastFocus = null;
+
+      function openDrawer(card){
+        lastFocus = document.activeElement;
+
+        const title = card.dataset.title || "Soft skill";
+        const icon = card.dataset.icon || "fa-solid fa-circle-info";
+        const situation = card.dataset.situation || "—";
+        const action = card.dataset.action || "—";
+        const impact = card.dataset.impact || "—";
+
+        sdTitle.textContent = title;
+        sdSituation.textContent = situation;
+        sdAction.textContent = action;
+        sdImpact.textContent = impact;
+        sdIcon.innerHTML = `<i class="${icon}"></i>`;
+
+        drawer.setAttribute('aria-hidden', 'false');
+        closeBtn.focus();
+      }
+
+      function closeDrawer(){
+        drawer.setAttribute('aria-hidden', 'true');
+        if(lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      cards.forEach(card => {
+        card.addEventListener('click', () => openDrawer(card));
+        card.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            openDrawer(card);
+          }
+        });
+      });
+
+      closeBtn.addEventListener('click', closeDrawer);
+      drawer.addEventListener('click', (e) => {
+        if(e.target === drawer) closeDrawer();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if(drawer.getAttribute('aria-hidden') === 'false' && e.key === 'Escape'){
+          e.preventDefault();
+          closeDrawer();
+        }
+      });
+    })();
   </script>
 </body>
 </html>
+```

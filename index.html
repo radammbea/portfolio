@@ -180,7 +180,7 @@
 
     .hero-inner {
       display: grid;
-      grid-template-columns: 1fr 340px;
+      grid-template-columns: 1fr 400px;
       gap: var(--gap);
       align-items: start;
     }
@@ -203,28 +203,28 @@
       background: var(--grad);
     }
 
-    .hero-badge {
+    .avail-badge {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      background: rgba(59,130,246,.12);
-      border: 1px solid rgba(59,130,246,.25);
-      border-radius: 999px;
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,.25);
+      border-radius: 99px;
       padding: 5px 14px;
       font-size: .75rem;
       font-weight: 600;
-      color: var(--p1);
+      color: var(--accent-2);
       margin-bottom: 18px;
     }
 
-    .hero-badge .dot {
+    .avail-badge .dot {
       width: 7px; height: 7px;
       border-radius: 50%;
       background: var(--accent-2);
-      animation: pulse 2s infinite;
+      animation: pulse-dot 2s ease infinite;
     }
 
-    @keyframes pulse {
+    @keyframes pulse-dot {
       0%,100% { opacity:1; transform:scale(1); }
       50%      { opacity:.5; transform:scale(1.4); }
     }
@@ -321,14 +321,14 @@
 
     .stat-item { text-align: center; }
     .stat-num {
-      font-size: 1.6rem;
+      font-size: 1.0rem;
       font-weight: 900;
       background: var(--grad);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .stat-label { font-size: .7rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+    .stat-label { font-size: .7rem; color: var(--muted); font-weight: 600; text-transform: none; letter-spacing: .04em; }
 
     /* Hero grid (right col) */
     .hero-grid {
@@ -890,6 +890,10 @@
       gap: var(--gap);
     }
 
+    @media (max-width: 768px) {
+      .contact-bento {grid-template-columns: 1fr;}
+    }
+
     .contact-info { display: flex; flex-direction: column; gap: 12px; }
 
     .c-card {
@@ -943,7 +947,9 @@
     }
     .quick-btn:hover { border-color: var(--p1); color: var(--p1); }
 
-    /* Form */
+    /* ═══════════════════════════════════════════
+    FORMULAIRE
+    ═══════════════════════════════════════════ */
     .contact-form-wrap {
       background: var(--card);
       border: 1px solid var(--border);
@@ -1122,7 +1128,96 @@
       .dock            { bottom: 12px; padding: 6px 8px; }
       .dock a          { width: 36px; height: 36px; font-size: .85rem; }
     }
-  </style>
+
+/* Compétences en cartes */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 24px;
+    box-shadow: var(--sh);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .skill-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--sh-lg);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+
+  .skill-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .skill-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-xs);
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .skill-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .skill-card-body p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex-grow: 1;
+  }
+
+  .skill-card-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .skill-example {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(59, 130, 246, 0.08);
+    border-left: 3px solid var(--p1);
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    border-radius: 0 var(--r-xs) var(--r-xs) 0;
+  }
+
+  .skill-example i {
+    color: var(--p1);
+    font-size: 0.7rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
 </head>
 <body>
 
@@ -1148,14 +1243,14 @@
 
           <!-- Colonne principale -->
           <div class="hero-main">
-            <div class="hero-badge">
+            <div class="avail-badge">
               <span class="dot"></span>
-              Disponible · Alternance / Stage
+              Disponible
             </div>
 
             <h1 class="hero-name">
-              Adam<br>
-              <span class="grad-text">Mbea</span>
+              Port
+              <span class="grad-text">Folio</span>
             </h1>
 
             <div class="hero-typing">
@@ -1169,24 +1264,23 @@
               <a class="btn btn-outline" href="#contact">
                 <i class="fa-solid fa-paper-plane"></i> Me contacter
               </a>
-              <!-- ✅ FIX #8 — rel="noopener noreferrer" -->
-              <a class="btn btn-outline" href="https://linkedin.com/in/adam-mbea/" target="_blank" rel="noopener noreferrer">
-                <i class="fa-brands fa-linkedin"></i> LinkedIn
+              <a class="btn btn-outline" href="#projects">
+                <i class="fa-solid fa-diagram-project"></i> Mes projets
               </a>
             </div>
 
             <div class="hero-stats">
               <div class="stat-item">
-                <div class="stat-num"><span data-count="3">0</span>+</div>
-                <div class="stat-label">Années études</div>
+                <div class="stat-num">Mastère Spécialisé</div>
+                <div class="stat-label">Niveau d'études actuel</div>
               </div>
               <div class="stat-item">
                 <div class="stat-num"><span data-count="6">0</span></div>
                 <div class="stat-label">Projets</div>
               </div>
               <div class="stat-item">
-                <div class="stat-num"><span data-count="2">0</span></div>
-                <div class="stat-label">Alternances</div>
+                <div class="stat-num">Junior</div>
+                <div class="stat-label">Expérience</div>
               </div>
             </div>
           </div>
@@ -1201,7 +1295,7 @@
                 <div class="avatar-status"></div>
               </div>
               <div class="av-name">Adam Mbea</div>
-              <div class="av-role">Audit · CDG · Finance</div>
+              <div class="av-role">Audit · Contrôle de gestion · Finance</div>
             </div>
 
             <div class="mini-card reveal reveal-delay-1">
@@ -1209,7 +1303,7 @@
                 <i class="fa-solid fa-location-dot"></i>
               </div>
               <div class="mini-label">Localisation</div>
-              <div class="mini-value">Toulouse, 31</div>
+              <div class="mini-value">Toulouse, 31000</div>
             </div>
 
             <div class="mini-card reveal reveal-delay-2">
@@ -1217,7 +1311,7 @@
                 <i class="fa-solid fa-graduation-cap"></i>
               </div>
               <div class="mini-label">Formation</div>
-              <div class="mini-value">Master CCA</div>
+              <div class="mini-value">Finance · Comptabilité</div>
             </div>
 
             <div class="mini-card reveal reveal-delay-3">
@@ -1253,28 +1347,13 @@
         <div class="about-bento">
           <div class="about-main">
             <p>
-              Étudiant en <strong>Master Comptabilité, Contrôle, Audit (CCA)</strong>,
-              je me spécialise dans l'audit interne, le contrôle de gestion et l'analyse financière.
-              Passionné par la transformation des données en décisions opérationnelles,
-              je maîtrise les outils Excel avancé, Power BI et les normes IFRS.
+            Mon projet professionnel s'oriente vers les métiers du contrôle de gestion, l'audit et de la finance. 
+            Je m'appuie pour cela sur une formation en comptabilité et finance, complétée par une spécialisation en audit interne
+             et contrôle de gestion, qui me permet de développer une vision à la fois technique, analytique et opérationnelle. 
+             Mes expériences m'ont appris à travailler sur des sujets liés à la fiabilité des données, au suivi des opérations, 
+             au reporting et à l'analyse financière, avec toujours la même exigence de rigueur et de qualité.
             </p>
-            <p>
-              Mes alternances m'ont permis de développer une approche rigoureuse
-              et orientée résultats, en travaillant sur des problématiques concrètes
-              de <strong>performance financière</strong> et d'<strong>optimisation de processus</strong>.
-            </p>
-            <div class="tag-list">
-              <span class="tag">Audit interne</span>
-              <span class="tag">Contrôle de gestion</span>
-              <span class="tag">IFRS</span>
-              <span class="tag">Excel VBA</span>
-              <span class="tag">Power BI</span>
-              <span class="tag">Power Query</span>
-              <span class="tag">Analyse financière</span>
-              <span class="tag">Reporting</span>
-              <span class="tag">Comptabilité financière</span>
-              <span class="tag">Gestion de la trésorerie</span>
-            </div>
+            
           </div>
 
           <div class="about-side">
@@ -1464,226 +1543,220 @@
            COMPÉTENCES
       ══════════════════════════════════ -->
       <section id="skills" class="reveal">
-        <div class="section-title">
-          <span class="title-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-          Compétences
+  <div class="section-title">
+    <span class="title-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+    Compétences Techniques
+  </div>
+  <div class="title-line"></div>
+
+  <div class="skills-grid">
+    <!-- Compétence 1 : Excel Avancé -->
+    <div class="skill-card reveal">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:linear-gradient(135deg,#21c55d,#16a34a)">
+          <i class="fa-solid fa-file-excel"></i>
         </div>
-        <div class="title-line"></div>
+        <h3 class="skill-card-title">Excel Avancé</h3>
+      </div>
+      <div class="skill-card-body">
+        <p>Automatisation des processus de reporting et analyse financière avec VBA, Power Query et Power Pivot. Création de modèles financiers dynamiques et tableaux de bord interactifs.</p>
+        <div class="skill-card-examples">
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Automatisation des rapports mensuels (Port autonome de Kribi)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Modélisation financière prévisionnelle (Projet 6)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Tableaux croisés dynamiques pour l'analyse des écarts</span>
+        </div>
+      </div>
+    </div>
 
-        <div class="skills-bento">
+    <!-- Compétence 2 : Power BI -->
+    <div class="skill-card reveal reveal-delay-1">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <h3 class="skill-card-title">Power BI</h3>
+      </div>
+      <div class="skill-card-body">
+        <p>Conception de tableaux de bord interactifs pour le suivi des KPI financiers et opérationnels. Intégration de données multi-sources (Excel, SQL, ERP) et visualisation avancée.</p>
+        <div class="skill-card-examples">
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Dashboard de suivi budgétaire (CNPS)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Analyse des écarts de coûts (Port autonome de Kribi)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Rapports automatisés pour la direction</span>
+        </div>
+      </div>
+    </div>
 
-<!-- Bloc 1 : Finance & Contrôle de gestion -->
-<div class="skill-group reveal">
-  <div class="sg-header">
-    <span class="sg-icon" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">
-      <i class="fa-solid fa-magnifying-glass-chart"></i>
-    </span>
-    <span class="sg-title">Finance & Contrôle de gestion</span>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Suivi budgétaire</span><span class="sb-pct">85%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="85" style="background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Analyse des écarts</span><span class="sb-pct">85%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="85" style="background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Reporting / KPI</span><span class="sb-pct">80%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="80" style="background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Analyse de rentabilité</span><span class="sb-pct">80%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="80" style="background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div>
-  </div>
-</div>
+    <!-- Compétence 3 : Audit Interne -->
+    <div class="skill-card reveal reveal-delay-2">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">
+          <i class="fa-solid fa-magnifying-glass-chart"></i>
+        </div>
+        <h3 class="skill-card-title">Audit Interne</h3>
+      </div>
+      <div class="skill-card-body">
+        <p>Évaluation des processus métiers, identification des risques et recommandations pour améliorer les contrôles internes. Conformité aux normes IIA et bonnes pratiques de gouvernance.</p>
+        <div class="skill-card-examples">
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Audit des processus de facturation (Kactus)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Vérification des rapprochements bancaires (CNPS)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Cartographie des risques opérationnels</span>
+        </div>
+      </div>
+    </div>
 
-<!-- Bloc 2 : Comptabilité -->
-<div class="skill-group reveal reveal-delay-1">
-  <div class="sg-header">
-    <span class="sg-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
-      <i class="fa-solid fa-coins"></i>
-    </span>
-    <span class="sg-title">Comptabilité</span>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Comptabilité générale</span><span class="sb-pct">85%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="85" style="background:linear-gradient(90deg,#10b981,#059669)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Rapprochements bancaires</span><span class="sb-pct">85%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="85" style="background:linear-gradient(90deg,#10b981,#059669)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Préparation états financiers</span><span class="sb-pct">80%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="80" style="background:linear-gradient(90deg,#10b981,#059669)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Travaux de clôture & audit</span><span class="sb-pct">75%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="75" style="background:linear-gradient(90deg,#10b981,#059669)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Contrôle des pièces comptables</span><span class="sb-pct">80%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="80" style="background:linear-gradient(90deg,#10b981,#059669)"></div></div>
-  </div>
-</div>
+    <!-- Compétence 4 : Normes IFRS -->
+    <div class="skill-card reveal reveal-delay-3">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626)">
+          <i class="fa-solid fa-file-contract"></i>
+        </div>
+        <h3 class="skill-card-title">Normes IFRS</h3>
+      </div>
+      <div class="skill-card-body">
+        <p>Application des normes IFRS pour la préparation des états financiers consolidés. Analyse des impacts comptables (IFRS 9, IFRS 15, IFRS 16) et conformité aux exigences réglementaires.</p>
+        <div class="skill-card-examples">
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Préparation des états financiers (CNPS)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Analyse des écarts IFRS/PCGA locaux</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Comptes combinés et consolidés (TBS Education)</span>
+        </div>
+      </div>
+    </div>
 
-<!-- Bloc 3 : Outils & Data -->
-<div class="skill-group reveal reveal-delay-2">
-  <div class="sg-header">
-    <span class="sg-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">
-      <i class="fa-solid fa-database"></i>
-    </span>
-    <span class="sg-title">Outils & Data</span>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Excel (VBA, Power Query)</span><span class="sb-pct">90%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="90" style="background:linear-gradient(90deg,#8b5cf6,#7c3aed)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Power BI</span><span class="sb-pct">75%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="75" style="background:linear-gradient(90deg,#8b5cf6,#7c3aed)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">Power Pivot</span><span class="sb-pct">70%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="70" style="background:linear-gradient(90deg,#8b5cf6,#7c3aed)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">SAP (notions)</span><span class="sb-pct">45%</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="45" style="background:linear-gradient(90deg,#8b5cf6,#7c3aed)"></div></div>
-  </div>
-</div>
+    <!-- Compétence 5 : Contrôle de Gestion -->
+    <div class="skill-card reveal reveal-delay-1">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">
+          <i class="fa-solid fa-calculator"></i>
+        </div>
+        <h3 class="skill-card-title">Contrôle de Gestion</h3>
+      </div>
+      <div class="skill-card-body">
+        <p>Pilotage de la performance financière via le suivi budgétaire, l'analyse des écarts et la modélisation prévisionnelle. Optimisation des coûts et amélioration des processus décisionnels.</p>
+        <div class="skill-card-examples">
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Suivi mensuel des budgets (Port autonome de Kribi)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Analyse de rentabilité par projet</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Tableaux de bord pour la direction générale</span>
+        </div>
+      </div>
+    </div>
 
-<!-- Bloc 4 : Langues -->
-<div class="skill-group reveal reveal-delay-3">
-  <div class="sg-header">
-    <span class="sg-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed)">
-      <i class="fa-solid fa-language"></i>
-    </span>
-    <span class="sg-title">Langues</span>
+    <!-- Compétence 6 : SAP -->
+    <div class="skill-card reveal reveal-delay-2">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
+          <i class="fa-solid fa-database"></i>
+        </div>
+        <h3 class="skill-card-title">SAP</h3>
+      </div>
+      <div class="skill-card-body">
+        <p>Utilisation des modules FI (Finance) et CO (Contrôle de gestion) pour la gestion des écritures comptables, le reporting financier et l'analyse des coûts. Intégration avec les outils de BI.</p>
+        <div class="skill-card-examples">
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Saisie des écritures comptables (CNPS)</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Extraction de données pour le reporting</span>
+          <span class="skill-example"><i class="fa-solid fa-circle-check"></i> Rapprochements automatiques</span>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">🇫🇷 Français</span><span class="sb-pct">Natif</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="100" style="background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div>
-  </div>
-  <div class="skill-bar">
-    <div class="sb-top"><span class="sb-name">🇬🇧 Anglais</span><span class="sb-pct">B2</span></div>
-    <div class="sb-track"><div class="sb-fill" data-w="70" style="background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div>
-  </div>
-</div>
-
-      </section>
+</section>
 
       <!-- ══════════════════════════════════
            SOFT SKILLS
       ══════════════════════════════════ -->
-      <section id="softskills" class="reveal">
-        <div class="section-title">
-          <span class="title-icon"><i class="fa-solid fa-people-arrows"></i></span>
-          Soft Skills
+<section id="softskills" class="reveal">
+  <div class="section-title">
+    <span class="title-icon"><i class="fa-solid fa-people-arrows"></i></span>
+    Soft Skills
+  </div>
+  <div class="title-line"></div>
+
+  <div class="soft-grid">
+    <!-- Soft Skill 1 : Travail en équipe -->
+    <div class="soft-card reveal" tabindex="0">
+      <div class="soft-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <div class="soft-title">Travail en équipe</div>
+      <div class="soft-desc">Collaboration efficace en environnement pluridisciplinaire.</div>
+      <div class="soft-expand">
+        <div class="soft-expand-inner">
+          Participation active à des projets transverses (ex : clôture mensuelle à la CNPS, reporting au Port autonome de Kribi) avec des équipes comptables, opérationnelles et IT.
         </div>
-        <div class="title-line"></div>
+      </div>
+    </div>
 
-        <div class="soft-grid">
-
-          <div class="soft-card reveal" tabindex="0">
-            <div class="soft-icon" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
-            <div class="soft-title">Rigueur analytique</div>
-            <div class="soft-desc">Approche structurée et méthodique dans l'analyse des données financières.</div>
-            <!-- ✅ FIX #9 — soft-expand animé -->
-            <div class="soft-expand">
-              <div class="soft-expand-inner">
-                Capacité à décomposer des problèmes complexes en sous-problèmes traitables,
-                identifier les anomalies et formuler des recommandations précises et actionnables.
-              </div>
-            </div>
-          </div>
-
-          <div class="soft-card reveal reveal-delay-1" tabindex="0">
-            <div class="soft-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
-              <i class="fa-solid fa-comments"></i>
-            </div>
-            <div class="soft-title">Communication</div>
-            <div class="soft-desc">Restitution claire des analyses auprès d'interlocuteurs variés.</div>
-            <div class="soft-expand">
-              <div class="soft-expand-inner">
-                Aptitude à vulgariser des données financières complexes et à rédiger
-                des rapports synthétiques adaptés aux décideurs opérationnels.
-              </div>
-            </div>
-          </div>
-
-          <div class="soft-card reveal reveal-delay-2" tabindex="0">
-            <div class="soft-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">
-              <i class="fa-solid fa-gears"></i>
-            </div>
-            <div class="soft-title">Adaptabilité</div>
-            <div class="soft-desc">Capacité à évoluer rapidement dans de nouveaux environnements métier.</div>
-            <div class="soft-expand">
-              <div class="soft-expand-inner">
-                Expérience dans plusieurs secteurs (tech, finance, services) qui m'a permis
-                de développer une grande flexibilité méthodologique et organisationnelle.
-              </div>
-            </div>
-          </div>
-
-          <div class="soft-card reveal reveal-delay-1" tabindex="0">
-            <div class="soft-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
-              <i class="fa-solid fa-lightbulb"></i>
-            </div>
-            <div class="soft-title">Curiosité intellectuelle</div>
-            <div class="soft-desc">Veille active sur les normes comptables et les outils d'analyse.</div>
-            <div class="soft-expand">
-              <div class="soft-expand-inner">
-                Apprentissage continu des nouvelles technologies (Power BI, automatisation)
-                et suivi régulier des évolutions normatives IFRS et réglementaires.
-              </div>
-            </div>
-          </div>
-
-          <div class="soft-card reveal reveal-delay-2" tabindex="0">
-            <div class="soft-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626)">
-              <i class="fa-solid fa-users"></i>
-            </div>
-            <div class="soft-title">Travail en équipe</div>
-            <div class="soft-desc">Collaboration efficace en environnement pluridisciplinaire.</div>
-            <div class="soft-expand">
-              <div class="soft-expand-inner">
-                Expérience en équipe projet avec des profils variés (comptables, DAF, opérationnels),
-                contribuant à l'atteinte des objectifs collectifs dans les délais impartis.
-              </div>
-            </div>
-          </div>
-
-          <div class="soft-card reveal reveal-delay-3" tabindex="0">
-            <div class="soft-icon" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">
-              <i class="fa-solid fa-clock"></i>
-            </div>
-            <div class="soft-title">Gestion des priorités</div>
-            <div class="soft-desc">Organisation rigoureuse face à plusieurs missions simultanées.</div>
-            <div class="soft-expand">
-              <div class="soft-expand-inner">
-                Gestion autonome de plusieurs dossiers en parallèle tout en respectant
-                les échéances de clôture et les deadlines de reporting.
-              </div>
-            </div>
-          </div>
-
+    <!-- Soft Skill 2 : Rigueur -->
+    <div class="soft-card reveal reveal-delay-1" tabindex="0">
+      <div class="soft-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
+        <i class="fa-solid fa-check-double"></i>
+      </div>
+      <div class="soft-title">Rigueur</div>
+      <div class="soft-desc">Précision dans le traitement des données financières.</div>
+      <div class="soft-expand">
+        <div class="soft-expand-inner">
+          Vérification systématique des pièces comptables (CNPS) et contrôle des écarts budgétaires (Port autonome de Kribi) pour garantir la fiabilité des reportings.
         </div>
-        
-          <div class="soft-card reveal reveal-delay-3" tabindex="0">
-          <div class="soft-title">Autonomie</div>
-          <div class="soft-desc">Capacité à travailler de manière indépendante.</div>
-          <div class="soft-expand">
-            <div class="soft-expand-inner">
-            Gestion autonome du suivi de 400+ bookings chez Kactus et
-            conduite de missions de reporting complet au Port autonome de Kribi.
-            </div>
-          </div>
+      </div>
+    </div>
+
+    <!-- Soft Skill 3 : Curiosité -->
+    <div class="soft-card reveal reveal-delay-2" tabindex="0">
+      <div class="soft-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">
+        <i class="fa-solid fa-lightbulb"></i>
+      </div>
+      <div class="soft-title">Curiosité</div>
+      <div class="soft-desc">Veille active sur les évolutions réglementaires et outils.</div>
+      <div class="soft-expand">
+        <div class="soft-expand-inner">
+          Formation autodidacte sur Power BI et Excel VBA pour automatiser des processus de reporting, et suivi des mises à jour IFRS.
         </div>
-      </section>
+      </div>
+    </div>
+
+    <!-- Soft Skill 4 : Communication -->
+    <div class="soft-card reveal reveal-delay-3" tabindex="0">
+      <div class="soft-icon" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">
+        <i class="fa-solid fa-comments"></i>
+      </div>
+      <div class="soft-title">Communication</div>
+      <div class="soft-desc">Clarté dans la transmission d'informations techniques.</div>
+      <div class="soft-expand">
+        <div class="soft-expand-inner">
+          Rédaction de notes de synthèse pour la direction (Port autonome de Kribi) et présentation des écarts budgétaires aux opérationnels.
+        </div>
+      </div>
+    </div>
+
+    <!-- Soft Skill 5 : Proactivité (NOUVELLE) -->
+    <div class="soft-card reveal reveal-delay-3" tabindex="0">
+      <div class="soft-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626)">
+        <i class="fa-solid fa-rocket"></i>
+      </div>
+      <div class="soft-title">Proactivité</div>
+      <div class="soft-desc">Anticipation des besoins et proposition d'améliorations.</div>
+      <div class="soft-expand">
+        <div class="soft-expand-inner">
+          Identification et résolution des anomalies de facturation chez Kactus (400+ bookings), et suggestion d'optimisations pour les processus de reporting à la CNPS.
+        </div>
+      </div>
+    </div>
+
+    <!-- Soft Skill 6 : Gestion des priorités -->
+    <div class="soft-card reveal reveal-delay-3" tabindex="0">
+      <div class="soft-icon" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">
+        <i class="fa-solid fa-clock"></i>
+      </div>
+      <div class="soft-title">Gestion des priorités</div>
+      <div class="soft-desc">Organisation rigoureuse face à plusieurs missions simultanées.</div>
+      <div class="soft-expand">
+        <div class="soft-expand-inner">
+          Gestion autonome de plusieurs dossiers en parallèle tout en respectant les échéances de clôture et les deadlines de reporting.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <!-- ══════════════════════════════════
      EXPÉRIENCES
@@ -1742,7 +1815,7 @@
       <div class="t-card" tabindex="0">
         <div class="t-header">
           <div class="t-logo">
-            <img src="images/cnps.png" alt="CNPS" loading="lazy"
+            <img src="images/cnps.jpg" alt="CNPS" loading="lazy"
                  onerror="this.style.display='none'">
           </div>
           <div class="t-body">
@@ -1827,72 +1900,114 @@
            FORMATION
       ══════════════════════════════════ -->
       <section id="education" class="reveal">
-        <div class="section-title">
-          <span class="title-icon"><i class="fa-solid fa-graduation-cap"></i></span>
-          Formation
+  <div class="section-title">
+    <span class="title-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+    Formation
+  </div>
+  <div class="title-line"></div>
+
+  <div class="timeline">
+
+    <!-- Mastère Spécialisé -->
+    <div class="t-item reveal">
+      <div class="t-card" tabindex="0">
+        <div class="t-header">
+          <div class="t-logo">
+            <img src="images/tbs.png" alt="TBS Education" loading="lazy"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="t-body">
+            <div class="t-title">Mastère Spécialisé Expert en Audit Interne et Contrôle de Gestion</div>
+            <div class="t-org">TBS Education (Toulouse Business School)</div>
+            <div class="t-loc"><i class="fa-solid fa-location-dot"></i> Toulouse, France</div>
+          </div>
+          <span class="t-date"><i class="fa-regular fa-calendar"></i> 2025–2026</span>
+          <div class="t-toggle"><i class="fa-solid fa-chevron-down"></i></div>
         </div>
-        <div class="title-line"></div>
-
-        <div class="timeline">
-
-          <div class="t-item reveal">
-            <div class="t-card" tabindex="0">
-              <div class="t-header">
-                <div class="t-logo">
-                  <img src="images/ecole.png" alt="École" loading="lazy"
-                       onerror="this.style.display='none'">
-                </div>
-                <div class="t-body">
-                  <div class="t-title">Master CCA — Comptabilité, Contrôle, Audit</div>
-                  <div class="t-org">IAE Toulouse</div>
-                  <div class="t-loc"><i class="fa-solid fa-location-dot"></i> Toulouse</div>
-                </div>
-                <span class="t-date"><i class="fa-regular fa-calendar"></i> 2023–2025</span>
-                <div class="t-toggle"><i class="fa-solid fa-chevron-down"></i></div>
-              </div>
-              <div class="t-details">
-                <div class="t-details-inner">
-                  <ul class="t-list">
-                    <li>Audit interne & externe, contrôle de gestion avancé</li>
-                    <li>Normes IFRS, consolidation des comptes de groupe</li>
-                    <li>Finance d'entreprise, analyse et diagnostic financier</li>
-                    <li>Systèmes d'information comptable, ERP</li>
-                  </ul>
-                </div>
-              </div>
+        <div class="t-details">
+          <div class="t-details-inner">
+            <ul class="t-list">
+              Le Mastère Spécialisé Expert en Audit Interne et Contrôle de Gestion de TBS Education propose une 
+              approche approfondie des enjeux d’audit, de contrôle, de performance et de fiabilité de l’information 
+              financière. En combinant technicité, analyse et vision opérationnelle, il forme à une compréhension 
+              globale des fonctions financières et de pilotage au sein des organisations.
+            </ul>
+            <div class="tag-list">
+              <span class="tag">Audit interne</span>
+              <span class="tag">Contrôle de gestion</span>
+              <span class="tag">IFRS</span>
+              <span class="tag">Excel VBA</span>
+              <span class="tag">Power BI</span>
+              <span class="tag">Power Query</span>
+              <span class="tag">Analyse financière</span>
+              <span class="tag">Reporting</span>
+              <span class="tag">Comptabilité financière</span>
+              <span class="tag">Gestion de la trésorerie</span>
             </div>
           </div>
-
-          <div class="t-item reveal reveal-delay-1">
-            <div class="t-card" tabindex="0">
-              <div class="t-header">
-                <div class="t-logo">
-                  <img src="images/ecole2.png" alt="École 2" loading="lazy"
-                       onerror="this.style.display='none'">
-                </div>
-                <div class="t-body">
-                  <div class="t-title">Licence Comptabilité & Gestion</div>
-                  <div class="t-org">Université Paris-Est</div>
-                  <div class="t-loc"><i class="fa-solid fa-location-dot"></i> Paris</div>
-                </div>
-                <span class="t-date"><i class="fa-regular fa-calendar"></i> 2020–2023</span>
-                <div class="t-toggle"><i class="fa-solid fa-chevron-down"></i></div>
-              </div>
-              <div class="t-details">
-                <div class="t-details-inner">
-                  <ul class="t-list">
-                    <li>Comptabilité générale et analytique</li>
-                    <li>Droit des affaires, fiscalité des entreprises</li>
-                    <li>Statistiques et mathématiques financières</li>
-                    <li>Informatique de gestion — Excel avancé</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
-      </section>
+      </div>
+    </div>
+
+    <!-- Programme Grande École -->
+    <div class="t-item reveal reveal-delay-1">
+      <div class="t-card" tabindex="0">
+        <div class="t-header">
+          <div class="t-logo">
+            <img src="images/edc.png" alt="EDC Paris" loading="lazy"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="t-body">
+            <div class="t-title">Programme Grande École – Audit & Contrôle de Gestion</div>
+            <div class="t-org">EDC Paris Business School</div>
+            <div class="t-loc"><i class="fa-solid fa-location-dot"></i> Puteaux, France</div>
+          </div>
+          <span class="t-date"><i class="fa-regular fa-calendar"></i> 2024–2025</span>
+          <div class="t-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+        </div>
+        <div class="t-details">
+          <div class="t-details-inner">
+            <ul class="t-list">
+              <li>Fondamentaux du contrôle de gestion et audit opérationnel</li>
+              <li>Analyse financière et diagnostic d'entreprise</li>
+              <li>Systèmes d'information comptable (SAP, Sage)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Master -->
+    <div class="t-item reveal reveal-delay-2">
+      <div class="t-card" tabindex="0">
+        <div class="t-header">
+          <div class="t-logo">
+            <img src="images/ucac.png" alt="UCAC" loading="lazy"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="t-body">
+            <div class="t-title">Master en Comptabilité et Finance d'Entreprises</div>
+            <div class="t-org">Université Catholique d'Afrique Centrale (UCAC)</div>
+            <div class="t-loc"><i class="fa-solid fa-location-dot"></i> Yaoundé, Cameroun</div>
+          </div>
+          <span class="t-date"><i class="fa-regular fa-calendar"></i> 2021–2023</span>
+          <div class="t-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+        </div>
+        <div class="t-details">
+          <div class="t-details-inner">
+            <ul class="t-list">
+              <li>Comptabilité financière et normes IFRS</li>
+              <li>Gestion budgétaire et analyse des écarts</li>
+              <li>Fiscalité des entreprises et droit des affaires</li>
+              <li>Mémoire : "Optimisation des processus de reporting financier"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
       <!-- ══════════════════════════════════
            CONTACT
@@ -1953,11 +2068,8 @@
                 <label for="fname" style="display:block;font-size:.78rem;font-weight:600;margin-bottom:6px">
                   Prénom & Nom
                 </label>
-                <input type="text" id="fname" name="name"
-                       placeholder="Marie Dupont" required autocomplete="name"
-                       style="width:100%;background:var(--card-2);border:1.5px solid var(--border);
-                              border-radius:var(--r-sm);padding:11px 14px;color:var(--text);
-                              font-family:inherit;font-size:.88rem;transition:var(--transition);outline:none">
+                <input type="text" id="fname" name="name" class="form-control"
+                       placeholder="Marie Dupont" required autocomplete="name">
               </div>
               <div class="field" style="margin-bottom:16px">
                 <label for="femail" style="display:block;font-size:.78rem;font-weight:600;margin-bottom:6px">
@@ -2020,186 +2132,7 @@
   </nav>
 
   <!-- Toast -->
-  <div id="toast" role="alert" aria-live="polite"
-       style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
-              background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);
-              padding:12px 20px;font-size:.85rem;font-weight:600;box-shadow:var(--sh-lg);
-              opacity:0;transition:all .3s;pointer-events:none;z-index:9999;white-space:nowrap">
-  </div>
-
-  <style>
-    /* Toast show state */
-    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-    /* Timeline styles */
-    .timeline { display:flex; flex-direction:column; gap:var(--gap); }
-
-    .t-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      overflow: hidden;
-      box-shadow: var(--sh);
-      transition: var(--transition);
-      cursor: pointer;
-    }
-    .t-card:hover { border-color: rgba(59,130,246,0.3); box-shadow: var(--sh-lg); }
-    .t-card.open  { border-color: rgba(59,130,246,0.25); }
-
-    .t-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 20px 22px;
-    }
-
-    .t-logo {
-      width: 44px; height: 44px;
-      border-radius: var(--r-sm);
-      overflow: hidden;
-      background: var(--card-2);
-      border: 1px solid var(--border);
-      flex-shrink: 0;
-      display: grid;
-      place-items: center;
-    }
-    .t-logo img { width:100%; height:100%; object-fit:contain; }
-
-    .t-body { flex: 1; min-width: 0; }
-    .t-title { font-size: .9rem; font-weight: 700; }
-    .t-org   { font-size: .78rem; color: var(--p1); font-weight: 600; margin-top: 2px; }
-    .t-loc   { font-size: .72rem; color: var(--muted); margin-top: 2px; display:flex; align-items:center; gap:4px; }
-
-    .t-date {
-      font-size: .72rem;
-      color: var(--muted);
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .t-toggle {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: var(--card-2);
-      display: grid;
-      place-items: center;
-      font-size: .75rem;
-      color: var(--muted);
-      transition: transform .3s;
-      flex-shrink: 0;
-    }
-    .t-card.open .t-toggle { transform: rotate(180deg); }
-
-    .t-details {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height .4s var(--ease-out);
-    }
-    .t-card.open .t-details { max-height: 600px; }
-
-    .t-details-inner {
-      padding: 0 22px 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    .t-list {
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .t-list li {
-      font-size: .82rem;
-      color: var(--muted);
-      padding-left: 16px;
-      position: relative;
-      line-height: 1.6;
-    }
-    .t-list li::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
-      color: var(--p1);
-    }
-
-    .result-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-    }
-    .result-badge {
-      background: rgba(59,130,246,.1);
-      border: 1px solid rgba(59,130,246,.2);
-      color: var(--p1);
-      border-radius: 999px;
-      padding: 4px 12px;
-      font-size: .72rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    /* Dock styles */
-    .dock {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 12px;
-      box-shadow: var(--sh-lg);
-      z-index: 100;
-    }
-
-    .dock a {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: .9rem;
-      color: var(--muted);
-      transition: var(--transition);
-      position: relative;
-    }
-    .dock a:hover,
-    .dock a.active { color: var(--p1); background: rgba(59,130,246,.12); }
-
-    .dock-sep {
-      width: 1px; height: 24px;
-      background: var(--border);
-      margin: 0 4px;
-    }
-
-    /* Input focus */
-    input:focus, textarea:focus {
-      border-color: var(--p1) !important;
-      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
-    }
-
-    /* Pills */
-    .pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
-    .pill {
-      background: rgba(59,130,246,.1);
-      border: 1px solid rgba(59,130,246,.2);
-      color: var(--p1);
-      border-radius: 999px;
-      padding: 5px 13px;
-      font-size: .72rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-  </style>
+  <div id="toast" role="alert" aria-live="polite"></div>
 
   <script>
   /* ═══════════════════════════════════════════
@@ -2239,16 +2172,21 @@
 
     function draw(){
       ctx.clearRect(0, 0, W, H);
-      const isDark = document.documentElement.dataset.theme !== 'light';
+      let isDark = document.documentElement.dataset.theme !== 'light';
+
+      btn.addEventListener('click', () => {
+        isDark = next === 'dark';
+      });
 
       /* Lignes */
       for(let i = 0; i < dots.length; i++){
         for(let j = i+1; j < dots.length; j++){
           const dx = dots[i].x - dots[j].x;
           const dy = dots[i].y - dots[j].y;
-          const d  = Math.sqrt(dx*dx + dy*dy);
-          if(d < MAX_DIST){
-            const a = (1 - d/MAX_DIST) * (isDark ? .18 : .10);
+          const dSq  = (dx*dx + dy*dy);
+          if(dSq < MAX_DIST_SQ){
+            const ratio = (1 - Math.sqrt(dSq)/MAX_DIST);
+            const a = ratio * (isDark ? .18 : .10);
             ctx.beginPath();
             ctx.moveTo(dots[i].x, dots[i].y);
             ctx.lineTo(dots[j].x, dots[j].y);
@@ -2278,12 +2216,20 @@
     draw();
 
     /* ✅ FIX #3 — Réinitialise dots après resize */
+    let resizeTimer;
     window.addEventListener('resize', () => {
-      cancelAnimationFrame(rafId);
-      resize();
-      dots = Array.from({length: N}, mkDot);
-      draw();
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        cancelAnimationFrame(rafId);
+        const ratioX = window.innerWidth / W;
+        const ratioY = window.innerHeight / H;
+        resize();
+        dots.forEach(d => { d.x *= ratioX; d.y *= ratioY; });
+        draw();
+      }, 150);
     });
+
+    const MAX_DIST_SQ = MAX_DIST * MAX_DIST;
   })();
 
   /* ═══════════════════════════════════════════

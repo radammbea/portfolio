@@ -1,1984 +1,1426 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --primary: #f0f4ff;
-            --secondary: #e8eeff;
-            --accent: #4f46e5;
-            --accent2: #7c3aed;
-            --accent3: #0891b2;
-            --text: #1e1b4b;
-            --text-muted: #6b7280;
-            --card-bg: #ffffff;
-            --border: rgba(79,70,229,0.12);
-            --glow: rgba(79,70,229,0.2);
-            --nav-bg: rgba(240,244,255,0.85);
-        }
-
-        html { 
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--primary);
-            color: var(--text);
-            overflow-x: hidden;
-        }
-
-        /* BACKGROUND */
-        .bg-canvas { 
-            position:fixed; 
-            top:0; 
-            left:0; 
-            width:100%; 
-            height:100%; 
-            z-index:0; 
-            overflow:hidden; 
-            pointer-events:none; 
-        }
-
-        .bg-blob { 
-            position:absolute; 
-            border-radius:50%; 
-            filter:blur(90px); 
-            opacity:0.18; 
-            animation:floatBlob 10s ease-in-out infinite;
-        }
-
-        .bg-blob:nth-child(1) { 
-            width:500px; 
-            height:500px; 
-            background:#a5b4fc; 
-            top:-100px; 
-            left:-100px; 
-            animation-delay:0s; 
-        }
-
-        .bg-blob:nth-child(2) { 
-            width:400px; 
-            height:400px; 
-            background:#c4b5fd; 
-            bottom:-100px; 
-            right:10%; 
-            animation-delay:3s; 
-        }
-
-        .bg-blob:nth-child(3) { 
-            width:350px; 
-            height:350px; 
-            background:#67e8f9; 
-            top:40%; 
-            left:60%; 
-            animation-delay:6s; 
-        }
-
-        @keyframes floatBlob { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-40px) scale(1.06);} }
-        
-        .grid-lines { 
-            position:absolute; 
-            width:100%; 
-            height:100%; 
-            background-image:linear-gradient(rgba(79,70,229,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,70,229,0.04) 1px,transparent 1px); 
-            background-size:60px 60px; 
-        }
-
-        /* NAV */
-        .nav { 
-            position:fixed; 
-            top:0; 
-            left:0; 
-            width:100%; 
-            z-index:1000; 
-            padding:20px 60px; 
-            display:grid;
-            grid-template-columns: 1fr auto 1fr; /* logo | liens | espace */ 
-            align-items:center; 
-            justify-content:center; 
-            background:var(--nav-bg); 
-            backdrop-filter:blur(20px); 
-            border-bottom:1px solid var(--border); 
-            transition:all 0.3s ease;
-            gap: 48px; 
-        }
-
-        .nav-logo { 
-            font-family:'Space Grotesk',sans-serif; 
-            font-size:1.4rem; font-weight:700; 
-            background:linear-gradient(135deg,var(--accent),var(--accent3)); 
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent; 
-            background-clip:text;
-            align-items: center;
-            display: flex;
-            gap: 12 px; 
-        }
-
-        .nav-links { 
-            justify-self: center;
-            display:flex; 
-            gap:36px; 
-            list-style:none; 
-        }
-
-        .nav-links a { 
-            color:var(--text-muted); 
-            text-decoration:none; 
-            font-size:0.85rem; 
-            font-weight:500; 
-            letter-spacing:0.5px; 
-            text-transform:uppercase; 
-            transition:color 0.3s; 
-            position:relative; 
-        }
-
-        .nav-links a::after { 
-            content:''; 
-            position:absolute; 
-            bottom:-4px; left:0; 
-            width:0; height:2px; 
-            background:linear-gradient(90deg,var(--accent),var(--accent3)); 
-            transition:width 0.3s; 
-        }
-
-        .nav-links a:hover { 
-            color:var(--accent); 
-        }
-
-        .nav-links a:hover::after { 
-            width:100%; 
-        }
-
-        .nav-cta { 
-            background:linear-gradient(135deg,var(--accent),var(--accent2)); 
-            color:#fff !important; padding:10px 22px; 
-            border-radius:50px; 
-            font-weight:600 !important; 
-            box-shadow:0 4px 20px rgba(79,70,229,0.3); 
-        }
-
-        .nav-cta::after { 
-            display:none !important; 
-        }
-
-        .nav-cta:hover { 
-            transform:translateY(-2px); 
-        }
-
-        /* HERO */
-        #hero { 
-            position:relative; 
-            z-index:1; min-height:100vh; 
-            display:flex; align-items:center; 
-            justify-content:center; 
-            text-align:center; 
-            padding:120px 40px 80px;
-            margin-bottom: 60px; 
-        }
-
-        .hero-content { 
-            max-width:900px; 
-        }
-
-        .hero-badge { 
-            display:inline-flex; 
-            align-items:center; 
-            gap:10px; 
-            background:rgba(70, 229, 110, 0.08); 
-            border:1px solid rgba(79,70,229,0.25); 
-            padding:9px 22px; border-radius:50px; 
-            font-size:0.82rem; color:var(--accent); 
-            font-weight:600; letter-spacing:0.5px; 
-            margin-bottom:36px; 
-            animation:fadeInDown 0.8s ease forwards; 
-        }
-
-        .hero-badge .dot { 
-            width:8px; 
-            height:8px; 
-            background:#22c55e; 
-            border-radius:50%; 
-            animation:pulse 2s ease infinite; }
-            @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.4);} 
-        }
-        
-        .hero-title { 
-            font-family:'Space Grotesk',sans-serif; 
-            font-size:clamp(2.8rem,7vw,5.5rem); 
-            font-weight:800; 
-            line-height:1.05; 
-            letter-spacing:-2px; 
-            margin-bottom:24px; 
-            animation:fadeInUp 0.8s ease 0.2s forwards; 
-            opacity:0; 
-        }
-
-        .hero-title .line1 { 
-            display:block; 
-            color:var(--text); 
-        }
-
-        .hero-title .line2 { 
-            display:block; 
-            background:linear-gradient(135deg,var(--accent),var(--accent3)); 
-            -webkit-background-clip:text; 
-            -webkit-text-fill-color:transparent; 
-            background-clip:text; 
-        }
-
-        .hero-subtitle { 
-            font-size:1.1rem; 
-            color:var(--text-muted); 
-            line-height:1.8; 
-            max-width:580px; 
-            margin:0 auto 48px; 
-            animation:fadeInUp 0.8s ease 0.4s forwards; 
-            opacity:0; 
-        }
-
-        .hero-actions { 
-            display:flex; 
-            gap:16px; 
-            justify-content:center; 
-            flex-wrap:wrap; 
-            animation:fadeInUp 0.8s ease 0.6s forwards; 
-            opacity:0; 
-        }
-
-        .btn-primary { 
-            background:linear-gradient(135deg,var(--accent),var(--accent2));
-            color:#fff; 
-            padding:16px 36px; 
-            border-radius:50px; 
-            text-decoration:none; 
-            font-weight:700; 
-            font-size:0.95rem; 
-            display:inline-flex;
-            align-items:center; 
-            gap:10px; 
-            transition:all 0.3s; 
-            box-shadow:0 6px 30px rgba(79,70,229,0.35); 
-        }
-
-        .btn-primary:hover { 
-            transform:translateY(-3px); 
-            box-shadow:0 12px 40px rgba(79,70,229,0.5); 
-        }
-
-        .btn-secondary { 
-            background:#fff; 
-            color:var(--accent); 
-            padding:16px 36px; 
-            border-radius:50px; 
-            text-decoration:none; 
-            font-weight:700; 
-            font-size:0.95rem; 
-            display:inline-flex; 
-            align-items:center; 
-            gap:10px; 
-            border:2px solid rgba(79,70,229,0.25); 
-            transition:all 0.3s; 
-            box-shadow:0 4px 16px rgba(79,70,229,0.1); 
-        }
-
-        .btn-secondary:hover { 
-            border-color:var(--accent); 
-            box-shadow:0 8px 28px rgba(79,70,229,0.2); 
-            transform:translateY(-3px); 
-        }
-
-        .scroll-indicator { 
-            position:absolute; 
-            bottom:36px; left:50%; 
-            transform:translateX(-50%); 
-            display:flex; 
-            flex-direction:column; 
-            align-items:center; 
-            gap:8px; 
-            color:var(--text-muted); 
-            font-size:0.73rem; 
-            letter-spacing:1.5px; 
-            text-transform:uppercase; 
-            animation:fadeInUp 1s ease 1s forwards; 
-            opacity:0; 
-        }
-
-        .scroll-line { 
-            width:1px; 
-            height:48px; 
-            background:linear-gradient(180deg,var(--accent),transparent); 
-            animation:scrollLine 2s ease infinite; 
-        }
-
-        @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top;} 50%{transform:scaleY(1);transform-origin:top;} 51%{transform:scaleY(1);transform-origin:bottom;} 100%{transform:scaleY(0);transform-origin:bottom;} }
-        @keyframes fadeInDown { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);} }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
-
-        /* STATS */
-        .stats-section { 
-            position:relative; 
-            z-index:1; display:grid; 
-            grid-template-columns:repeat(4,1fr); 
-            gap:1px; background:var(--border); 
-            border-top:1px solid var(--border); 
-            border-bottom:1px solid var(--border); 
-            margin-bottom: 40px;
-            margin: 0 40px 60px 40px; 
-            border-radius: 24px; 
-            overflow: hidden; 
-        }
-
-        .stat-item { 
-            background:#fff; 
-            padding:44px 24px; 
-            text-align:center; 
-            transition:background 0.3s; 
-        }
-
-        .stat-item:hover { 
-            background:#f5f3ff; 
-        }
-
-        .stat-number { 
-            font-family:'Space Grotesk',sans-serif; 
-            font-size:2.8rem; font-weight:800; 
-            background:linear-gradient(135deg,var(--accent),var(--accent3)); 
-            -webkit-background-clip:text; 
-            -webkit-text-fill-color:transparent; 
-            background-clip:text; 
-            display:inline;
-        }
-
-        .stat-suffix { 
-            font-family:'Space Grotesk',sans-serif; 
-            font-size:2.8rem; 
-            font-weight:800; 
-            background:linear-gradient(135deg,var(--accent),var(--accent3)); 
-            -webkit-background-clip:text; 
-            -webkit-text-fill-color:transparent; 
-            background-clip:text; 
-        }
-
-        .stat-label { 
-            color:var(--text-muted); 
-            font-size:0.85rem; 
-            margin-top:6px; 
-            font-weight:500; 
-        }
-
-        /* SECTIONS */
-        .section { 
-            position:relative; 
-            z-index:1; 
-            padding:100px 60px; 
-        }
-
-        .section-header { 
-            margin-bottom:64px; 
-        }
-
-        .section-title { 
-            font-family:'Space Grotesk',sans-serif; 
-            font-size:clamp(1.8rem,4vw,2.8rem); 
-            font-weight:700; 
-            letter-spacing:-1px; 
-            line-height:1.1; 
-            color:var(--text); 
-        }
-
-        .section-title span { 
-            background:linear-gradient(135deg,var(--accent),var(--accent3)); 
-            -webkit-background-clip:text; 
-            -webkit-text-fill-color:transparent; 
-            background-clip:text; 
-        }
-
-        /* ABOUT */
-        #about { 
-            display:grid; 
-            grid-template-columns:1fr 1fr; 
-            gap:80px; align-items:center; 
-            background:#fff; 
-            border-bottom:1px solid var(--border);
-            padding: 60px 80px;
-        }
-
-        .about-text p { 
-            color:var(--text-muted); 
-            line-height:1.9; 
-            margin-bottom:20px; 
-            font-size:1.02rem; 
-        }
-
-        .about-text p strong { 
-            color:var(--text); 
-        }
-
-        .about-tags { 
-            display:flex; 
-            flex-wrap:wrap; 
-            gap:10px; 
-            margin-top:28px; 
-        }
-
-        .tag { 
-            background:#ede9fe; 
-            border:1px solid #c4b5fd; color:var(--accent); 
-            padding:8px 16px; 
-            border-radius:50px; 
-            font-size:0.8rem; 
-            font-weight:600; 
-            transition:all 0.3s; 
-        }
-
-        .tag:hover { 
-            background:#ddd6fe; 
-            transform:translateY(-2px); 
-        }
-
-        .about-cards-grid { 
-            display:grid; 
-            grid-template-columns:1fr 1fr; 
-            gap:18px; 
-        }
-
-        .about-card { 
-            background:var(--primary); 
-            border:1px solid var(--border); 
-            border-radius:20px; padding:28px; 
-            transition:all 0.3s; 
-            position:relative; 
-            overflow:hidden; 
-        }
-
-        .about-card::before { 
-            content:''; 
-            position:absolute; 
-            top:0; 
-            left:0; 
-            right:0; 
-            height:3px; 
-            background:linear-gradient(90deg,var(--accent),var(--accent3)); 
-            transform:scaleX(0); 
-            transition:transform 0.3s; 
-        }
-
-        .about-card:hover { 
-            transform:translateY(-5px); 
-            box-shadow:0 12px 36px rgba(79,70,229,0.12); 
-        }
-
-        .about-card:hover::before { 
-            transform:scaleX(1); 
-        }
-
-        .about-card-icon { 
-            width:52px; 
-            height:52px; 
-            background:linear-gradient(135deg,var(--accent),var(--accent2)); 
-            border-radius:16px; 
-            display:flex; 
-            align-items:center; 
-            justify-content:center; 
-            font-size:1.3rem; 
-            margin-bottom:16px;
-            color: #fff;
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .about-card:hover .about-card-icon {
-            transform: rotate(-6deg) scale(1.1);
-            box-shadow: 0 10px 28px rgba(79, 70, 229, 0.45);
-        }
-
-        .about-card h3 { 
-            font-family:'Space Grotesk',sans-serif; 
-            font-size:1rem; 
-            font-weight:700; 
-            color:var(--text); 
-            margin-bottom:8px; 
-        }
-
-        .about-card p { 
-            color:var(--text-muted); 
-            line-height:1.7; 
-            font-size:0.88rem; 
-        }
-
-        #experience {
-            background: var(--primary);
-            border-bottom: 1px solid var(--border);
-            padding: 80px 40px;
-        }
-
-        .experience-container { 
-            max-width: 960px; 
-            margin: 0 auto; 
-        }
-
-        /* --- Layout timeline --- */
-        .experience-timeline {
-        position: relative;
-        /* Colonne gauche : 140px de date + 20px gap + ligne */
-        padding-left: 45px;
-        }
-
-        /* Ligne verticale */
-        .experience-timeline::before {
-        content: '';
-        position: absolute;
-        left: 30px;          /* bord droit de la zone date */
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: linear-gradient(180deg, var(--accent), var(--accent3), transparent);
-        }
-
-        /* --- Item --- */
-        .experience-timeline-item {
-        position: relative;
-        margin-bottom: 44px;
-        opacity: 0;
-        transform: translateX(-20px);
-        transition: all 0.6s ease;
-        }
-
-        .experience-timeline-item.visible { 
-            opacity: 1; transform: translateX(0); 
-        }
-
-        /* Date à GAUCHE de la ligne */
-        .experience-timeline-year {
-        position: absolute;
-        right: calc(100% + 32px); /* à droite du padding, avant la ligne */
-        top: 30%;
-        transform: translateY(-50%);
-        width: 130px;
-        text-align: right;
-        font-size: 0.8rem;
-        font-weight: 700;
-        color: var(--accent);
-        line-height: 1.5;
-        }
-
-        .experience-timeline-year span {
-        font-weight: 400;
-        color: var(--text-muted);
-        }
-
-        /* Point sur la ligne */
-        .experience-timeline-dot {
-        position: absolute;
-        left: -25px;           /* 155px - 170px + 11px (moitié du dot) ≈ -26px */
-        top: 30%;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-        border-radius: 50%;
-        border: 3px solid var(--primary);
-        box-shadow: 0 0 12px var(--glow);
-        z-index: 1;
-        }
-
-        /* --- Carte --- */
-        .experience-timeline-card {
-        background: #fff;
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 28px 30px;
-        transition: all 0.3s;
-        position: relative;
-        overflow: hidden;
-        padding-bottom: 50px; /* espace pour le bouton */
-        }
-
-        .experience-timeline-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--accent), var(--accent3));
-        transform: scaleX(0);
-        transition: transform 0.3s;
-        }
-
-        .experience-timeline-card:hover {
-        border-color: rgba(79,70,229,0.25);
-        transform: translateY(-4px);
-        box-shadow: 0 16px 48px rgba(79,70,229,0.12);
-        }
-
-        .experience-timeline-card:hover::before { 
-            transform: scaleX(1); 
-        }
-
-        .experience-timeline-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 14px;
-        flex-wrap: wrap;
-        gap: 10px;
-        }
-
-        .experience-timeline-header-left {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        }
-
-        .experience-timeline-company-info {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-        }
-
-        .experience-timeline-logo {
-        width: 80px;
-        height: 80px;
-        border-radius: 14px;
-        object-fit: contain;
-        border: 1px solid var(--border);
-        background: #fff;
-        padding: 6px;
-        flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        .experience-timeline-company {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--text);
-        }
-
-        .experience-timeline-role {
-        color: var(--accent3);
-        font-size: 0.88rem;
-        font-weight: 600;
-        }
-
-        .experience-timeline-location {
-        color: var(--text-muted);
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        }
-        
-        .experience-timeline-period {
-        background: #ede9fe;
-        border: 1px solid #c4b5fd;
-        color: var(--accent);
-        padding: 5px 13px;
-        border-radius: 50px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        white-space: nowrap;
-        align-self: flex-start;
-        }
-        
-        .experience-detail-btn {
-            position: absolute;
-            bottom: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 8px 18px;
-            border-radius: 50px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .experience-detail-btn:hover {
-        background: var(--accent);
-        color: #fff;
-        }
-
-        /* MODALS EXPERIENCE */
-        .exp-modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.5);
-        backdrop-filter: blur(4px);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-        padding: 20px;
-        }
-
-        .exp-modal-overlay.active {
-        opacity: 1;
-        pointer-events: all;
-        }
-
-        .exp-modal-content {
-        background: #fff;
-        border-radius: 24px;
-        width: 100%;
-        max-width: 620px;
-        max-height: 88vh;
-        overflow-y: auto;
-        box-shadow: 0 32px 80px rgba(0,0,0,0.2);
-        transform: translateY(30px) scale(0.97);
-        transition: transform 0.3s ease;
-        }
-
-        .exp-modal-overlay.active .exp-modal-content {
-        transform: translateY(0) scale(1);
-        }
-
-        .exp-modal-header {
-        padding: 28px 28px 22px;
-        border-bottom: 1px solid #f0f0f0;
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        position: relative;
-        }
-
-        .exp-modal-logo {
-        width: 64px;
-        height: 64px;
-        border-radius: 14px;
-        object-fit: contain;
-        border: 1px solid #e5e7eb;
-        background: #fff;
-        padding: 6px;
-        flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        .exp-modal-header-info { 
-            flex: 1; 
-        }
-
-        .exp-modal-header-info h3 {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #1a1a2e;
-        margin-bottom: 4px;
-        }
-        .exp-modal-role {
-        color: var(--accent3);
-        font-size: 0.88rem;
-        font-weight: 600;
-        margin-bottom: 6px;
-        }
-
-        .exp-modal-meta {
-        color: #888;
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        flex-wrap: wrap;
-        }
-
-        .exp-modal-meta span {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        }
-
-        .exp-modal-close {
-        position: absolute;
-        top: 14px;
-        right: 14px;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        border: 1px solid #e5e7eb;
-        background: #f9f9f9;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #888;
-        font-size: 0.85rem;
-        transition: all 0.2s;
-        }
-
-        .exp-modal-close:hover { 
-            background: #fee2e2; 
-            border-color: #fca5a5; 
-            color: #ef4444; 
-        }
-
-        .exp-modal-body { 
-            padding: 24px 28px 28px; 
-        }
-
-        .exp-modal-block { 
-            margin-bottom: 22px; 
-        }
-
-        .exp-modal-block:last-child { 
-            margin-bottom: 0; 
-        }
-
-        .exp-modal-block h4 {
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: #1a1a2e;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        }
-
-        .exp-modal-block h4 i { 
-            color: 
-            var(--accent); 
-        }
-
-        .exp-modal-block p { 
-            color: #555; 
-            font-size: 0.92rem; 
-            line-height: 1.7; 
-        }
-
-        .exp-modal-block ul { 
-            list-style: none; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 8px; 
-        }
-
-        .exp-modal-block ul li {
-        color: #555;
-        font-size: 0.9rem;
-        padding-left: 18px;
-        position: relative;
-        line-height: 1.5;
-        }
-
-        .exp-modal-block ul li::before {
-        content: '▸';
-        position: absolute;
-        left: 0;
-        color: var(--accent);
-        font-size: 0.75rem;
-        top: 2px;
-        }
-
-        .exp-modal-tags { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 8px; 
-        }
-
-        .exp-modal-tags span {
-        background: #ede9fe;
-        border: 1px solid #c4b5fd;
-        color: var(--accent);
-        padding: 5px 13px;
-        border-radius: 50px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        }
-
-        /* --- MEDIA STYLE --- */
-        .modal-media {
-            width: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .modal-media img,
-        .modal-media video {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 10px;
-        }
-
-        .modal-media iframe {
-            width: 100%;
-            height: 250px;
-            border: none;
-            border-radius: 10px;
-        }
-
-        .play-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.7);
-            color: white;
-            font-size: 48px;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-         /* EDUCATION */
-        #education { 
-            background: #fff; 
-            border-bottom: 1px solid var(--border);
-            padding: 80px 40px; 
-        }
-
-        .edu-timeline-section {
-            padding: 60px 40px;
-            background: #f9f9f9;
-        }
-
-        .edu-timeline {
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        position: relative;
-        }
-
-        .edu-timeline-top {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 14px;
-        }
-        /* Ligne horizontale */
-        .edu-timeline::before {
-        content: '';
-        position: absolute;
-        top: 80px; /* aligné avec les dots */
-        left: 10%;
-        right: 10%;
-        height: 3px;
-        background: linear-gradient(180deg, var(--accent), var(--accent3), transparent);
-        z-index: 0;
-        }
-
-        .edu-timeline-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        position: relative;
-        z-index: 1;
-        }
-
-        /* ---- Période AU DESSUS du point ---- */
-        .edu-timeline-date {
-        font-size: 0.78rem;
-        font-weight: 600;
-        color: #4a90d9;
-        background: #eef4fc;
-        border: 1px solid #c5d9f1;
-        border-radius: 20px;
-        padding: 4px 12px;
-        margin-bottom: 14px;
-        white-space: nowrap;
-        }
-
-        /* ---- Point ---- */
-        .edu-timeline-dot {
-        width: 20px;
-        height: 20px;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-        border: 3px solid var(--primary);
-        border-radius: 50%;
-        box-shadow: 0 0 12px var(--glow);
-        z-index: 1;
-        flex-shrink: 0;
-        margin-bottom: 20px;
-        transition: transform 0.3s ease;
-        }
-
-        .edu-timeline-item:hover .edu-timeline-dot {
-        transform: scale(1.4);
-        }
-
-        /* ---- Carte ronde ---- */
-        .edu-timeline-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 12px;
-        cursor: pointer;
-        }
-
-        /* Cercle avec logo */
-        .school-circle.modal-trigger {
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
-        background: white;
-        border: 3px solid #eef4fc;
-        box-shadow: 0 4px 20px rgba(74, 144, 217, 0.15);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-
-        .school-circle.modal-trigger::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));;
-        border-radius: 50%;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        }
-
-        .school-circle.modal-trigger:hover::after {
-        opacity: 0.85;
-        }
-
-        .edu-timeline-item:hover .school-circle {
-        transform: scale(1.08);
-        box-shadow: 0 8px 30px rgba(74, 144, 217, 0.3);
-        border-color: linear-gradient(135deg, var(--accent), var(--accent2));;
-        }
-
-        .school-circle img {
-        width: 90%;
-        height: 90%;
-        mix-blend-mode: multiply;
-        object-fit: contain;
-        }
-
-        /* Fallback emoji si pas de logo */
-        .school-circle .school-emoji {
-        font-size: 2.5rem;
-        }
-
-        /* Intitulé formation */
-        .school-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #1a1a2e;
-        max-width: 160px;
-        line-height: 1.4;
-        }
-
-        /* Localisation */
-        .school-location {
-        font-size: 0.78rem;
-        color: #888;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        }
-
-        .school-location i {
-        color: #4a90d9;
-        font-size: 0.75rem;
-        }
-
-        /* Bouton détail */
-        .edu-modal-trigger {
-        background: #eef4fc;
-        border: 1px solid #c5d9f1;
-        color: #4a90d9;
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-        transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        .edu-modal-trigger:hover {
-        background: #4a90d9;
-        color: white;
-        transform: scale(1.1);
-        }
-
-        /* ==================== */
-        /*  EDU   MODAL         */
-        /* ==================== */
-
-        .edu-modal-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.5);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(3px);
-        }
-
-        .edu-modal-overlay.active {
-        display: flex;
-        animation: fadeIn 0.25s ease;
-        }
-
-        @keyframes fadeIn {
-        from { opacity: 0; }
-        to   { opacity: 1; }
-        }
-
-        .edu-modal-content {
-        background: white;
-        border-radius: 16px;
-        padding: 35px;
-        width: 90%;
-        max-width: 550px;
-        max-height: 85vh;
-        overflow-y: auto;
-        position: relative;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-        animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-        from { transform: translateY(30px); opacity: 0; }
-        to   { transform: translateY(0);    opacity: 1; }
-        }
-
-        .edu-modal-close {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: #f0f0f0;
-        border: none;
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-        color: #555;
-        transition: background 0.2s ease, color 0.2s ease;
-        }
-
-        .edu-modal-close:hover {
-        background: #e74c3c;
-        color: white;
-        }
-
-        .edu-modal-header {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 25px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #eef4fc;
-        }
-
-        .edu-modal-logo {
-        width: 65px;
-        height: 65px;
-        border-radius: 50%;
-        background: #f5f5f5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        border: 2px solid #eef4fc;
-        flex-shrink: 0;
-        }
-
-        .edu-modal-logo img {
-        width: 80%;
-        height: 80%;
-        object-fit: contain;
-        }
-
-        .edu-modal-logo .school-emoji {
-        font-size: 1.8rem;
-        }
-
-        .edu-modal-header h2 {
-        font-size: 1.1rem;
-        color: #1a1a2e;
-        margin: 4px 0;
-        }
-
-        .edu-modal-school {
-        color: #4a90d9;
-        font-size: 0.85rem;
-        font-style: italic;
-        }
-
-        .edu-modal-block {
-        margin-bottom: 20px;
-        }
-
-        .edu-modal-block h4 {
-        color: #1a1a2e;
-        font-size: 0.95rem;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        }
-
-        .edu-modal-block h4 i {
-        color: #4a90d9;
-        }
-
-        .edu-modal-block p {
-        color: #555;
-        font-size: 0.9rem;
-        }
-
-        .edu-modal-block ul {
-        list-style: none;
-        padding: 0;
-        }
-
-        .edu-modal-block ul li {
-        color: #555;
-        font-size: 0.9rem;
-        padding: 5px 0 5px 15px;
-        position: relative;
-        }
-
-        .edu-modal-block ul li::before {
-        content: '▸';
-        position: absolute;
-        left: 0;
-        color: #4a90d9;
-        }
-
-        .edu-modal-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        }
-
-        .edu-modal-tags span {
-        background: #eef4fc;
-        color: #4a90d9;
-        border: 1px solid #c5d9f1;
-        border-radius: 20px;
-        padding: 4px 12px;
-        font-size: 0.8rem;
-        }
-
-        /* ==================== */
-        /*  EDU RESPONSIVE      */
-        /* ==================== */
-
-        @media (max-width: 768px) {
-        .edu-timeline {
-            flex-direction: column;
-            align-items: flex-start;
-            padding-left: 20px;
-        }
-
-        .edu-timeline::before {
-            top: 0;
-            bottom: 0;
-            left: 48px;
-            right: auto;
-            width: 3px;
-            height: 100%;
-        }
-
-        .edu-timeline-item {
-            flex-direction: row;
-            align-items: flex-start;
-            gap: 20px;
-            margin-bottom: 40px;
-            width: 100%;
-        }
-
-        .edu-timeline-item > * {
-            flex-shrink: 0;
-        }
-
-        .edu-timeline-date {
-            display: none;
-        }
-
-        .edu-timeline-dot {
-            margin: 10px 0 0 0;
-        }
-
-        .edu-timeline-card {
-            text-align: left;
-            align-items: flex-start;
-            flex: 1;
-        }
-
-        .school-circle {
-            width: 80px;
-            height: 80px;
-        }
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adam Mbea · Finance & Audit</title>
+  <meta name="description" content="Portfolio Adam Mbea — Auditeur junior, Finance & Audit, TBS Education">
+
+  <script>
+    (function(){
+      const t = localStorage.getItem('theme');
+      if(t) document.documentElement.dataset.theme = t;
+    })();
+  </script>
+
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@latest/font/simple-icons.min.css">
+
+  <style>
+    /* ── VARIABLES ── */
+    :root {
+      --bg: #080c14;
+      --bg-2: #0d1220;
+      --card: #111827;
+      --card-2: #1a2236;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f4ff;
+      --muted: #8899b4;
+      --muted-2: #5a6a85;
+      --p1: #3b82f6;
+      --p2: #8b5cf6;
+      --r: 12px;
+      --r-sm: 8px;
+      --gap: 24px;
+      --sh: 0 4px 20px rgba(0,0,0,0.25);
+      --sh2: 0 16px 48px rgba(0,0,0,0.4);
+      --transition: all 0.3s cubic-bezier(0.25,0.8,0.25,1);
+      --ease: cubic-bezier(0.4,0,0.2,1);
+      --ease-out: cubic-bezier(0.19,1,0.22,1);
+      --spring: cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-2: #f1f5f9;
+      --card: #ffffff;
+      --card-2: #f8fafc;
+      --border: rgba(0,0,0,0.07);
+      --text: #111827;
+      --muted: #64748b;
+      --muted-2: #94a3b8;
+      --sh: 0 4px 20px rgba(0,0,0,0.06);
+      --sh2: 0 16px 48px rgba(0,0,0,0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    p { text-align: justify; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-2); }
+    ::-webkit-scrollbar-thumb { background: var(--p1); border-radius: 4px; }
+
+    /* ── BACKGROUND CANVAS ── */
+    #bg-canvas {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+
+    main { position: relative; z-index: 1; }
+
+    /* ── THEME BTN ── */
+    .theme-btn {
+      position: fixed; top: 20px; right: 20px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--card); border: 1px solid var(--border);
+      display: grid; place-items: center; z-index: 100;
+      box-shadow: var(--sh); color: var(--text);
+      transition: var(--transition);
+    }
+    .theme-btn:hover { background: var(--card-2); }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--p1); color: white;
+      padding: 12px 20px; border-radius: var(--r-sm);
+      box-shadow: var(--sh); transform: translateY(150%);
+      opacity: 0; transition: var(--transition); z-index: 1000;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px 120px; }
+
+    .panel {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 32px; box-shadow: var(--sh);
+    }
+
+    .section-title {
+      font-size: 1.5rem; font-weight: 700; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .title-line {
+      width: 40px; height: 3px; background: var(--p1);
+      margin-bottom: 32px; border-radius: 3px;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: var(--r-sm);
+      font-weight: 600; transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    .btn-primary { background: var(--p1); color: white; }
+    .btn-primary:hover { background: #2563eb; transform: translateY(-2px); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--card-2); transform: translateY(-2px); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      padding: 22px 72px; display: flex; align-items: center;
+      justify-content: space-between; transition: all .35s var(--ease);
+    }
+    .nav.scrolled {
+      background: rgba(8,12,20,0.92); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border); padding: 14px 72px;
+      box-shadow: var(--sh);
+    }
+    :root[data-theme="light"] .nav.scrolled { background: rgba(248,250,252,0.92); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo-mark {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--p1), var(--p2));
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; color: white;
+      font-size: 0.9rem; font-weight: 700;
+    }
+    .nav-logo-text { font-size: 1rem; font-weight: 600; color: var(--text); }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--muted); font-size: .82rem; font-weight: 500;
+      letter-spacing: .5px; transition: color .25s; position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1px; background: var(--p1); transition: width .3s var(--ease);
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      background: var(--p1) !important; color: white !important;
+      padding: 8px 20px !important; border-radius: var(--r-sm) !important;
+      font-weight: 600 !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: #2563eb !important; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 48px 100px; position: relative; overflow: hidden;
+    }
+    .hero-bg { position: absolute; inset: 0; pointer-events: none; }
+    .hero-bg-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(59,130,246,.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(59,130,246,.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+    .hero-bg-glow {
+      position: absolute; width: 800px; height: 800px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,.1) 0%, transparent 65%);
+      top: 50%; left: 50%; transform: translate(-50%, -52%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 860px; }
+
+    .avail-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      border: 1px solid rgba(59,130,246,.25); background: rgba(59,130,246,.08);
+      padding: 8px 20px; border-radius: 999px;
+      font-size: .72rem; font-weight: 600; color: #93c5fd;
+      letter-spacing: .8px; text-transform: uppercase; margin-bottom: 44px;
+      animation: fu .8s ease both;
+    }
+    .dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: blink-dot 2.5s ease infinite; }
+    @keyframes blink-dot { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,.5)} 60%{opacity:.5;box-shadow:0 0 0 5px rgba(16,185,129,0)} }
+
+    .hero-title {
+      font-size: clamp(3rem, 7.5vw, 6rem); line-height: .95;
+      letter-spacing: -2px; color: var(--text); margin-bottom: 32px;
+      animation: fu .8s .15s ease both; opacity: 0; font-weight: 800;
+    }
+    .hero-title .line1 {
+      display: block; font-size: .38em; font-weight: 500;
+      color: var(--muted); letter-spacing: 4px; text-transform: uppercase;
+      margin-bottom: 12px; font-family: 'Poppins', sans-serif;
+    }
+    .hero-title .line2 { display: block; }
+    .grad-text {
+      background: linear-gradient(90deg, var(--p1), var(--p2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero-sub {
+      font-size: 1rem; color: var(--muted); line-height: 1.85;
+      max-width: 520px; margin: 0 auto 52px; font-weight: 300;
+      animation: fu .8s .3s ease both; opacity: 0;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 500; }
+    .hero-actions {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      animation: fu .8s .45s ease both; opacity: 0;
+    }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--muted-2); font-size: .62rem; letter-spacing: 2.5px; text-transform: uppercase;
+      animation: fu 1s .9s ease both; opacity: 0;
+    }
+    .hero-scroll-line { width: 1px; height: 44px; background: linear-gradient(180deg, var(--p1), transparent); animation: sa 2.2s ease infinite; }
+    @keyframes sa { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+    @keyframes fu { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    .hero-tag {display: inline-flex;align-items: center;gap: 6px;background: rgba(8,145,178,0.07);border: 1px solid rgba(8,145,178,0.2);padding: 7px 16px;border-radius: 50px;font-size: 0.78rem;color: #0891b2;font-weight: 600;backdrop-filter: blur(8px);}
+
+    /* ── STATS BAND ── */
+    .stats-band {
+      background: var(--card-2); border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: repeat(4, 1fr);
+    }
+    .stat-item {
+      padding: 40px 28px; text-align: center;
+      border-right: 1px solid var(--border); transition: background .25s;
+      position: relative;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item:hover { background: var(--card); }
+    .stat-item::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg, transparent, var(--p1), transparent);
+      opacity: 0; transition: opacity .3s;
+    }
+    .stat-item:hover::before { opacity: 1; }
+    .stat-num { font-size: 2.2rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .stat-num span { color: var(--p1); }
+    .stat-label { color: var(--muted); font-size: .72rem; margin-top: 8px; letter-spacing: .6px; text-transform: uppercase; }
+
+    /* ── SECTIONS ── */
+    .s { padding: 100px 0; }
+    .s-eyebrow {
+      width: 100px;
+      height: 3px;
+      background: var(--p1);
+      margin-bottom: 10px;
+      border-radius: 3px;
+    }
+    .s-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--p1); }
+    .s-title { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700; line-height: 1.1; margin-bottom: 14px; }
+    .s-title em { color: var(--p1); font-style: normal; }
+    .s-sub { color: var(--muted); font-size: .95rem; line-height: 1.85; max-width: 620px; font-weight: 300; }
+
+    /* ── ABOUT ── */
+    #about { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    #about .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .about-body p { color: var(--muted); line-height: 1.9; font-size: .95rem; font-weight: 300; margin-bottom: 20px; }
+    .about-body p strong { color: var(--text); font-weight: 600; }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .tag {
+      background: var(--card-2); border: 1px solid var(--border);
+      color: var(--muted); padding: 6px 16px;
+      border-radius: 999px; font-size: .75rem; font-weight: 500; transition: all .2s;
+    }
+    .tag:hover { background: rgba(59,130,246,.12); border-color: rgba(59,130,246,.3); color: var(--text); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .acard {
+      background: var(--card-2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 24px;
+      transition: all .3s var(--spring); position: relative; overflow: hidden;
+    }
+    .acard::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg, var(--p1), var(--p2));
+      transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease);
+    }
+    .acard:hover { transform: translateY(-5px); box-shadow: var(--sh2); border-color: rgba(59,130,246,.2); }
+    .acard:hover::after { transform: scaleX(1); }
+    .acard-ico {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--p1), var(--p2));
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; margin-bottom: 14px; transition: transform .3s var(--spring);
+    }
+    .acard:hover .acard-ico { transform: rotate(-6deg) scale(1.1); }
+    .acard h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 7px; }
+    .acard p { font-size: .8rem; color: var(--muted); line-height: 1.65; font-weight: 300; }
+
+    /* ── TIMELINE ── */
+    #experience { border-bottom: 1px solid var(--border); }
+    .exp-wrap { max-width: 840px; margin: 0 auto; }
+    .tl { position: relative; padding-left: 36px; }
+    .tl::before {
+      content: ''; position: absolute; left: 0; top: 10px; bottom: 0;
+      width: 1px; background: linear-gradient(180deg, var(--p1), var(--border) 85%, transparent);
+    }
+    .tl-item {
+      position: relative; margin-bottom: 28px;
+      opacity: 0; transform: translateX(-14px);
+      transition: opacity .5s var(--ease), transform .5s var(--ease);
+    }
+    .tl-item.visible { opacity: 1; transform: none; }
+    .tl-dot {
+      position: absolute; left: -43px; top: 26px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--p1);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+    }
+    .tl-yr {
+      position: absolute; left: -152px; top: 23px; width: 96px;
+      text-align: right; font-size: .85rem; font-style: italic;
+      color: var(--p1); font-weight: 600;
+    }
+    .tl-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 26px 30px;
+      transition: all .3s var(--ease); box-shadow: var(--sh);
+    }
+    .tl-card:hover { border-color: rgba(59,130,246,.25); box-shadow: var(--sh2); transform: translateY(-3px); }
+    .tl-head { display: flex; align-items: flex-start; gap: 16px; }
+    .tl-logo {
+      width: 48px; height: 48px; border-radius: 10px;
+      object-fit: contain; background: var(--card-2);
+      padding: 5px; border: 1px solid var(--border); flex-shrink: 0;
+    }
+    .tl-co { font-weight: 700; font-size: .95rem; color: var(--text); }
+    .tl-role { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    .tl-loc { font-size: .72rem; color: var(--muted-2); display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+    .tl-badge {
+      margin-left: auto;
+      background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.2);
+      color: var(--p1); font-size: .68rem; font-weight: 700;
+      padding: 4px 13px; border-radius: 999px; white-space: nowrap;
+      flex-shrink: 0; letter-spacing: .4px;
+    }
+    .tl-btn {
+      margin-top: 16px; display: inline-flex; align-items: center; gap: 7px;
+      font-size: .74rem; font-weight: 600; color: var(--text);
+      background: none; border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 8px 16px; cursor: pointer;
+      letter-spacing: .3px; transition: all .2s;
+    }
+    .tl-btn:hover { background: var(--p1); color: white; border-color: var(--p1); }
+
+    /* ── PROJECTS ── */
+    #projects { border-bottom: 1px solid var(--border); }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 44px; }
+    .fbtn {
+      padding: 8px 20px; border-radius: 999px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); font-size: .74rem;
+      font-weight: 600; letter-spacing: .4px; cursor: pointer;
+      transition: all .25s; font-family: 'Poppins', sans-serif; text-transform: uppercase;
+    }
+    .fbtn:hover { border-color: var(--p1); color: var(--text); }
+    .fbtn.active { background: var(--p1); color: white; border-color: var(--p1); }
+    .proj-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
+    .proj-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 28px; cursor: pointer;
+      transition: all .3s var(--spring); position: relative; overflow: hidden;
+    }
+    .proj-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--p1), var(--p2));
+      transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease);
+    }
+    .proj-card:hover { transform: translateY(-6px); box-shadow: var(--sh2); border-color: rgba(59,130,246,.2); }
+    .proj-card:hover::before { transform: scaleX(1); }
+    .pc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .pc-ico {
+      width: 46px; height: 46px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: transform .3s var(--spring);
+    }
+    .proj-card:hover .pc-ico { transform: rotate(-8deg) scale(1.12); }
+    .pc-ico.rep { background: rgba(59,130,246,.1); color: var(--p1); }
+    .pc-ico.aud { background: rgba(239,68,68,.1); color: #ef4444; }
+    .pc-ico.ctrl { background: rgba(139,92,246,.1); color: var(--p2); }
+    .pc-ico.mod { background: rgba(16,185,129,.1); color: #10b981; }
+    .pc-badge {
+      font-size: .63rem; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; padding: 4px 13px;
+      border-radius: 999px; border: 1px solid;
+    }
+    .pc-badge.rep { background: rgba(59,130,246,.1); color: var(--p1); border-color: rgba(59,130,246,.25); }
+    .pc-badge.aud { background: rgba(239,68,68,.08); color: #ef4444; border-color: rgba(239,68,68,.2); }
+    .pc-badge.ctrl { background: rgba(139,92,246,.1); color: var(--p2); border-color: rgba(139,92,246,.25); }
+    .pc-badge.mod { background: rgba(16,185,129,.1); color: #10b981; border-color: rgba(16,185,129,.2); }
+    .pc-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 9px; line-height: 1.25; }
+    .pc-desc { font-size: .82rem; color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 14px; }
+    .pc-result {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: .74rem; color: #34d399;
+      background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.2);
+      padding: 5px 12px; border-radius: 6px; margin-bottom: 18px; font-weight: 600;
+    }
+    .pc-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 16px; border-top: 1px solid var(--border);
+    }
+    .pc-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pc-tags span {
+      font-size: .69rem; color: var(--muted-2); background: var(--card-2);
+      border: 1px solid var(--border); padding: 3px 9px; border-radius: 4px;
+    }
+    .pc-arr {
+      width: 32px; height: 32px; border-radius: var(--r-sm);
+      border: 1px solid var(--border); background: transparent;
+      color: var(--muted); display: flex; align-items: center;
+      justify-content: center; cursor: pointer; flex-shrink: 0;
+      transition: all .2s; font-size: .78rem;
+    }
+    .pc-arr:hover { background: var(--p1); color: white; border-color: var(--p1); }
+    .proj-card.hidden { display: none; }
+
+    /* ── SKILLS BENTO ── */
+    #skills { border-bottom: 1px solid var(--border); }
+    .bento { display: grid; grid-template-columns: repeat(12,1fr); gap: 14px; margin-top: 52px; }
+    .bc {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 28px;
+      opacity: 0; transform: translateY(18px);
+      transition: opacity .55s var(--ease), transform .55s var(--ease), border-color .25s, box-shadow .25s;
+    }
+    .bc.visible { opacity: 1; transform: none; }
+    .bc:hover { border-color: rgba(59,130,246,.25); box-shadow: var(--sh2); }
+    .bc-finance { grid-column: span 7; grid-row: span 2; }
+    .bc-tools { grid-column: span 5; }
+    .bc-soft { grid-column: span 5; }
+    .bc-lang { grid-column: span 12; }
+    .bc-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .bc-ico {
+      width: 36px; height: 36px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .82rem; flex-shrink: 0; transition: transform .3s var(--spring);
+    }
+    .bc:hover .bc-ico { transform: rotate(-7deg) scale(1.1); }
+    .bc-ico.n { background: linear-gradient(135deg, var(--p1), var(--p2)); color: white; }
+    .bc-ico.g { background: rgba(59,130,246,.15); color: var(--p1); }
+    .bc-ico.b { background: rgba(139,92,246,.1); color: var(--p2); }
+    .bc-ttl { font-size: .88rem; font-weight: 700; color: var(--text); }
+    .fin-list { display: flex; flex-direction: column; gap: 8px; }
+    .fin-row {
+      display: flex; align-items: center; gap: 13px; padding: 11px 15px;
+      background: var(--card-2); border: 1px solid var(--border);
+      border-radius: 9px; transition: all .2s;
+    }
+    .fin-row:hover { border-color: rgba(59,130,246,.25); background: rgba(59,130,246,.05); transform: translateX(4px); }
+    .fin-ico {
+      width: 32px; height: 32px; border-radius: 7px;
+      background: var(--bg-2); color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .72rem; flex-shrink: 0; transition: all .2s;
+    }
+    .fin-row:hover .fin-ico { background: var(--p1); color: white; }
+    .fin-nm { font-size: .8rem; color: var(--text); font-weight: 400; }
+    .tools-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tpill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 13px; border-radius: 6px;
+      background: var(--card-2); border: 1px solid var(--border);
+      font-size: .74rem; color: var(--muted); transition: all .2s; cursor: default;
+    }
+    .tpill i { font-size: .66rem; color: var(--p1); }
+    .tpill:hover { background: var(--p1); border-color: var(--p1); color: white; }
+    .tpill:hover i { color: white; }
+    .sk-soft-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 7px; }
+    .srow {
+      display: flex; align-items: center; gap: 9px; padding: 10px 12px;
+      background: var(--card-2); border: 1px solid var(--border);
+      border-radius: 8px; font-size: .78rem; color: var(--muted);
+      transition: all .2s; cursor: default;
+    }
+    .srow i { font-size: .72rem; color: var(--p1); width: 14px; text-align: center; flex-shrink: 0; }
+    .srow:hover { background: var(--card); border-color: var(--border); transform: translateY(-2px); color: var(--text); }
+    .lang-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .ltile {
+      display: flex; align-items: center; gap: 16px; padding: 16px 20px;
+      background: var(--card-2); border: 1px solid var(--border);
+      border-radius: var(--r); transition: all .25s var(--spring); cursor: default;
+    }
+    .ltile:hover { border-color: rgba(59,130,246,.3); transform: translateY(-3px); }
+    .lflag { font-size: 1.9rem; line-height: 1; }
+    .lname { font-size: .88rem; font-weight: 600; color: var(--text); }
+    .llvl { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── EDUCATION ── */
+    #education { border-bottom: 1px solid var(--border); }
+    .edu-row {
+      display: flex; justify-content: center; align-items: flex-start;
+      position: relative; margin-top: 60px;
+    }
+    .edu-row::before {
+      content: ''; position: absolute; top: 62px; left: 16%; right: 16%;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--p1), transparent);
+    }
+    .edu-item { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
+    .edu-yr { font-size: .88rem; color: var(--p1); margin-bottom: 14px; font-weight: 600; font-style: italic; }
+    .edu-dot {
+      width: 13px; height: 13px; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--p1);
+      box-shadow: 0 0 0 4px rgba(59,130,246,.15);
+      margin-bottom: 24px; transition: transform .3s var(--spring);
+    }
+    .edu-item:hover .edu-dot { transform: scale(1.4); box-shadow: 0 0 0 6px rgba(59,130,246,.2); }
+    .edu-circle {
+      width: 104px; height: 104px; border-radius: 50%;
+      background: var(--card-2); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; cursor: pointer;
+      transition: all .3s var(--spring); margin-bottom: 16px;
+    }
+    .edu-item:hover .edu-circle { border-color: var(--p1); box-shadow: 0 0 0 4px rgba(59,130,246,.12), var(--sh2); transform: scale(1.07); }
+    .edu-circle img { width: 85%; height: 85%; object-fit: contain; }
+    .edu-ttl { font-size: .97rem; font-weight: 600; color: var(--text); max-width: 160px; line-height: 1.4; }
+    .edu-loc { font-size: .72rem; color: var(--muted); display: flex; align-items: center; gap: 4px; justify-content: center; margin-top: 5px; }
+    .edu-loc i { color: var(--p1); font-size: .66rem; }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: linear-gradient(160deg, var(--card) 0%, var(--card-2) 50%, var(--bg-2) 100%);
+      position: relative; overflow: hidden;
+      border: 1px solid var(--border); border-radius: var(--r);
+      margin-bottom: 40px;
+    }
+    #contact::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(59,130,246,.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(59,130,246,.03) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none;
+    }
+    .contact-in {
+      max-width: 960px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 88px;
+      align-items: center; position: relative; z-index: 1;
+      padding: 80px 48px;
+    }
+    .ct-eyebrow {
+            width: 100px;
+      height: 3px;
+      background: var(--p1);
+      margin-bottom: 10px;
+      border-radius: 3px;}
+
+    .ct-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--p1); }
+    .ct-title { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; line-height: 1.05; color: var(--text); margin-bottom: 18px; }
+    .ct-title em { color: var(--p1); font-style: normal; }
+    .ct-desc { color: var(--muted); font-size: .9rem; line-height: 1.85; font-weight: 300; margin-bottom: 36px; }
+    .ct-desc strong { color: var(--text); font-weight: 400; }
+    .ct-info { display: flex; flex-direction: column; gap: 13px; }
+    .ct-irow { display: flex; align-items: center; gap: 13px; color: var(--muted); font-size: .84rem; font-weight: 300; }
+    .ct-irow i {
+      width: 34px; height: 34px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .74rem; color: var(--p1); flex-shrink: 0;
+    }
+    .ct-cards { display: flex; flex-direction: column; gap: 13px; }
+    .ct-card {
+      display: flex; align-items: center; gap: 18px; padding: 20px 24px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); text-decoration: none;
+      transition: all .3s var(--spring);
+    }
+    .ct-card:hover { background: var(--card-2); border-color: rgba(59,130,246,.3); transform: translateX(6px); }
+    .ct-cico { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .ct-cico.em { background: rgba(59,130,246,.12); color: var(--p1); }
+    .ct-cico.li { background: rgba(59,130,246,.08); color: #60a5fa; }
+    .ct-cico.cv { background: rgba(139,92,246,.1); color: var(--p2); }
+    .ct-clbl { font-size: .62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted-2); margin-bottom: 3px; }
+    .ct-cval { font-size: .88rem; font-weight: 500; color: var(--text); }
+    .ct-arr { margin-left: auto; color: var(--muted-2); font-size: .78rem; transition: all .2s; }
+    .ct-card:hover .ct-arr { color: var(--p1); transform: translateX(4px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--card-2); border-top: 1px solid var(--border);
+      padding: 28px 48px; display: flex; align-items: center; justify-content: space-between;
+      border-radius: 0 0 var(--r) var(--r);
+    }
+    .ft-logo { font-size: 1rem; font-weight: 700; color: var(--p1); }
+    .ft-copy { font-size: .74rem; color: var(--muted-2); }
+    .ft-links { display: flex; gap: 22px; }
+    .ft-links a { font-size: .74rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .ft-links a:hover { color: var(--p1); }
+
+    /* ── BACK TO TOP ── */
+    .btt {
+      position: fixed; bottom: 88px; right: 28px;
+      width: 42px; height: 42px;
+      background: var(--p1); border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: .8rem; opacity: 0;
+      transform: translateY(12px); transition: all .3s var(--spring);
+      cursor: pointer; text-decoration: none; z-index: 90; box-shadow: var(--sh);
+    }
+    .btt.visible { opacity: 1; transform: none; }
+    .btt:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(59,130,246,.35); }
+
+    /* ── MODALS ── */
+    .mo {
+      position: fixed; inset: 0;
+      background: rgba(8,12,20,.75); backdrop-filter: blur(12px);
+      z-index: 2000; display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .mo.active { opacity: 1; pointer-events: all; }
+    .mc {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); width: 100%; max-width: 600px; max-height: 88vh;
+      overflow-y: auto; box-shadow: 0 32px 80px rgba(0,0,0,.4);
+      transform: translateY(28px) scale(.97); transition: transform .38s var(--spring);
+      scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    }
+    .mo.active .mc { transform: none; }
+    .mh {
+      padding: 26px 30px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 16px; position: relative;
+    }
+    .mh-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--p1), var(--p2)); }
+    .mh-logo {
+      width: 52px; height: 52px; border-radius: 10px;
+      object-fit: contain; background: var(--card-2);
+      padding: 5px; border: 1px solid var(--border); flex-shrink: 0;
+    }
+    .mh-co { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .mh-role { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    .mh-meta { font-size: .71rem; color: var(--muted-2); display: flex; gap: 14px; margin-top: 5px; flex-wrap: wrap; }
+    .mh-meta span { display: flex; align-items: center; gap: 4px; }
+    .mh-meta i { color: var(--p1); }
+    .m-close {
+      position: absolute; top: 14px; right: 14px; width: 30px; height: 30px;
+      border-radius: var(--r-sm); border: 1px solid var(--border); background: transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: .75rem; transition: all .2s;
+    }
+    .m-close:hover { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.3); color: #ef4444; transform: rotate(90deg); }
+    .mb { padding: 26px 30px; }
+    .mb-block { margin-bottom: 22px; }
+    .mb-block:last-child { margin-bottom: 0; }
+    .mb-block h4 {
+      font-size: .68rem; font-weight: 700; letter-spacing: 1.8px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 11px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .mb-block h4 i { color: var(--p1); }
+    .mb-block p { font-size: .86rem; color: var(--muted); line-height: 1.75; }
+    .mb-block p strong { color: var(--text); font-weight: 600; }
+    .mb-block ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .mb-block ul li {
+      font-size: .83rem; color: var(--muted); padding-left: 18px;
+      position: relative; line-height: 1.55;
+    }
+    .mb-block ul li::before { content: '▸'; position: absolute; left: 0; color: var(--p1); font-weight: 600; }
+    .m-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .m-tags span {
+      background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.2);
+      color: var(--text); padding: 4px 12px; border-radius: 5px; font-size: .72rem; font-weight: 600;
+    }
+    /* proj modal variants */
+    .mh-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .mh-icon.rep { background: rgba(59,130,246,.1); color: var(--p1); }
+    .mh-icon.aud { background: rgba(239,68,68,.1); color: #ef4444; }
+    .mh-icon.ctrl { background: rgba(139,92,246,.1); color: var(--p2); }
+    .mh-icon.mod { background: rgba(16,185,129,.1); color: #10b981; }
+    .mh-cat { font-size: .62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--p1); margin-bottom: 3px; }
+    .mh-ttl { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+    .mh-ctx { font-size: .72rem; color: var(--muted-2); display: flex; align-items: center; gap: 5px; margin-top: 3px; }
+    /* edu modal */
+    .edu-mh {
+      padding: 24px 30px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 16px; position: relative;
+    }
+    .mh-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--p1), var(--p2)); }
+    .edu-mlogo {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: var(--card-2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0; padding: 4px;
+    }
+    .edu-mlogo img { width: 100%; height: 100%; object-fit: contain; }
+    .edu-myr { font-size: .8rem; font-style: italic; color: var(--p1); margin-bottom: 3px; font-weight: 600; }
+    .edu-mh h2 { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .edu-mschool { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    body.locked { overflow: hidden; }
+
+    /* ── DOCK ── */
+    .dock {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 30px; padding: 8px; display: flex; gap: 4px;
+      z-index: 100; box-shadow: var(--sh);
+    }
+    .dock a {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: grid; place-items: center; color: var(--muted);
+      transition: var(--transition); position: relative;
+    }
+    .dock a:hover, .dock a.active { background: var(--p1); color: white; }
+    .dock-sep { width: 1px; height: 30px; background: var(--border); margin: 5px 0; }
+    .tooltip {
+      position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+      background: var(--text); color: var(--bg); padding: 4px 12px;
+      border-radius: var(--r-sm); font-size: .72rem; white-space: nowrap;
+      opacity: 0; pointer-events: none; transition: opacity .2s; margin-bottom: 8px;
+    }
+    .dock a:hover .tooltip { opacity: 1; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .bc-finance{grid-column:span 12;grid-row:span 1}
+      .bc-tools,.bc-soft{grid-column:span 6}
+    }
+    @media(max-width:768px){
+      .nav{padding:14px 24px}.nav.scrolled{padding:12px 24px}
+      .nav-links li:not(:last-child){display:none}
+      #hero{padding:100px 24px 80px}
+      .stats-band{grid-template-columns:repeat(2,1fr)}
+      #about .inner{grid-template-columns:1fr;gap:48px}
+      .contact-in{grid-template-columns:1fr;gap:48px;padding:56px 28px}
+      .proj-grid{grid-template-columns:1fr}
+      .tl{padding-left:22px}.tl-yr{display:none}
+      footer{flex-direction:column;gap:14px;text-align:center;padding:20px}
+      .edu-row{flex-direction:column;align-items:flex-start;padding-left:20px}
+      .edu-row::before{display:none}
+      .edu-item{flex-direction:row;gap:16px;align-items:flex-start;text-align:left;margin-bottom:32px;width:100%}
+      .edu-circle{flex-shrink:0}
+      .s{padding:64px 24px}
+    }
+    @media(max-width:640px){
+      .bc-tools,.bc-soft{grid-column:span 12}
+      .lang-grid{grid-template-columns:1fr}
+      .sk-soft-grid{grid-template-columns:1fr}
+      .about-grid{grid-template-columns:1fr}
+    }
+  </style>
 </head>
+<body>
 
-<body>    
+<canvas id="bg-canvas"></canvas>
 
-    <div class="bg-canvas">
-        <div class="bg-blob"></div>
-        <div class="bg-blob"></div>
-        <div class="bg-blob"></div>
-        <div class="grid-lines"></div>
+<button class="theme-btn" id="themeBtn" aria-label="Changer de thème">
+  <i class="fa-solid fa-moon" id="themeIcon"></i>
+</button>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-mark">AM</div>
+    <span class="nav-logo-text">Adam Mbea</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">Profil</a></li>
+    <li><a href="#experience">Expériences</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#skills">Compétences</a></li>
+    <li><a href="#education">Formation</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="container">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-bg-glow"></div>
+  </div>
+  <div class="hero-content">
+    <div class="avail-badge"><span class="dot"></span>Disponible dès que possible</div>
+    <div class="hero-tag"><i class="fas fa-graduation-cap"></i> MS AICG · TBS Education</div>
+    <h1 class="hero-title">
+      <span class="line1">Finance &amp; Comptabilité</span>
+      <span class="line2"><span class="grad-text">PORTFOLIO</span></span>
+    </h1>
+    <p style="text-align: center;" class="hero-sub">Mastère Spécialisé · <strong>TBS Education, Toulouse</strong><br>Fiabilisation des données, analyse et pilotage de la performance.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-primary"><i class="fas fa-paper-plane"></i>Me contacter</a>
+      <a href="#experience" class="btn btn-outline"><i class="fas fa-briefcase"></i>Mon parcours</a>
     </div>
+  </div>
+  <div class="hero-scroll"><div class="hero-scroll-line"></div></div>
+</section>
 
-    <!-- NAV -->
-    <nav>
-        <div class="nav-logo">AM</div>
-            <ul class="nav-links">
-                <li><a href="#about">Profil</a></li>
-                <li><a href="#experience">Expériences</a></li>
-                <li><a href="#projects">Projets</a></li>
-                <li><a href="#skills">Compétences</a></li>
-                <li><a href="#education">Formation</a></li>
-                <li><a href="#contact" class="nav-cta">Contact</a></li>
-            </ul>
-    </nav>
-
-    <!-- HERO -->
-    <section id="hero">
-        <div class="hero-content">
-            <div class="hero-badge"><span class="dot"></span> Disponible · Stage 6 mois · Mai 2026</div>
-            <h1 class="hero-title">
-                <span class="line1">Adam Mbea</span>
-                <span class="line2">Contrôle de Gestion</span>
-            </h1>
-            <p class="hero-subtitle">Étudiant en Mastère Spécialisé à TBS Education · Toulouse<br>Passionné par le pilotage de la performance, l'analyse financière et la fiabilisation des données.</p>
-            <div class="hero-actions">
-                <a href="#contact" class="btn-primary"><i class="fas fa-paper-plane"></i> Me contacter</a>
-                <a href="#experience" class="btn-secondary"><i class="fas fa-briefcase"></i> Mon parcours</a>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <div class="scroll-line"></div>
-        </div>
-    </section>
-
-    <!-- STATS -->
-    <div class="stats-section">
-        <div class="stat-item">
-            <div><span class="stat-number" data-target="400">0</span><span class="stat-suffix">+</span></div>
-            <div class="stat-label">Bookings traités</div>
-        </div>
-        <div class="stat-item">
-            <div><span class="stat-number" data-target="10">0</span><span class="stat-suffix"> mois</span></div>
-            <div class="stat-label">Expérience CDD</div>
-        </div>
-        <div class="stat-item">
-            <div><span class="stat-suffix">Toulouse</span></div>
-            <div class="stat-label">Localisation</div>
-        </div>
-        <div class="stat-item">
-            <div><span class="stat-number" data-target="810">0</span></div>
-            <div class="stat-label">Score TOEIC</div>
-        </div>
-    </div>
-
-    <!-- ABOUT -->
-    <section id="about">
-        <div class="about-text">
-            <div class="section-header" style="margin-bottom:28px;">
-                <h2 class="section-title">Qui <span>je suis</span> ?</h2>
-            </div>
-            <p>Étudiant en <strong>Mastère Spécialisé Expert en Audit Interne et Contrôle de Gestion</strong> à TBS Education, 
-                je me suis construit une solide expérience à travers des missions variées en France et au Cameroun.
-            </p>
-            <p>Mon parcours m'a permis de développer une maîtrise d'<strong>Excel avancé, du reporting, de l'analyse des écarts</strong> 
-                et de la fiabilisation des données financières. Je recherche un stage de fin d'études de 6 mois dans lequel contribuer 
-                activement au pilotage de la performance.
-            </p>
-        </div>
-        <div class="about-cards-grid">
-            <div class="about-card">
-                <div class="about-card-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <h3>Contrôle de Gestion</h3>
-                <p>Suivi budgétaire, analyse des écarts, reporting et KPIs d'aide à la décision.</p>
-            </div>
-            <div class="about-card">
-                <div class="about-card-icon">
-                    <i class="fas fa-file-invoice-dollar"></i>   
-                </div>
-                <h3>Comptabilité</h3>
-                <p>Comptabilité générale, rapprochements bancaires, clôtures et états financiers.</p>
-            </div>
-            <div class="about-card">
-                <div class="about-card-icon">
-                    <i class="fas fa-magnifying-glass-chart"></i>
-                </div>
-                <h3>Audit Interne</h3>
-                <p>Audit des systèmes et processus, pilotage des risques, contrôle des investissements.</p>
-            </div>
-            <div class="about-card">
-                <div class="about-card-icon">
-                    <i class="fas fa-database"></i>
-                </div>
-                <h3>Data & Outils</h3>
-                <p>Excel avancé, Power BI, Power Query, VBA pour l'analyse et la restitution financière.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- EXPERIENCES -->
-    <section id="experience">
-        <div class="section-header">
-            <h2 class="section-title">Mon <span>parcours</span> professionnel</h2>
-        </div>
-        <div class="experience-container">
-            <div class="experience-timeline">
-
-                <!-- Kactus -->
-                <div class="experience-timeline-item">
-                    <div class="experience-timeline-year">
-                        2025<br><span>2 mois</span>
-                    </div>
-                    <div class="experience-timeline-dot"></div>
-                    <div class="experience-timeline-card">
-                        <div class="experience-timeline-header">
-                            <div class="experience-timeline-header-left">
-                                    <img src="images/kactus.png" alt="Kactus Logo" class="experience-timeline-logo">
-                                    <div class="experience-timeline-company-info">
-                                        <div class="experience-timeline-company">Kactus – Évènementiel</div>
-                                        <div class="experience-timeline-role">Chargé de Facturation · Stage</div>
-                                        <div class="experience-timeline-location"><i class="fas fa-map-marker-alt"></i> Paris, France</div>
-                                        <div>
-                                            <button class="experience-detail-btn" data-exp-modal="modal-kactus">
-                                                <i class="fas fa-plus-circle"></i>Détails
-                                            </button>
-                                        </div>
-                                    </div>
-                            </div>
-                            <span class="experience-timeline-period">2025 · 2 mois</span>
-                        </div>
-                                
-                    </div>
-                </div>
-                
-                
-    
-
-
-                <!-- CNPS -->
-                <div class="experience-timeline-item">
-                    <div class="experience-timeline-year">
-                        2023 – 2024<br><span>10 mois</span>
-                    </div>
-                        <div class="experience-timeline-dot"></div>
-                        <div class="experience-timeline-card">
-                            <div class="experience-timeline-header">
-                                <div class="experience-timeline-header-left">
-                                    <img src="images/cnps.jpg" alt="CNPS Logo" class="experience-timeline-logo">
-                                    <div class="experience-timeline-company-info">
-                                        <div class="experience-timeline-company">CNPS – Sécurité Sociale</div>
-                                        <div class="experience-timeline-role">Collaborateur Comptable · CDD</div>
-                                        <div class="experience-timeline-location"><i class="fas fa-map-marker-alt"></i> Cameroun</div>
-                                        <div>
-                                            <button class="experience-detail-btn" data-exp-modal="modal-cnps">
-                                                <i class="fas fa-plus-circle"></i>Détails
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="experience-timeline-period">2023 – 2024 · 10 mois</span>
-                            </div>
-                           
-                        </div>  
-                </div>
-            
-
-                <!-- Port Autonome de Kribi -->
-                <div class="experience-timeline-item">
-                    <div class="experience-timeline-year">
-                        2022<br><span>6 mois</span>
-                    </div>
-                        <div class="experience-timeline-dot"></div>
-                        <div class="experience-timeline-card">
-                            <div class="experience-timeline-header">
-                                <div class="experience-timeline-header-left">
-                                    <img src="images/pak.jpg" alt="PAK Logo" class="experience-timeline-logo">
-                                    <div class="experience-timeline-company-info">
-                                        <div class="experience-timeline-company">Port Autonome de Kribi</div>
-                                        <div class="experience-timeline-role">Assistant Contrôleur de Gestion · Stage</div>
-                                        <div class="experience-timeline-location"><i class="fas fa-map-marker-alt"></i> Cameroun</div>
-                                        <div><button class="experience-detail-btn" data-exp-modal="modal-pak">
-                                            <i class="fas fa-plus-circle"></i>Détails
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                    <span class="experience-timeline-period"> Mai · Octobre</span>
-                            </div>
-                        </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-                <!-- MODAL KACTUS -->
-                        <div class="exp-modal-overlay" id="modal-kactus">
-                            <div class="exp-modal-content">
-                                <div class="exp-modal-header">
-                                    <img src="images/kactus.png" alt="Kactus" class="exp-modal-logo">
-                                        <div class="exp-modal-header-info">
-                                            <h3>Kactus – Évènementiel</h3>
-                                            <div class="exp-modal-role">Chargé de Facturation · Stage</div>
-                                            <div class="exp-modal-meta">
-                                                <span><i class="fas fa-calendar-alt"></i> 2025 · 2 mois</span>
-                                                <span><i class="fas fa-map-marker-alt"></i> Paris, France</span>
-                                            </div>
-                                        </div>
-                                    <button class="exp-modal-close"><i class="fas fa-times"></i></button>
-                                </div>
-                                <div class="exp-modal-body">
-                                    <div class="exp-modal-block">
-                                        <h4><i class="fas fa-briefcase"></i> Mission principale</h4>
-                                        <p>Pilotage du suivi de la facturation clients et partenaires sur plus de <strong>400 bookings</strong>, contrôle de la conformité des paiements, traitement des anomalies et contribution à l'optimisation des processus afin de fiabiliser les flux administratifs et financiers.</p>
-                                    </div>
-                                    <div class="exp-modal-block">
-                                        <h4><i class="fas fa-tasks"></i> Responsabilités</h4>
-                                        <ul>
-                                            <li>Suivi et contrôle de la facturation sur plus de 400 bookings</li>
-                                            <li>Vérification de la conformité des paiements clients et partenaires</li>
-                                            <li>Identification et traitement des anomalies de facturation</li>
-                                            <li>Contribution à l'optimisation et la documentation des processus</li>
-                                            <li>Communication avec les équipes internes via Aircall et Front</li>
-                                        </ul>
-                                    </div>
-                                    <div class="exp-modal-block">
-                                        <h4><i class="fas fa-tools"></i> Outils utilisés</h4>
-                                        <div class="exp-modal-tags">
-                                            <span>Aircall</span>
-                                            <span>Notion</span>
-                                            <span>Front</span>
-                                            <span>Excel</span>
-                                        </div>
-                                    </div>
-                                    <div class="exp-modal-block">
-                                        <h4><i class="fas fa-star"></i> Compétences développées</h4>
-                                        <div class="exp-modal-tags">
-                                            <span>Facturation</span>
-                                            <span>Contrôle paiements</span>
-                                            <span>Optimisation processus</span>
-                                            <span>Rigueur financière</span>
-                                        </div>
-                                    </div>
-                                    <div class="exp-modal-block">
-                                        <h4>Test vidéo</h4>
-                                        <div class="modal-media">
-                                            <video controls width="100%"
-                                                src="tutos_vid/tuto_test.mp4" type="video/mp4"
-                                                allowfullscreen>
-                                            </video>
-                                            <div class="play-overlay">▶</div>
-                                        </div>    
-</div>                              </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                <!-- MODAL CNPS -->
-                    <div class="exp-modal-overlay" id="modal-cnps">
-                    <div class="exp-modal-content">
-                        <div class="exp-modal-header">
-                        <img src="images/cnps.jpg" alt="CNPS" class="exp-modal-logo">
-                        <div class="exp-modal-header-info">
-                            <h3>CNPS – Sécurité Sociale</h3>
-                            <div class="exp-modal-role">Collaborateur Comptable · CDD</div>
-                            <div class="exp-modal-meta">
-                            <span><i class="fas fa-calendar-alt"></i> 2023 – 2024 · 10 mois</span>
-                            <span><i class="fas fa-map-marker-alt"></i> Cameroun</span>
-                            </div>
-                        </div>
-                        <button class="exp-modal-close"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="exp-modal-body">
-                        <div class="exp-modal-block">
-                            <h4><i class="fas fa-briefcase"></i> Mission principale</h4>
-                            <p>Contribution à la fiabilisation de l'information financière à travers le traitement des opérations courantes, les rapprochements bancaires, l'analyse de données et la participation à la préparation des états financiers et des inspections.</p>
-                        </div>
-                        <div class="exp-modal-block">
-                            <h4><i class="fas fa-tasks"></i> Responsabilités</h4>
-                            <ul>
-                            <li>Traitement des opérations comptables courantes</li>
-                            <li>Réalisation des rapprochements bancaires</li>
-                            <li>Analyse et fiabilisation des données financières</li>
-                            <li>Participation à la préparation des états financiers</li>
-                            <li>Contribution aux travaux de clôture et aux inspections</li>
-                            </ul>
-                        </div>
-                        <div class="exp-modal-block">
-                            <h4><i class="fas fa-tools"></i> Outils utilisés</h4>
-                            <div class="exp-modal-tags">
-                            <span>Tompro</span><span>Excel</span>
-                            </div>
-                        </div>
-                        <div class="exp-modal-block">
-                            <h4><i class="fas fa-star"></i> Compétences développées</h4>
-                            <div class="exp-modal-tags">
-                            <span>Comptabilité générale</span><span>Rapprochements bancaires</span>
-                            <span>États financiers</span><span>Travaux de clôture</span><span>Audit interne</span>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-
-                <!-- MODAL PAK -->
-                    <div class="exp-modal-overlay" id="modal-pak">
-                    <div class="exp-modal-content">
-                        <div class="exp-modal-header">
-                        <img src="images/pak.jpg" alt="Port Autonome de Kribi" class="exp-modal-logo">
-                        <div class="exp-modal-header-info">
-                            <h3>Port Autonome de Kribi</h3>
-                            <div class="exp-modal-role">Assistant Contrôleur de Gestion · Stage</div>
-                            <div class="exp-modal-meta">
-                            <span><i class="fas fa-calendar-alt"></i> 2022 · 6 mois</span>
-                            <span><i class="fas fa-map-marker-alt"></i> Cameroun</span>
-                            </div>
-                        </div>
-                        <button class="exp-modal-close"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="exp-modal-body">
-                        <div class="exp-modal-block">
-                            <h4><i class="fas fa-briefcase"></i> Mission principale</h4>
-                            <p>Appui au pilotage de la performance via le suivi budgétaire, l'analyse des écarts, l'étude des coûts et de la rentabilité, ainsi que la production de reportings et d'indicateurs d'aide à la décision.</p>
-                        </div>
-                        <div class="exp-modal-block">
-                            <h4><i class="fas fa-tasks"></i> Responsabilités</h4>
-                            <ul>
-                            <li>Suivi et contrôle de l'exécution budgétaire</li>
-                            <li>Analyse des écarts entre prévisions et réalisations</li>
-                            <li>Étude des coûts et de la rentabilité par activité</li>
-                            <li>Production de tableaux de bord et de reportings périodiques</li>
-                            <li>Élaboration d'indicateurs de performance (KPIs)</li>
-                            </ul>
-                        </div>
-                        <div class="exp-modal-block">
-                            <h4><i class="fas fa-tools"></i> Outils utilisés</h4>
-                            <div class="exp-modal-tags">
-                            <span>Excel</span><span>Power Query</span>
-                            </div>
-                        </div>
-                        <div class="exp-modal-block">
-                            <h4><i class="fas fa-star"></i> Compétences développées</h4>
-                            <div class="exp-modal-tags">
-                            <span>Suivi budgétaire</span><span>Analyse des écarts</span>
-                            <span>Étude des coûts</span><span>Reporting</span><span>KPIs</span>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-
-
-    <!-- EDUCATION -->
-    <section id="education">
-        <div class="section-header">
-            <h2 class="section-title">Mon <span>parcours</span> académique</h2>
-        </div>
-        <div class="experience-container">
-            <div class="edu-timeline">
-
-                <!-- TBS -->
-                <div class="edu-timeline-item">
-                    <div class="edu-timeline-top">
-                        <div class="edu-timeline-date">2025 – Aujourd'hui</div>
-                        <div class="school-location">
-                            <i class="fas fa-map-marker-alt"></i> Toulouse, France
-                        </div>
-                    </div>
-                    <div class="edu-timeline-dot"></div>
-                    <div class="edu-timeline-card">
-                        <div class="school-circle modal-trigger" data-modal="modal-tbs" title="Voir le détail">
-
-                            <!-- Remplace le src par le vrai logo -->
-                            <img src="images/tbs.png" alt="TBS Education"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                            <span class="school-emoji" style="display:none">🎓</span>
-                        </div>
-                        <div class="school-title">Mastère Spécialisé Expert en Audit Interne & Contrôle de Gestion</div>
-
-                    </div>
-                </div>
-
-                <!-- EDC -->
-                <div class="edu-timeline-item">
-                    <div class="edu-timeline-top">
-                        <div class="edu-timeline-date">2024 – 2025</div>
-                        <div class="school-location">
-                            <i class="fas fa-map-marker-alt"></i> Paris, France
-                        </div>
-                    </div>
-                    <div class="edu-timeline-dot"></div>
-                    <div class="edu-timeline-card">
-                        <div class="school-circle modal-trigger" data-modal="modal-edc" title="Voir le détail">
-                        <img src="images/edc.png" alt="EDC Paris"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                        <span class="school-emoji" style="display:none">📚</span>
-                        </div>
-                        <span class="school-title">4ème année PGE – Audit & Contrôle de Gestion</span>
-                    </div>
-                </div>
-
-                <!-- UCAC -->
-                <div class="edu-timeline-item">
-                    <div class="edu-timeline-top">
-                        <div class="edu-timeline-date">2021 – 2023</div>
-                        <div class="school-location">
-                            <i class="fas fa-map-marker-alt"></i> Yaoundé, Cameroun
-                        </div>
-                    </div>
-                    <div class="edu-timeline-dot"></div>
-                    <div class="edu-timeline-card">
-                        <div class="school-circle modal-trigger" data-modal="modal-ucac" title="Voir le détail">
-                        <img src="images/ucac.png" alt="UCAC"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                        <span class="school-emoji" style="display:none">🏫</span>
-                        </div>
-                        <span class="school-title">Master – Comptabilité et Finance d'Entreprises</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-<!-- MODAL TBS -->
-<div class="edu-modal-overlay" id="modal-tbs">
-  <div class="edu-modal-content">
-    <button class="edu-modal-close"><i class="fas fa-times"></i></button>
-    <div class="edu-modal-header">
-      <div class="edu-modal-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/fr/thumb/b/b8/Logo_TBS_Education.svg/1200px-Logo_TBS_Education.svg.png" alt="TBS"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-        <span class="school-emoji" style="display:none">🎓</span>
-      </div>
-      <div>
-        <span class="edu-timeline-date">2025 – Aujourd'hui</span>
-        <h2>Mastère Spécialisé</h2>
-        <p class="edu-modal-school">TBS Education – Toulouse, France</p>
-      </div>
-    </div>
-    <div class="edu-modal-body">
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-book"></i> Intitulé complet</h4>
-        <p>Expert en Audit Interne et Contrôle de Gestion</p>
-      </div>
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-list-ul"></i> Matières principales</h4>
-        <ul>
-          <li>Audit des systèmes et processus</li>
-          <li>Pilotage des risques</li>
-          <li>Comptes consolidés et combinés</li>
-          <li>Normes IFRS approfondies</li>
-          <li>Contrôle des investissements</li>
-          <li>Gestion de la trésorerie</li>
-        </ul>
-      </div>
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-star"></i> Compétences acquises</h4>
-        <div class="edu-modal-tags">
-          <span>Audit interne</span>
-          <span>Contrôle de gestion</span>
-          <span>Normes IFRS</span>
-          <span>Gestion des risques</span>
-          <span>Reporting financier</span>
-          <span>Comptes consolidés</span>
-        </div>
-      </div>
-    </div>
+<!-- STATS BAND -->
+<div class="stats-band reveal">
+  <div class="stat-item">
+    <div class="stat-num"><span data-t="4">0</span></div>
+    <div class="stat-label">Projets réalisés</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num"><span style="color:var(--p1)">Junior</span></div>
+    <div class="stat-label">Expérience</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">Toulouse</div>
+    <div class="stat-label">Localisation</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num"><span data-t="810">0</span></div>
+    <div class="stat-label">Score TOEIC</div>
   </div>
 </div>
 
-<!-- MODAL EDC -->
-<div class="edu-modal-overlay" id="modal-edc">
-  <div class="edu-modal-content">
-    <button class="edu-modal-close"><i class="fas fa-times"></i></button>
-    <div class="edu-modal-header">
-      <div class="edu-modal-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/fr/thumb/4/4e/EDC_Paris_Business_School_logo.svg/1200px-EDC_Paris_Business_School_logo.svg.png" alt="EDC"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-        <span class="school-emoji" style="display:none">📚</span>
-      </div>
-      <div>
-        <span class="edu-timeline-date">2024 – 2025</span>
-        <h2>4ème année PGE</h2>
-        <p class="edu-modal-school">EDC Paris Business School – Puteaux, France</p>
-      </div>
+<!-- ABOUT -->
+<section id="about" class="s reveal">
+  <div class="inner">
+    <div class="about-body">
+      <div class="s-eyebrow"></div>
+      <h2 class="s-title">Qui <em>je suis</em> ?</h2>
+      <p>Étudiant en <strong>Mastère Spécialisé Expert en Audit Interne et Contrôle de Gestion</strong> à TBS Education, je me suis construit une solide expérience à travers des missions variées en France et au Cameroun.</p>
+      <p>Mon parcours m'a permis de développer une double compétence : technique avec la maîtrise d'outils avancés (Excel, Power BI, SAP), et analytique avec la capacité à produire des analyses financières fiables et orientées décision.</p>
+
     </div>
-    <div class="edu-modal-body">
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-book"></i> Spécialisation</h4>
-        <p>Audit & Contrôle de Gestion – Programme Grande École</p>
+    <div class="about-grid">
+      <div class="acard">
+        <div class="acard-ico"><i class="fas fa-chart-line"></i></div>
+        <h3>Contrôle de gestion</h3>
+        <p textalign="left">Suivi budgétaire, analyse des écarts, reporting et KPIs d'aide à la décision.</p>
       </div>
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-list-ul"></i> Matières principales</h4>
-        <ul>
-          <li>Contrôle de gestion avancé</li>
-          <li>Audit financier et opérationnel</li>
-          <li>Finance d'entreprise</li>
-          <li>Comptabilité approfondie</li>
-          <li>Management stratégique</li>
-        </ul>
+      <div class="acard">
+        <div class="acard-ico"><i class="fas fa-shield-halved"></i></div>
+        <h3>Audit interne</h3>
+        <p style="text-align: left;">Analyses des systèmes et des processus, cartographie et gestion des risques.</p>
       </div>
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-star"></i> Compétences acquises</h4>
-        <div class="edu-modal-tags">
-          <span>Audit financier</span>
-          <span>Contrôle de gestion</span>
-          <span>Finance d'entreprise</span>
-          <span>Analyse stratégique</span>
-          <span>Comptabilité avancée</span>
-        </div>
+      <div class="acard">
+        <div class="acard-ico"><i class="fas fa-file-invoice"></i></div>
+        <h3>Comptabilité & IFRS</h3>
+        <p style="text-align: left;">Comptabilité générale, normes internationales et consolidation de groupe.</p>
+      </div>
+      <div class="acard">
+        <div class="acard-ico"><i class="fas fa-database"></i></div>
+        <h3>Outils & Reporting</h3>
+        <p style="text-align: left;">Excel avancé, Power BI, Power Query, VBA pour l'automatisation, l'analyse et la restitution financière.</p>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- MODAL UCAC -->
-<div class="edu-modal-overlay" id="modal-ucac">
-  <div class="edu-modal-content">
-    <button class="edu-modal-close"><i class="fas fa-times"></i></button>
-    <div class="edu-modal-header">
-      <div class="edu-modal-logo">
-        <img src="https://ucac-icam.com/wp-content/uploads/2021/03/logo-ucac.png" alt="UCAC"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-        <span class="school-emoji" style="display:none">🏫</span>
-      </div>
-      <div>
-        <span class="edu-timeline-date">2021 – 2023</span>
-        <h2>Master</h2>
-        <p class="edu-modal-school">Université Catholique d'Afrique Centrale – Cameroun</p>
-      </div>
-    </div>
-    <div class="edu-modal-body">
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-book"></i> Intitulé complet</h4>
-        <p>Master en Comptabilité et Finance d'Entreprises</p>
-      </div>
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-list-ul"></i> Matières principales</h4>
-        <ul>
-          <li>Comptabilité générale et analytique</li>
-          <li>Finance d'entreprise</li>
-          <li>Fiscalité</li>
-          <li>Audit et contrôle</li>
-          <li>Mathématiques financières</li>
-          <li>Droit des affaires</li>
-        </ul>
-      </div>
-      <div class="edu-modal-block">
-        <h4><i class="fas fa-star"></i> Compétences acquises</h4>
-        <div class="edu-modal-tags">
-          <span>Comptabilité générale</span>
-          <span>Finance d'entreprise</span>
-          <span>Fiscalité</span>
-          <span>Audit</span>
-          <span>Analyse financière</span>
+<!-- EXPERIENCE -->
+<section id="experience" class="s reveal">
+  <div class="s-eyebrow"></div>
+  <h2 class="s-title">Expériences <em>professionnelles</em></h2>
+  <p class="s-sub">Des missions dans des secteurs d'activités variés, en France et au Cameroun.</p>
+
+  <div class="exp-wrap" style="margin-top:52px">
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-yr">2025</div>
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <img class="tl-logo" src="images/logos-exp/kactus.png" alt="Kactus">
+            <div>
+              <div class="tl-co">Chargé de facturation</div>
+              <div class="tl-role">Kactus</div>
+              <div class="tl-loc"><i class="fas fa-map-marker-alt"></i> Paris, France</div>
+            </div>
+            <span class="tl-badge">2 mois</span>
+          </div>
+          <button class="tl-btn" data-exp-modal="me-kactus"><i class="fas fa-plus"></i> Détails</button>
         </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-yr">2023</div>
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <img class="tl-logo" src="images/logos-exp/cnps.jpg" alt="CNPS">
+            <div>
+              <div class="tl-co">Collaborateur comptable</div>
+              <div class="tl-role">Caisse Nationale de Prévoyance Sociale</div>
+              <div class="tl-loc"><i class="fas fa-map-marker-alt"></i> Yaoundé, Cameroun</div>
+            </div>
+            <span class="tl-badge">10 mois</span>
+          </div>
+          <button class="tl-btn" data-exp-modal="me-cnps"><i class="fas fa-plus"></i> Détails</button>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-yr">2022</div>
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <img class="tl-logo" src="images/logos-exp/pak.jpg" alt="Pak">
+            <div>
+              <div class="tl-co">Assistant contrôleur de gestion</div>
+              <div class="tl-role">Port Autonome de Kribi</div>
+              <div class="tl-loc"><i class="fas fa-map-marker-alt"></i> Kribi, Cameroun</div>
+            </div>
+            <span class="tl-badge">6 mois</span>
+          </div>
+          <button class="tl-btn" data-exp-modal="me-pak"><i class="fas fa-plus"></i> Détails</button>
+        </div>
+      </div>
+
+        <div class="tl-item">
+            <div class="tl-yr">2021</div>
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+            <div class="tl-head">
+                <img class="tl-logo" src="images/logos-exp/palm_beach.png" alt="Palm Beach">
+                <div>
+                <div class="tl-co">Assistant comptable & chargé de reporting</div>
+                <div class="tl-role">Hôtel Palm Beach Plus</div>
+                <div class="tl-loc"><i class="fas fa-map-marker-alt"></i> Kribi, Cameroun</div>
+                </div>
+                <span class="tl-badge">4 mois</span>
+            </div>
+            <button class="tl-btn" data-exp-modal="me-palm_beach"><i class="fas fa-plus"></i> Détails</button>
+            </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-    <script>
-        
-        // Scroll animation
-        const expObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-            setTimeout(() => entry.target.classList.add('visible'), i * 150);
+<!-- PROJECTS -->
+<section id="projects" class="s reveal">
+  <div class="s-eyebrow"></div>
+  <h2 class="s-title">Mes <em>projets</em></h2>
+
+  <div class="filters">
+    <button class="fbtn active" data-f="all">Tous</button>
+    <button class="fbtn" data-f="rep">Visualisation</button>
+    <button class="fbtn" data-f="aud">Audit</button>
+    <button class="fbtn" data-f="ctrl">CDG</button>
+    <button class="fbtn" data-f="auto">Automatisation</button>
+  </div>
+
+  <div class="proj-grid">
+    <div class="proj-card" data-cat="rep" data-pm="mp-rep">
+      <div class="pc-top">
+        <div class="pc-ico rep"><i class="fas fa-chart-bar"></i></div>
+        <span class="pc-badge rep">Reporting</span>
+      </div>
+      <div class="pc-title">Tableau de bord Power BI</div>
+      <div class="pc-desc">Analyse des écarts budgétaires et reporting automatisé pour un service commercial — suivi mensuel des KPIs.</div>
+      <div class="pc-result"><i class="fas fa-check-circle"></i> −35% de temps de reporting</div>
+      <div class="pc-foot">
+        <div class="pc-tags"><span>Power BI</span><span>DAX</span><span>Excel</span></div>
+        <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <div class="proj-card" data-cat="aud" data-pm="mp-aud">
+      <div class="pc-top">
+        <div class="pc-ico aud"><i class="fas fa-shield-halved"></i></div>
+        <span class="pc-badge aud">Audit</span>
+      </div>
+      <div class="pc-title">Audit processus achats</div>
+      <div class="pc-desc">Cartographie des risques et recommandations pour améliorer le contrôle interne sur le cycle achats-fournisseurs.</div>
+      <div class="pc-result"><i class="fas fa-check-circle"></i> 12 recommandations formulées</div>
+      <div class="pc-foot">
+        <div class="pc-tags"><span>Audit interne</span><span>Risques</span><span>COSO</span></div>
+        <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <div class="proj-card" data-cat="ctrl" data-pm="mp-ctrl">
+      <div class="pc-top">
+        <div class="pc-ico ctrl"><i class="fas fa-gears"></i></div>
+        <span class="pc-badge ctrl">CDG</span>
+      </div>
+      <div class="pc-title">Automatisation Excel VBA</div>
+      <div class="pc-desc">Macro pour le traitement automatisé des données comptables et génération de rapports mensuels standardisés.</div>
+      <div class="pc-result"><i class="fas fa-check-circle"></i> 8h économisées/mois</div>
+      <div class="pc-foot">
+        <div class="pc-tags"><span>Excel VBA</span><span>Power Query</span></div>
+        <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- Retraitement de fichier texte -->
+    <div class="proj-card" data-cat="auto" data-pm="mp-retraitement">
+      <div class="pc-top">
+        <div class="pc-ico auto"><i class="fas fa-building-columns"></i></div>
+        <span class="pc-badge auto">Automatisation</span>
+      </div>
+      <div class="pc-title">Retraitement de fichier texte</div>
+      <div class="pc-desc">Automatiser la récupération et le retraitement de fichiers texte pour améliorer leur qualité et faciliter leur exploitation.</div>
+      <div class="pc-result"><i class="fas fa-check-circle"></i> 3 entités consolidées</div>
+      <div class="pc-foot">
+        <div class="pc-tags"><span>Excel</span><span>VBA</span></div>
+        <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="s reveal">
+  <div class="s-eyebrow"></div>
+  <h2 class="s-title">Compétences <em>& Outils</em></h2>
+
+  <div class="bento">
+    <div class="bc bc-finance">
+      <div class="bc-head">
+        <div class="bc-ico n"><i class="fas fa-chart-pie"></i></div>
+        <span class="bc-ttl">Compétences techniques</span>
+      </div>
+      <div class="fin-list">
+        <div class="fin-row"><div class="fin-ico"><i class="fas fa-file-invoice-dollar"></i></div><span class="fin-nm">Contrôle de gestion</span></div>
+        <div class="fin-row"><div class="fin-ico"><i class="fas fa-shield-halved"></i></div><span class="fin-nm">Audit interne & contrôle interne (COSO)</span></div>
+        <div class="fin-row"><div class="fin-ico"><i class="fas fa-balance-scale"></i></div><span class="fin-nm">Comptabilité générale et analytique</span></div>
+        <div class="fin-row"><div class="fin-ico"><i class="fas fa-building-columns"></i></div><span class="fin-nm">Normes IFRS & consolidation</span></div>
+        <div class="fin-row"><div class="fin-ico"><i class="fas fa-coins"></i></div><span class="fin-nm">Gestion de trésorerie & prévisionnel</span></div>
+        <div class="fin-row"><div class="fin-ico"><i class="fas fa-receipt"></i></div><span class="fin-nm">Fiscalité des entreprises</span></div>
+        <div class="fin-row"><div class="fin-ico"><i class="fas fa-chart-line"></i></div><span class="fin-nm">Analyse financière</span></div>
+      </div>
+    </div>
+
+    <div class="bc bc-tools">
+      <div class="bc-head">
+        <div class="bc-ico g"><i class="fas fa-wrench"></i></div>
+        <span class="bc-ttl">Outils & Logiciels</span>
+      </div>
+      <div class="tools-wrap">
+        <span class="tpill"><i class="fas fa-table"></i> Excel & VBA</span>
+        <span class="tpill"><i class="fas fa-chart-pie"></i> Power BI</span>
+        <span class="tpill"><i class="fas fa-database"></i> Power Query</span>
+        <span class="tpill"><i class="fas fa-cubes"></i> Power Pivot</span>
+        <span class="tpill"><i class="fas fa-cogs"></i> SAP</span>
+        <span class="tpill"><i class="fas fa-calculator"></i> Tompro</span>
+        <span class="tpill"><i class="fas fa-book-open"></i> Sage</span>
+        <span class="tpill"><i class="fab fa-microsoft"></i> Microsoft 365</span>
+        <span class="tpill"><i class="si si-notion"></i> Notion</span>
+        <span class="tpill"><i class="fab fa-slack"></i> Slack</span>
+        <span class="tpill"><i class="fas fa-headset"></i> Aircall</span>
+        <span class="tpill"><i class="fas fa-envelope-circle-check"></i> Front</span>
+        <span class="tpill"><i class="fas fa-video"></i> Microsoft Teams</span>
+      </div>
+    </div>
+
+    <div class="bc bc-soft">
+      <div class="bc-head">
+        <div class="bc-ico b"><i class="fas fa-lightbulb"></i></div>
+        <span class="bc-ttl">Soft Skills</span>
+      </div>
+      <div class="sk-soft-grid">
+        <div class="srow"><i class="fas fa-users"></i> Travail en équipe</div>
+        <div class="srow"><i class="fas fa-magnifying-glass-chart"></i> Esprit d'analyse</div>
+        <div class="srow"><i class="fas fa-lightbulb"></i><span>Curiosité</span></div>
+        <div class="srow"><i class="fas fa-bullseye"></i> Rigueur & précision</div>
+        <div class="srow"><i class="fas fa-comments"></i> Communication</div>
+        <div class="srow"><i class="fas fa-bolt"></i><span>Proactivité</span></div>
+        <div class="srow"><i class="fas fa-random"></i> Adaptabilité</div>
+        <div class="srow"><i class="fas fa-brain"></i> Gestion du stress</div>
+      </div>
+    </div>
+
+    <div class="bc bc-lang">
+      <div class="bc-head">
+        <div class="bc-ico g"><i class="fas fa-globe"></i></div>
+        <span class="bc-ttl">Langues</span>
+      </div>
+      <div class="lang-grid">
+        <div class="ltile"><span class="lflag">C2</span><div><div class="lname">Français</div><div class="llvl">Langue maternelle</div></div></div>
+        <div class="ltile"><span class="lflag">B2</span><div><div class="lname">Anglais</div><div class="llvl">TOEIC 810</div></div></div>
+        <div class="ltile"><span class="lflag">A2</span><div><div class="lname">Espagnol</div><div class="llvl">Débutant</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="s reveal">
+  <div class="s-eyebrow"></div>
+  <h2 class="s-title">Mon <em>parcours académique</em></h2>
+
+  <div class="edu-row">
+    <div class="edu-item">
+      <div class="edu-yr">2026</div>
+      <div class="edu-dot"></div>
+      <div class="edu-circle modal-trigger" data-modal="me-tbs"><img src="images/logos-edu/tbs.png" alt="TBS"></div>
+      <div class="edu-ttl">Mastère Spécialisé AICG</div>
+      <div class="edu-loc"><i class="fas fa-map-marker-alt"></i> TBS Education – Toulouse</div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-yr">2025</div>
+      <div class="edu-dot"></div>
+      <div class="edu-circle modal-trigger" data-modal="me-edc"><img src="images/logos-edu/edc.png" alt="EDC"></div>
+      <div class="edu-ttl">Programme Grande École</div>
+      <div class="edu-loc"><i class="fas fa-map-marker-alt"></i> EDC Paris – Puteaux</div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-yr">2023</div>
+      <div class="edu-dot"></div>
+      <div class="edu-circle modal-trigger" data-modal="me-ucac2"><img src="images/logos-edu/ucac.png" alt="UCAC"></div>
+      <div class="edu-ttl">Master en Comptabilité & Finance</div>
+      <div class="edu-loc"><i class="fas fa-map-marker-alt"></i> UCAC – Yaoundé, Cameroun</div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-yr">2021</div>
+      <div class="edu-dot"></div>
+      <div class="edu-circle modal-trigger" data-modal="me-ucac1"><img src="images/logos-edu/ucac.png" alt="UCAC"></div>
+      <div class="edu-ttl">Licence en Comptabilité & Finance</div>
+      <div class="edu-loc"><i class="fas fa-map-marker-alt"></i> UCAC – Yaoundé, Cameroun</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="reveal">
+  <div class="contact-in">
+    <div>
+      <div class="ct-eyebrow"></div>
+      <h2 class="ct-title">Prenons <em>contact</em></h2>
+      <p class="ct-desc">Actuellement à la recherche d'un stage de 6 mois, <strong>dès que possible</strong>. Ouvert aux opportunités dans les métiers de la finance.</p>
+      <div class="ct-info">
+        <div class="ct-irow"><i class="fas fa-map-marker-alt"></i>Toulouse · Mobilité nationale</div>
+      </div>
+    </div>
+    <div class="ct-cards">
+      <a href="mailto:r.adammbea@gmail.com" class="ct-card">
+        <div class="ct-cico em"><i class="fas fa-envelope"></i></div>
+        <div><div class="ct-clbl">Email</div><div class="ct-cval">Envoyer un message</div></div>
+        <i class="fas fa-arrow-right ct-arr"></i>
+      </a>
+      <a href="https://linkedin.com/in/adam-mbea" target="_blank" rel="noopener" class="ct-card">
+        <div class="ct-cico li"><i class="fab fa-linkedin-in"></i></div>
+        <div><div class="ct-clbl">LinkedIn</div><div class="ct-cval">Connecter sur LinkedIn</div></div>
+        <i class="fas fa-arrow-right ct-arr"></i>
+      </a>
+      <a href="cv/cv_adam_mbea.pdf" target="_blank" class="ct-card">
+        <div class="ct-cico cv"><i class="fas fa-file-pdf"></i></div>
+        <div><div class="ct-clbl">CV</div><div class="ct-cval">Télécharger mon CV</div></div>
+        <i class="fas fa-arrow-right ct-arr"></i>
+      </a>
+    </div>
+  </div>
+  <footer>
+    <div class="ft-logo">Adam Mbea</div>
+    <span class="ft-copy">© 2025 · Finance & Audit · TBS Education</span>
+    <div class="ft-links">
+      <a href="#hero">Accueil</a>
+    </div>
+  </footer>
+</section>
+
+</div><!-- /container -->
+</main>
+
+<!-- DOCK NAV -->
+<nav class="dock" aria-label="Navigation rapide">
+  <a href="#hero" data-spy="hero"><i class="fas fa-house"></i><span class="tooltip">Accueil</span></a>
+  <a href="#about" data-spy="about"><i class="fas fa-user"></i><span class="tooltip">Profil</span></a>
+  <div class="dock-sep"></div>
+  <a href="#experience" data-spy="experience"><i class="fas fa-briefcase"></i><span class="tooltip">Expériences</span></a>
+  <a href="#projects" data-spy="projects"><i class="fas fa-diagram-project"></i><span class="tooltip">Projets</span></a>
+  <a href="#skills" data-spy="skills"><i class="fas fa-wrench"></i><span class="tooltip">Compétences</span></a>
+  <div class="dock-sep"></div>
+  <a href="#education" data-spy="education"><i class="fas fa-graduation-cap"></i><span class="tooltip">Formation</span></a>
+  <a href="#contact" data-spy="contact"><i class="fas fa-envelope"></i><span class="tooltip">Contact</span></a>
+</nav>
+
+<a href="#hero" class="btt"><i class="fas fa-arrow-up"></i></a>
+
+<!-- EXPERIENCE MODALS -->
+  <!-- Modal Kactus -->
+<div class="mo" id="me-kactus"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><img class="mh-logo" src="images/logos-exp/kactus.png" alt="Kactus"><div><div class="mh-co">Chargé de facturation - stage</div><div class="mh-role">Kactus</div><div class="mh-meta"><span><i class="fas fa-calendar"></i> sept. 2025 – oct. 2025</span><span><i class="fas fa-map-marker-alt"></i> Paris</span></div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb">
+    <div class="mb-block"><h4><i class="fas fa-list-ul"></i>Missions</h4><ul><li>Gérer plus de 400 bookings sur Front</li><li>Réaliser la facturation clients et partenaires</li><li>Résoudre les litiges en coordination avec les équipes Évènementiel, Supply et Support</li><li>Améliorer l'outil de facturation</li><li>Concevoir sur Excel un outil pour automatiser le calcul des commissions</li></ul></div>
+    <div class="mb-block"><h4><i class="fas fa-star"></i>Compétences mobilisées</h4><div class="m-tags"><span>Excel</span><span>Front</span><span>Slack</span><span>Communication</span><span>Travail en équipe</span></div></div>
+  </div>
+</div></div>
+<!-- Modal CNPS -->
+<div class="mo" id="me-cnps"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><img class="mh-logo" src="images/logos-exp/cnps.jpg" alt="CNPS"><div><div class="mh-co">Collaborateur comptable - CDD</div><div class="mh-role">Caisse Nationale de Prévoyance Sociale</div><div class="mh-meta"><span><i class="fas fa-calendar"></i> oct. 2023 – juil. 2024</span><span><i class="fas fa-map-marker-alt"></i> Yaoundé</span></div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb">
+    <div class="mb-block"><h4><i class="fas fa-list-ul"></i>Missions</h4><ul><li>Traitement des opérations comptables courantes</li><li>Réconciliations bancaires et contrôle des flux</li><li>Préparation de reportings financiers hebdomadaires</li><li>Support à l'analyse des états financiers</li></ul></div>
+    <div class="mb-block"><h4><i class="fas fa-star"></i>Compétences mobilisées</h4><div class="m-tags"><span>Comptabilité</span><span>Finance bancaire</span><span>Excel</span><span>Analyse financière</span></div></div>
+  </div>
+</div></div>
+<!-- Modal PAK -->
+<div class="mo" id="me-pak"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><img class="mh-logo" src="images/logos-exp/pak.jpg" alt="PAK"><div><div class="mh-co">Contrôleur de gestion - Stage</div><div class="mh-role">Port Autonome de Kribi</div><div class="mh-meta"><span><i class="fas fa-calendar"></i> mai 2022 – oct. 2022</span><span><i class="fas fa-map-marker-alt"></i> Kribi</span></div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb">
+    <div class="mb-block"><h4><i class="fas fa-list-ul"></i>Missions</h4><ul><li>Assistance au contrôle fiscal des entreprises</li><li>Analyse de déclarations fiscales</li><li>Rédaction de notes de synthèse</li></ul></div>
+    <div class="mb-block"><h4><i class="fas fa-star"></i>Compétences mobilisées</h4><div class="m-tags"><span>Fiscalité</span><span>Droit fiscal</span><span>Analyse</span></div></div>
+  </div>
+</div></div>
+<!-- Modal Palm Beach -->
+<div class="mo" id="me-palm_beach"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><img class="mh-logo" src="images/logos-exp/palm_beach.png" alt="Palm Beach"><div><div class="mh-co">Assistant comptable & chargé de reporting - Stage</div><div class="mh-role">Hôtel Palm Beach Plus</div><div class="mh-meta"><span><i class="fas fa-calendar"></i> jui. 2021 - oct. 2021</span><span><i class="fas fa-map-marker-alt"></i> Kribi</span></div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb">
+    <div class="mb-block"><h4><i class="fas fa-list-ul"></i>Missions</h4><ul><li>Assistance au contrôle fiscal des entreprises</li><li>Analyse de déclarations fiscales</li><li>Rédaction de notes de synthèse</li></ul></div>
+    <div class="mb-block"><h4><i class="fas fa-star"></i>Compétences mobilisées</h4><div class="m-tags"><span>Fiscalité</span><span>Droit fiscal</span><span>Analyse</span></div></div>
+  </div>
+</div></div>
+
+<!-- PROJECT MODALS -->
+<div class="mo" id="mp-rep"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><div class="mh-icon rep"><i class="fas fa-chart-bar"></i></div><div><div class="mh-cat">Reporting</div><div class="mh-ttl">Tableau de bord Power BI</div><div class="mh-ctx"><i class="fas fa-calendar"></i> 2024–2025</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-bullseye"></i>Objectif</h4><p>Concevoir un outil de suivi mensuel des écarts budgétaires pour le service commercial d'un casino, en automatisant la collecte et la visualisation des données.</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Réalisations</h4><ul><li>Connexion à des sources multiples via Power Query</li><li>Modélisation des données et calculs DAX</li><li>Réduction du temps de reporting de 35%</li></ul></div><div class="mb-block"><h4><i class="fas fa-wrench"></i>Outils</h4><div class="m-tags"><span>Power BI</span><span>DAX</span><span>Power Query</span><span>Excel</span></div></div></div>
+</div></div>
+
+<div class="mo" id="mp-aud"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><div class="mh-icon aud"><i class="fas fa-shield-halved"></i></div><div><div class="mh-cat">Audit</div><div class="mh-ttl">Audit processus achats</div><div class="mh-ctx"><i class="fas fa-calendar"></i> 2024</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-bullseye"></i>Objectif</h4><p>Évaluer le niveau de contrôle interne sur le cycle achats-fournisseurs et formuler des recommandations d'amélioration.</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Réalisations</h4><ul><li>Cartographie des risques selon référentiel COSO</li><li>Tests de conformité et d'efficacité</li><li>12 recommandations hiérarchisées par criticité</li></ul></div><div class="mb-block"><h4><i class="fas fa-wrench"></i>Outils</h4><div class="m-tags"><span>Audit interne</span><span>COSO</span><span>Matrice des risques</span></div></div></div>
+</div></div>
+
+<div class="mo" id="mp-ctrl"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><div class="mh-icon ctrl"><i class="fas fa-gears"></i></div><div><div class="mh-cat">CDG</div><div class="mh-ttl">Automatisation Excel VBA</div><div class="mh-ctx"><i class="fas fa-calendar"></i> 2024</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-bullseye"></i>Objectif</h4><p>Automatiser le traitement mensuel des données comptables pour générer des rapports standardisés en quelques secondes.</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Réalisations</h4><ul><li>Macro VBA de traitement et consolidation</li><li>Génération automatique de rapports PDF</li><li>Économie de 8 heures par mois</li></ul></div><div class="mb-block"><h4><i class="fas fa-wrench"></i>Outils</h4><div class="m-tags"><span>Excel VBA</span><span>Power Query</span></div></div></div>
+</div></div>
+
+  <!-- Retraitement de fichier texte -->
+<div class="mo" id="mp-retraitement"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><div class="mh-icon mod"><i class="fas fa-building-columns"></i></div><div><div class="mh-cat">Automatisation</div><div class="mh-ttl">Retraitement de fichier texte</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-bullseye"></i>Objectif</h4><p>Mettre en place un outil capable de traiter et transformer automatiquement des fichiers texte bruts afin d’en améliorer la qualité, la lisibilité et l’exploitation. L'outil a pour but de fiabiliser les données, de réduire les tâches manuelles et de préparer les fichiers pour une utilisation dans des processus d’analyse ou d’intégration.</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Réalisations</h4><ul><li>Nettoyage des données</li><li>Extraction et structuration des informations utiles</li><li>Production de sorties exploitables</li></ul></div><div class="mb-block"><h4><i class="fas fa-wrench"></i>Outils</h4><div class="m-tags"><span>Excel</span><span>VBA</span></div></div></div>
+</div></div>
+
+<!-- EDUCATION MODALS -->
+  <!-- Modal TBS -->
+<div class="mo" id="me-tbs"><div class="mc">
+  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/tbs.png" alt="TBS"></div><div><h2>Mastère Spécialisé </h2><div class="edu-mschool">TBS Education – Toulouse</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Spécialisation</h4><p>Expert en Audit Interne et Contrôle de Gestion</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Audit interne avancé</li><li>Contrôle de gestion stratégique</li><li>Finance d'entreprise</li><li>Data Analytics & Business Intelligence</li></ul></div><div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Audit interne</span><span>Contrôle de gestion</span><span>Data Analytics</span></div></div></div>
+</div></div>
+  <!-- Modal EDC -->
+<div class="mo" id="me-edc"><div class="mc">
+  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/edc.png" alt="EDC"></div><div><h2>Programme Grande École</h2><div class="edu-mschool">EDC Paris Business School</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Spécialisation</h4><p>Audit & Contrôle de Gestion</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Contrôle de gestion avancé</li><li>Audit financier et opérationnel</li><li>Finance d'entreprise</li><li>Management stratégique</li></ul></div><div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Audit financier</span><span>Finance d'entreprise</span><span>Analyse stratégique</span></div></div></div>
+</div></div>
+  <!-- Modal UCAC Master -->
+<div class="mo" id="me-ucac2"><div class="mc">
+  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/ucac.png" alt="UCAC"></div><div><h2>Master</h2><div class="edu-mschool">Université Catholique d'Afrique Centrale</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Spécialisation</h4><p>Comptabilité et Finance d'Entreprises</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Analyse financière approfondie</li><li>Contrôle de gestion opérationnel et stratégique</li><li>Décision de financement et d'investissement</li><li>Droit fiscal</li><li>Finance de marché</li><li>Fusion et consolidation des entités</li><li>Gestion de la trésorerie</li><li>Ingénierie financière</li></ul></div><!--div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Comptabilité générale</span><span>Analyse financière</span><span>Fiscalité</span></div></div--></div>
+</div></div>
+  <!-- Modal UCAC Licence -->
+<div class="mo" id="me-ucac1"><div class="mc">
+  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/ucac.png" alt="UCAC"></div><div><h2>Licence</h2><div class="edu-mschool">Université Catholique d'Afrique Centrale</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Spécialisation</h4><p>Comptabilité et Finance d'Entreprises</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Analyse financière</li><li>Audit interne et contrôle interne</li><li>Cadre comptable</li><li>Comptabilité approfondie</li><li>Comptabilité de gestion</li><li>Fiscalité des entreprises</li><li>Gestion de la trésorerie</li></ul></div><!--div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Comptabilité générale</span><span>Analyse financière</span><span>Fiscalité</span></div></div--></div>
+</div></div>
+
+<script>
+'use strict';
+// Nav scroll
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+
+// Theme toggle
+(function(){
+  const btn = document.getElementById('themeBtn');
+  const icon = document.getElementById('themeIcon');
+  const html = document.documentElement;
+  icon.className = html.dataset.theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  btn.addEventListener('click', () => {
+    const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    html.dataset.theme = next;
+    icon.className = next === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    localStorage.setItem('theme', next);
+  });
+})();
+
+// Animated background canvas
+(function(){
+  const canvas = document.getElementById('bg-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let rafId;
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  function mkDot(){ return { x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, vx: (Math.random()-.5)*.8, vy: (Math.random()-.5)*.8 }; }
+  resize();
+  const N = Math.floor(canvas.width * canvas.height / 8000);
+  const MAX_DIST = 120;
+  const dots = Array.from({length:N}, mkDot);
+  function draw(){
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for(let i=0; i<dots.length; i++){
+      for(let j=i+1; j<dots.length; j++){
+        const dx=dots[i].x-dots[j].x, dy=dots[i].y-dots[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<MAX_DIST){
+          const a=(1-d/MAX_DIST)*(isDark?.18:.10);
+          ctx.beginPath(); ctx.moveTo(dots[i].x,dots[i].y); ctx.lineTo(dots[j].x,dots[j].y);
+          ctx.strokeStyle=`rgba(59,130,246,${a})`; ctx.lineWidth=.8; ctx.stroke();
         }
-        });
-        }, { threshold: 0.15 });
+      }
+    }
+    dots.forEach(d=>{
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+      ctx.fillStyle=isDark?'rgba(59,130,246,0.5)':'rgba(59,130,246,0.25)';
+      ctx.fill();
+      d.x+=d.vx; d.y+=d.vy;
+      if(d.x<0||d.x>canvas.width) d.vx*=-1;
+      if(d.y<0||d.y>canvas.height) d.vy*=-1;
+    });
+    rafId=requestAnimationFrame(draw);
+  }
+  resize();
+  window.addEventListener('resize', ()=>{ cancelAnimationFrame(rafId); resize(); dots.length=0; Array.from({length:N},mkDot).forEach(d=>dots.push(d)); draw(); });
+  draw();
+})();
 
-        document.querySelectorAll('.experience-timeline-item').forEach(item => {
-        expObserver.observe(item);
-        });
+// Stats counter
+const ease = t => 1 - Math.pow(1-t, 3);
+const io1 = new IntersectionObserver((ents, obs) => ents.forEach(e => {
+  if(!e.isIntersecting) return;
+  const el=e.target, t=+el.dataset.t, d=1600, s=performance.now();
+  const tick=n=>{ const p=Math.min((n-s)/d,1); el.textContent=Math.round(ease(p)*t); if(p<1)requestAnimationFrame(tick); };
+  requestAnimationFrame(tick); obs.unobserve(el);
+}), {threshold:.5});
+document.querySelectorAll('[data-t]').forEach(el => io1.observe(el));
 
-        // Ouvrir modal
-        document.querySelectorAll('[data-exp-modal]').forEach(btn => {
-        btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-exp-modal');
-        document.getElementById(id).classList.add('active');
-        document.body.style.overflow = 'hidden';
-        });
-        });
+// Skills bento reveal
+const io2 = new IntersectionObserver((ents,obs)=>ents.forEach(e=>{
+  if(!e.isIntersecting)return;
+  setTimeout(()=>e.target.classList.add('visible'),+e.target.dataset.d||0);
+  obs.unobserve(e.target);
+}),{threshold:.1});
+document.querySelectorAll('.bc').forEach(el=>io2.observe(el));
 
-        // Fermer via ✕
-        document.querySelectorAll('.exp-modal-close').forEach(btn => {
-        btn.addEventListener('click', () => {
-        btn.closest('.exp-modal-overlay').classList.remove('active');
-        document.body.style.overflow = '';
-        });
-        });
+// Reveal animations
+if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target); } });
+  },{rootMargin:'0px 0px -60px 0px', threshold:.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el=>el.classList.add('show'));
+}
 
-        // Fermer en cliquant sur le fond
-        document.querySelectorAll('.exp-modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            });
-        });
+// Timeline items reveal
+const io3 = new IntersectionObserver((ents,obs)=>ents.forEach((e,i)=>{
+  if(!e.isIntersecting)return;
+  setTimeout(()=>e.target.classList.add('visible'),i*110);
+  obs.unobserve(e.target);
+}),{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.tl-item').forEach(el=>io3.observe(el));
 
-        // Fermer avec Échap
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-            document.querySelectorAll('.exp-modal-overlay.active').forEach(o => {
-                o.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-            }
-        });
+// Modal manager
+const MM = {
+  active: null, last: null,
+  open(id, t){ const o=document.getElementById(id); if(!o)return; this.active=o; this.last=t||document.activeElement; o.classList.add('active'); document.body.classList.add('locked'); const f=o.querySelectorAll('a,button,[tabindex]'); if(f.length)requestAnimationFrame(()=>f[0].focus({preventScroll:true})); },
+  close(o){ if(!o||!o.classList.contains('active'))return; o.classList.remove('active'); if(!document.querySelector('.mo.active'))document.body.classList.remove('locked'); this.last?.focus?.({preventScroll:true}); this.active=null; },
+  closeAll(){ document.querySelectorAll('.mo.active').forEach(o=>this.close(o)); }
+};
+document.addEventListener('click', e=>{
+  const exp = e.target.closest('[data-exp-modal]');
+  const edu = e.target.closest('.modal-trigger[data-modal]');
+  const prj = e.target.closest('.proj-card[data-pm], .pc-arr');
+  if(exp){ MM.open(exp.dataset.expModal, exp); return; }
+  if(edu){ MM.open(edu.dataset.modal, edu); return; }
+  if(prj){ const card=e.target.closest('.proj-card'); if(card&&card.dataset.pm)MM.open(card.dataset.pm,card); return; }
+  const cl = e.target.closest('.m-close');
+  if(cl){ MM.close(cl.closest('.mo')); return; }
+  if(e.target.classList.contains('mo')) MM.close(e.target);
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape')MM.closeAll(); });
 
-        // Arrêter les vidéos YouTube à la fermeture du modal
-        document.querySelectorAll('.modal-close').forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Stoppe les iframes (YouTube)
-            btn.closest('.modal-overlay').querySelectorAll('iframe').forEach(iframe => {
-                iframe.src = iframe.src;
-            });
+// Project filter
+document.querySelectorAll('.fbtn').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const f=btn.dataset.f;
+  document.querySelectorAll('.proj-card').forEach(c=>{
+    const show=f==='all'||c.dataset.cat===f;
+    c.classList.toggle('hidden',!show);
+  });
+}));
 
-            btn.closest('.modal-overlay').classList.remove('active');
-            document.body.style.overflow = '';
-        });
-        });
+// Back to top
+const btt = document.querySelector('.btt');
+window.addEventListener('scroll',()=>btt.classList.toggle('visible',scrollY>400),{passive:true});
 
-    </script>
-
+// Scroll spy for dock
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.dock a[data-spy]');
+new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      navLinks.forEach(link=>{ link.classList.remove('active'); if(link.dataset.spy===entry.target.id)link.classList.add('active'); });
+    }
+  });
+},{rootMargin:'-50% 0px -50% 0px'}).observe.call(
+  new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        navLinks.forEach(link=>{ link.classList.remove('active'); if(link.dataset.spy===entry.target.id)link.classList.add('active'); });
+      }
+    });
+  },{rootMargin:'-50% 0px -50% 0px'}),
+  ...Array.from(sections)
+);
+// Simplified scroll spy
+window.addEventListener('scroll', ()=>{
+  let current='';
+  sections.forEach(s=>{ if(scrollY>=s.offsetTop-200)current=s.id; });
+  navLinks.forEach(link=>{ link.classList.toggle('active',link.dataset.spy===current); });
+},{passive:true});
+</script>
 </body>
 </html>
-
-

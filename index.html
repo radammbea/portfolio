@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adam Mbea · Portfolio</title>
+  <title>Portfolio · Adam Mbea</title>
   <meta name="description" content="Portfolio Adam Mbea — Auditeur junior, Finance & Audit, TBS Education">
 
   <script>
@@ -311,7 +311,7 @@
     }
     .acard:hover .acard-ico { transform: rotate(-6deg) scale(1.1); }
     .acard h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 7px; }
-    .acard p { font-size: .8rem; color: var(--muted); line-height: 1.65; font-weight: 300; }
+    .acard p { font-size: .8rem; color: var(--muted); line-height: 1.65; font-weight: 300; text-align: left; }
 
     /* ── TIMELINE ── */
     #experience { border-bottom: 1px solid var(--border); }
@@ -440,6 +440,52 @@
     .pc-arr:hover { background: var(--p1); color: white; border-color: var(--p1); }
     .proj-card.hidden { display: none; }
 
+    /* ── PROJECTS SLIDER ── */
+
+    .slider-wrapper { position: relative; margin: auto; overflow: hidden;
+    }
+    .slider { display: flex; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; }
+
+    .slider::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide-page {
+      min-width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(180, 180, 180, 0.5);
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .slider-btn.left {
+      left: 10px;
+    }
+
+    .slider-btn.right {
+      right: 10px;
+    }
+
+    /* classe pour cacher */
+    .hidden {
+      display: none;
+    }
+
     /* ── SKILLS BENTO ── */
     #skills { border-bottom: 1px solid var(--border); }
     .bento { display: grid; grid-template-columns: repeat(12,1fr); gap: 14px; margin-top: 52px; }
@@ -563,11 +609,12 @@
       padding: 80px 48px;
     }
     .ct-eyebrow {
-            width: 100px;
+      width: 100px;
       height: 3px;
       background: var(--p1);
       margin-bottom: 10px;
-      border-radius: 3px;}
+      border-radius: 3px;
+    }
 
     .ct-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--p1); }
     .ct-title { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; line-height: 1.05; color: var(--text); margin-bottom: 18px; }
@@ -634,7 +681,7 @@
     .mo.active { opacity: 1; pointer-events: all; }
     .mc {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); width: 100%; max-width: 600px; max-height: 88vh;
+      border-radius: var(--r); width: 100%; max-width: 80%; max-height: 88vh;
       overflow-y: auto; box-shadow: 0 32px 80px rgba(0,0,0,.4);
       transform: translateY(28px) scale(.97); transition: transform .38s var(--spring);
       scrollbar-width: thin; scrollbar-color: var(--border) transparent;
@@ -693,12 +740,12 @@
     .mh-cat { font-size: .62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--p1); margin-bottom: 3px; }
     .mh-ttl { font-size: 1.15rem; font-weight: 700; color: var(--text); }
     .mh-ctx { font-size: .72rem; color: var(--muted-2); display: flex; align-items: center; gap: 5px; margin-top: 3px; }
+    
     /* edu modal */
     .edu-mh {
       padding: 24px 30px; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 16px; position: relative;
     }
-    .mh-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--p1), var(--p2)); }
     .edu-mlogo {
       width: 58px; height: 58px; border-radius: 50%;
       background: var(--card-2); border: 1px solid var(--border);
@@ -799,7 +846,7 @@
     <div class="avail-badge"><span class="dot"></span>Disponible dès que possible</div>
     <div class="hero-tag"><i class="fas fa-graduation-cap"></i> MS AICG · TBS Education</div>
     <h1 class="hero-title">
-      <span class="line1">Finance &amp; Comptabilité</span>
+      <span class="line1">Audit, Contrôle de gestion &amp; Finance</span>
       <span class="line2"><span class="grad-text">PORTFOLIO</span></span>
     </h1>
     <p style="text-align: center;" class="hero-sub">Mastère Spécialisé · <strong>TBS Education, Toulouse</strong><br>Fiabilisation des données, analyse et pilotage de la performance.</p>
@@ -808,7 +855,7 @@
       <a href="#experience" class="btn btn-outline"><i class="fas fa-briefcase"></i>Mon parcours</a>
     </div>
   </div>
-  <div class="hero-scroll"><div class="hero-scroll-line"></div></div>
+  <div class="hero-scroll" aria-hidden="true"><div class="hero-scroll-line"></div></div>
 </section>
 
 <!-- STATS BAND -->
@@ -845,22 +892,22 @@
       <div class="acard">
         <div class="acard-ico"><i class="fas fa-chart-line"></i></div>
         <h3>Contrôle de gestion</h3>
-        <p textalign="left">Suivi budgétaire, analyse des écarts, reporting et KPIs d'aide à la décision.</p>
+        <p>Suivi budgétaire, analyse des écarts, reporting et KPIs d'aide à la décision.</p>
       </div>
       <div class="acard">
         <div class="acard-ico"><i class="fas fa-shield-halved"></i></div>
         <h3>Audit interne</h3>
-        <p style="text-align: left;">Analyses des systèmes et des processus, cartographie et gestion des risques.</p>
+        <p>Analyses des systèmes et des processus, cartographie et gestion des risques.</p>
       </div>
       <div class="acard">
         <div class="acard-ico"><i class="fas fa-file-invoice"></i></div>
         <h3>Comptabilité & IFRS</h3>
-        <p style="text-align: left;">Comptabilité générale, normes internationales et consolidation de groupe.</p>
+        <p>Comptabilité générale, normes internationales et consolidation de groupe.</p>
       </div>
       <div class="acard">
         <div class="acard-ico"><i class="fas fa-database"></i></div>
         <h3>Outils & Reporting</h3>
-        <p style="text-align: left;">Excel avancé, Power BI, Power Query, VBA pour l'automatisation, l'analyse et la restitution financière.</p>
+        <p>Excel avancé, Power BI, Power Query, VBA pour l'automatisation, l'analyse et la restitution financière.</p>
       </div>
     </div>
   </div>
@@ -925,21 +972,21 @@
         </div>
       </div>
 
-        <div class="tl-item">
-            <div class="tl-yr">2021</div>
-            <div class="tl-dot"></div>
-            <div class="tl-card">
-            <div class="tl-head">
-                <img class="tl-logo" src="images/logos-exp/palm_beach.png" alt="Palm Beach">
-                <div>
-                <div class="tl-co">Assistant comptable & chargé de reporting</div>
-                <div class="tl-role">Hôtel Palm Beach Plus</div>
-                <div class="tl-loc"><i class="fas fa-map-marker-alt"></i> Kribi, Cameroun</div>
-                </div>
-                <span class="tl-badge">4 mois</span>
+      <div class="tl-item">
+        <div class="tl-yr">2021</div>
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <img class="tl-logo" src="images/logos-exp/palm_beach.png" alt="Palm Beach">
+            <div>
+              <div class="tl-co">Assistant comptable & chargé de reporting</div>
+              <div class="tl-role">Hôtel Palm Beach Plus</div>
+              <div class="tl-loc"><i class="fas fa-map-marker-alt"></i> Kribi, Cameroun</div>
             </div>
-            <button class="tl-btn" data-exp-modal="me-palm_beach"><i class="fas fa-plus"></i> Détails</button>
-            </div>
+            <span class="tl-badge">4 mois</span>
+          </div>
+          <button class="tl-btn" data-exp-modal="me-palm_beach"><i class="fas fa-plus"></i> Détails</button>
+        </div>
       </div>
     </div>
   </div>
@@ -958,63 +1005,76 @@
     <button class="fbtn" data-f="auto">Automatisation</button>
   </div>
 
-  <div class="proj-grid">
-    <div class="proj-card" data-cat="rep" data-pm="mp-rep">
-      <div class="pc-top">
-        <div class="pc-ico rep"><i class="fas fa-chart-bar"></i></div>
-        <span class="pc-badge rep">Reporting</span>
-      </div>
-      <div class="pc-title">Tableau de bord Power BI</div>
-      <div class="pc-desc">Analyse des écarts budgétaires et reporting automatisé pour un service commercial — suivi mensuel des KPIs.</div>
-      <div class="pc-result"><i class="fas fa-check-circle"></i> −35% de temps de reporting</div>
-      <div class="pc-foot">
-        <div class="pc-tags"><span>Power BI</span><span>DAX</span><span>Excel</span></div>
-        <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
-      </div>
+  <div class="slider-wrapper">
+
+      <button class="slider-btn left" id="prevBtn">&#10094;</button>
+    
+      <div class="slider" id="projectsSlider">
+        <!-- Page 1 -->
+        <div class="slide-page">
+          <div class="proj-card" data-cat="rep" data-pm="mp-rep">
+            <div class="pc-top">
+              <div class="pc-ico rep"><i class="fas fa-chart-bar"></i></div>
+              <span class="pc-badge rep">Reporting</span>
+            </div>
+            <div class="pc-title">Tableau de bord Power BI</div>
+            <div class="pc-desc">Analyse des écarts budgétaires et reporting automatisé pour un service commercial — suivi mensuel des KPIs.</div>
+            <div class="pc-result"><i class="fas fa-check-circle"></i> −35% de temps de reporting</div>
+            <div class="pc-foot">
+              <div class="pc-tags"><span>Power BI</span><span>DAX</span><span>Excel</span></div>
+              <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+
+          <div class="proj-card" data-cat="aud" data-pm="mp-aud">
+            <div class="pc-top">
+              <div class="pc-ico aud"><i class="fas fa-shield-halved"></i></div>
+              <span class="pc-badge aud">Audit</span>
+            </div>
+            <div class="pc-title">Audit processus achats</div>
+            <div class="pc-desc">Cartographie des risques et recommandations pour améliorer le contrôle interne sur le cycle achats-fournisseurs.</div>
+            <div class="pc-result"><i class="fas fa-check-circle"></i> 12 recommandations formulées</div>
+            <div class="pc-foot">
+              <div class="pc-tags"><span>Audit interne</span><span>Risques</span><span>COSO</span></div>
+              <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+
+          <!-- Retraitement de fichier texte -->
+          <div class="proj-card" data-cat="auto" data-pm="mp-retraitement">
+            <div class="pc-top">
+              <div class="pc-ico auto"><i class="fas fa-building-columns"></i></div>
+              <span class="pc-badge auto">Automatisation</span>
+            </div>
+            <div class="pc-title">Retraitement de fichier texte</div>
+            <div class="pc-desc">Automatiser la récupération et le retraitement de fichiers texte pour améliorer leur qualité et faciliter leur exploitation.</div>
+            <div class="pc-result"><i class="fas fa-check-circle"></i> 3 entités consolidées</div>
+            <div class="pc-foot">
+              <div class="pc-tags"><span>Excel</span><span>VBA</span></div>
+              <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="slide-page">
+          <div class="proj-card" data-cat="ctrl" data-pm="mp-ctrl">
+            <div class="pc-top">
+              <div class="pc-ico ctrl"><i class="fas fa-gears"></i></div>
+              <span class="pc-badge ctrl">CDG</span>
+            </div>
+            <div class="pc-title">Automatisation Excel VBA</div>
+            <div class="pc-desc">Macro pour le traitement automatisé des données comptables et génération de rapports mensuels standardisés.</div>
+            <div class="pc-result"><i class="fas fa-check-circle"></i> 8h économisées/mois</div>
+            <div class="pc-foot">
+              <div class="pc-tags"><span>Excel VBA</span><span>Power Query</span></div>
+              <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
     </div>
 
-    <div class="proj-card" data-cat="aud" data-pm="mp-aud">
-      <div class="pc-top">
-        <div class="pc-ico aud"><i class="fas fa-shield-halved"></i></div>
-        <span class="pc-badge aud">Audit</span>
-      </div>
-      <div class="pc-title">Audit processus achats</div>
-      <div class="pc-desc">Cartographie des risques et recommandations pour améliorer le contrôle interne sur le cycle achats-fournisseurs.</div>
-      <div class="pc-result"><i class="fas fa-check-circle"></i> 12 recommandations formulées</div>
-      <div class="pc-foot">
-        <div class="pc-tags"><span>Audit interne</span><span>Risques</span><span>COSO</span></div>
-        <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
-      </div>
-    </div>
-
-    <div class="proj-card" data-cat="ctrl" data-pm="mp-ctrl">
-      <div class="pc-top">
-        <div class="pc-ico ctrl"><i class="fas fa-gears"></i></div>
-        <span class="pc-badge ctrl">CDG</span>
-      </div>
-      <div class="pc-title">Automatisation Excel VBA</div>
-      <div class="pc-desc">Macro pour le traitement automatisé des données comptables et génération de rapports mensuels standardisés.</div>
-      <div class="pc-result"><i class="fas fa-check-circle"></i> 8h économisées/mois</div>
-      <div class="pc-foot">
-        <div class="pc-tags"><span>Excel VBA</span><span>Power Query</span></div>
-        <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
-      </div>
-    </div>
-
-    <!-- Retraitement de fichier texte -->
-    <div class="proj-card" data-cat="auto" data-pm="mp-retraitement">
-      <div class="pc-top">
-        <div class="pc-ico auto"><i class="fas fa-building-columns"></i></div>
-        <span class="pc-badge auto">Automatisation</span>
-      </div>
-      <div class="pc-title">Retraitement de fichier texte</div>
-      <div class="pc-desc">Automatiser la récupération et le retraitement de fichiers texte pour améliorer leur qualité et faciliter leur exploitation.</div>
-      <div class="pc-result"><i class="fas fa-check-circle"></i> 3 entités consolidées</div>
-      <div class="pc-foot">
-        <div class="pc-tags"><span>Excel</span><span>VBA</span></div>
-        <button class="pc-arr"><i class="fas fa-arrow-right"></i></button>
-      </div>
-    </div>
+    <button class="slider-btn right" id="nextBtn">&#10095;</button>
   </div>
 </section>
 
@@ -1074,7 +1134,7 @@
         <div class="srow"><i class="fas fa-bullseye"></i> Rigueur & précision</div>
         <div class="srow"><i class="fas fa-comments"></i> Communication</div>
         <div class="srow"><i class="fas fa-bolt"></i><span>Proactivité</span></div>
-        <div class="srow"><i class="fas fa-random"></i> Adaptabilité</div>
+        <div class="srow"><i class="fas fa-arrows-rotate"></i> Adaptabilité</div>
         <div class="srow"><i class="fas fa-brain"></i> Gestion du stress</div>
       </div>
     </div>
@@ -1116,14 +1176,14 @@
     <div class="edu-item">
       <div class="edu-yr">2023</div>
       <div class="edu-dot"></div>
-      <div class="edu-circle modal-trigger" data-modal="me-ucac2"><img src="images/logos-edu/ucac.png" alt="UCAC1"></div>
+      <div class="edu-circle modal-trigger" data-modal="me-ucac2"><img src="images/logos-edu/ucac.png" alt="UCAC"></div>
       <div class="edu-ttl">Master en Comptabilité & Finance</div>
       <div class="edu-loc"><i class="fas fa-map-marker-alt"></i> UCAC – Yaoundé, Cameroun</div>
     </div>
     <div class="edu-item">
       <div class="edu-yr">2021</div>
       <div class="edu-dot"></div>
-      <div class="edu-circle modal-trigger" data-modal="me-ucac1"><img src="images/logos-edu/ucac.png" alt="UCAC2"></div>
+      <div class="edu-circle modal-trigger" data-modal="me-ucac1"><img src="images/logos-edu/ucac.png" alt="UCAC"></div>
       <div class="edu-ttl">Licence en Comptabilité & Finance</div>
       <div class="edu-loc"><i class="fas fa-map-marker-alt"></i> UCAC – Yaoundé, Cameroun</div>
     </div>
@@ -1152,7 +1212,7 @@
         <div><div class="ct-clbl">LinkedIn</div><div class="ct-cval">Connecter sur LinkedIn</div></div>
         <i class="fas fa-arrow-right ct-arr"></i>
       </a>
-      <a href="cv/cv_adam_mbea.pdf" target="_blank" class="ct-card">
+      <a href="cv/cv_adam_mbea.pdf" target="_blank" rel="noopener" class="ct-card">
         <div class="ct-cico cv"><i class="fas fa-file-pdf"></i></div>
         <div><div class="ct-clbl">CV</div><div class="ct-cval">Télécharger mon CV</div></div>
         <i class="fas fa-arrow-right ct-arr"></i>
@@ -1188,8 +1248,8 @@
 
 <!-- EXPERIENCE MODALS -->
   <!-- Modal Kactus -->
-<div class="mo" id="me-kactus"><div class="mc">
-  <div class="mh"><div class="mh-stripe"></div><img class="mh-logo" src="images/logos-exp/kactus.png" alt="Kactus"><div><div class="mh-co">Chargé de facturation - stage</div><div class="mh-role">Kactus</div><div class="mh-meta"><span><i class="fas fa-calendar"></i> sept. 2025 – oct. 2025</span><span><i class="fas fa-map-marker-alt"></i> Paris</span></div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+<div class="mo" id="me-kactus" role="dialog" aria-modal="true" aria-label="Kactus"><div class="mc">
+  <div class="mh"><div class="mh-stripe"></div><img class="mh-logo" src="images/logos-exp/kactus.png" alt="Kactus"><div><div class="mh-co">Chargé de facturation - stage</div><div class="mh-role">Kactus</div><div class="mh-meta"><span><i class="fas fa-calendar"></i> sept. 2025 – oct. 2025</span><span><i class="fas fa-map-marker-alt"></i> Paris</span></div></div><button class="m-close" aria-label="Fermer"><i class="fas fa-times"></i></button></div>
   <div class="mb">
     <div class="mb-block"><h4><i class="fas fa-list-ul"></i>Missions</h4><ul><li>Gérer plus de 400 bookings sur Front</li><li>Réaliser la facturation clients et partenaires</li><li>Résoudre les litiges en coordination avec les équipes Évènementiel, Supply et Support</li><li>Améliorer l'outil de facturation</li><li>Concevoir sur Excel un outil pour automatiser le calcul des commissions</li></ul></div>
     <div class="mb-block"><h4><i class="fas fa-star"></i>Compétences mobilisées</h4><div class="m-tags"><span>Excel</span><span>Front</span><span>Slack</span><span>Communication</span><span>Travail en équipe</span></div></div>
@@ -1245,23 +1305,23 @@
 <!-- EDUCATION MODALS -->
   <!-- Modal TBS -->
 <div class="mo" id="me-tbs"><div class="mc">
-  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/tbs.png" alt="TBS"></div><div><h2>Mastère Spécialisé </h2><div class="edu-mschool">TBS Education – Toulouse</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
-  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Spécialisation</h4><p>Expert en Audit Interne et Contrôle de Gestion</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Analyse de la performance économique, financière, sociale et environnementale</li><li>Audit de la fonction ressources humaines</li><li>Audit et contrôle de gestion du système commercial et marketing</li><li>Audit interne et management des risques dans le secteur bancaire</li><li>Audit, contrôle et pilotage de la fonction achat</li><li>Comptabilité de gestion : target costing, méthodes et calcul des coûts</li><li>Comptabilité financière dans le contexte des principes comptables français</li><li>Comptes consolidés et comptes combinés dans le contexte des principes comptables internationaux / Approfondissement aux normes IFRS</li><li>Contrôle de gestion des grands projets, de la RD et de l’innovation</li><li>Contrôle de gestion et audit interne face aux nouveaux enjeux sociaux et sociétaux : Economie Sociale et Solidaire (ESS), contrôle de gestion social</li><li>Contrôle de gestion industriel et contrôle du système de production</li><li>Contrôle du système financier de l'entreprise : contrôle des investissements et gestion de trésorerie</li><li>Gestion prévisionnelle : budgets et reporting dans différents contextes organisationnels</li><li>Mergers and Acquisitions (M&A)</li><li>Normes et méthodes de l’audit et du contrôle interne</li><li>Pilotage de la performance stratégique (financière et extra-financière) : business unit, prix de transfert, tableau de bord et Balanced Scorecard</li></ul></div><div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Analyse financière et pilotage de la performance</span><span>Contrôle de gestion</span><span>Audit interne et contrôle interne</span><span>Management des risques</span><span>Comptabilité financière</span><span>Comptabilité de gestion</span><span>Normes comptables et consolidation</span><span>Pilotage stratégique</span><span>Audit interne</span><span>Gestion de la trésorerie et contrôle des investissements</span><span>Fusion-acquisition</span><span>Excel</span><span>VBA</span><span>Power BI</span></div></div></div>
+  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/tbs.png" alt="TBS"></div><div><h2>Mastère Spécialisé Expert en Audit Interne et Contrôle de Gestion</h2><div class="edu-mschool">TBS Education – Toulouse</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Présentation du programme</h4><p>Le Mastère Spécialisé Expert en Audit Interne et Contrôle de Gestion de TBS Education représente une véritable valeur ajoutée dans mon parcours. Ce cursus m'a permis de développer une double compétence en audit interne et en contrôle de gestion, tout en renforçant ma capacité à analyser les risques, piloter la performance et assurer la conformité aux standards internationaux. À travers cette formation, j’ai appris à transformer les données en outils d’aide à la décision et à apporter une contribution concrète à la création de valeur en entreprise, renforçant mon employabilité et me préparant à occuper des fonctions stratégiques dès le début de ma carrière.</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Analyse de la performance économique, financière, sociale et environnementale</li><li>Audit de la fonction ressources humaines</li><li>Audit et contrôle de gestion du système commercial et marketing</li><li>Audit interne et management des risques dans le secteur bancaire</li><li>Audit, contrôle et pilotage de la fonction achat</li><li>Comptabilité de gestion : target costing, méthodes et calcul des coûts</li><li>Comptabilité financière dans le contexte des principes comptables français</li><li>Comptes consolidés et comptes combinés dans le contexte des principes comptables internationaux / Approfondissement aux normes IFRS</li><li>Contrôle de gestion des grands projets, de la RD et de l’innovation</li><li>Contrôle de gestion et audit interne face aux nouveaux enjeux sociaux et sociétaux : Economie Sociale et Solidaire (ESS), contrôle de gestion social</li><li>Contrôle de gestion industriel et contrôle du système de production</li><li>Contrôle du système financier de l'entreprise : contrôle des investissements et gestion de trésorerie</li><li>Gestion prévisionnelle : budgets et reporting dans différents contextes organisationnels</li><li>Mergers and Acquisitions (M&A)</li><li>Normes et méthodes de l’audit et du contrôle interne</li><li>Pilotage de la performance stratégique (financière et extra-financière) : business unit, prix de transfert, tableau de bord et Balanced Scorecard</li></ul></div><div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Analyse financière</span><span>Contrôle de gestion et pilotage de la performance</span><span>Audit interne et contrôle interne</span><span>Management des risques</span><span>Comptabilité financière</span><span>Comptabilité de gestion</span><span>Normes comptables et consolidation</span><span>Pilotage stratégique</span><span>Audit interne</span><span>Gestion de la trésorerie et contrôle des investissements</span><span>Fusion-acquisition</span><span>Excel</span><span>VBA</span><span>Power BI</span></div></div></div>
 </div></div>
   <!-- Modal EDC -->
 <div class="mo" id="me-edc"><div class="mc">
-  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/edc.png" alt="EDC"></div><div><h2>Programme Grande École</h2><div class="edu-mschool">EDC Paris Business School</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
-  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Spécialisation</h4><p>Audit & Contrôle de Gestion</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Contrôle de gestion avancé</li><li>Audit financier et opérationnel</li><li>Finance d'entreprise</li><li>Management stratégique</li></ul></div><div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Audit financier</span><span>Finance d'entreprise</span><span>Analyse stratégique</span></div></div></ div>
+  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/edc.png" alt="EDC"></div><div><h2>Programme Grande École spécialisation en Audit & Contrôle de Gestion</h2><div class="edu-mschool">EDC Paris Business School</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Présentation du programme</h4><p>Audit & Contrôle de Gestion</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Contrôle de gestion avancé</li><li>Audit financier et opérationnel</li><li>Finance d'entreprise</li><li>Management stratégique</li></ul></div><div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Audit financier</span><span>Finance d'entreprise</span><span>Analyse stratégique</span></div></div></div>
 </div></div>
   <!-- Modal UCAC Master -->
 <div class="mo" id="me-ucac2"><div class="mc">
-  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/ucac.png" alt="UCAC"></div><div><h2>Master</h2><div class="edu-mschool">Université Catholique d'Afrique Centrale</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
-  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Spécialisation</h4><p>Comptabilité et Finance d'Entreprises</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Analyse financière approfondie</li><li>Contrôle de gestion opérationnel et stratégique</li><li>Décision de financement et d'investissement</li><li>Droit fiscal</li><li>Finance de marché</li><li>Fusion et consolidation des entités</li><li>Gestion de la trésorerie</li><li>Ingénierie financière</li></ul></div><!--div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Comptabilité générale</span><span>Analyse financière</span><span>Fiscalité</span></div></div--></div>
+  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/ucac.png" alt="UCAC"></div><div><h2>Master en Comptabilité et Finance d'Entreprises</h2><div class="edu-mschool">Université Catholique d'Afrique Centrale</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Présentation du programme</h4><p>Ce Master m'a permis d’approfondir mes connaissances en comptabilité, finance, fiscalité et analyse financière, tout en développant une vision globale du fonctionnement de l’entreprise. Cette formation renforce ma capacité à produire, interpréter et exploiter l’information financière afin d’accompagner la prise de décision, le pilotage de la performance et la création de valeur. Elle consolide ainsi mon profil de futur professionnel rigoureux, analytique et opérationnel, capable d’évoluer efficacement dans les métiers de la comptabilité, de la finance, de l’audit et du contrôle de gestion.</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Analyse financière approfondie</li><li>Contrôle de gestion opérationnel et stratégique</li><li>Décision de financement et d'investissement</li><li>Droit fiscal</li><li>Finance de marché</li><li>Fusion et consolidation des entités</li><li>Gestion de la trésorerie</li><li>Ingénierie financière</li></ul></div><!--div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Comptabilité générale</span><span>Analyse financière</span><span>Fiscalité</span></div></div--></div>
 </div></div>
   <!-- Modal UCAC Licence -->
 <div class="mo" id="me-ucac1"><div class="mc">
-  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/ucac.png" alt="UCAC"></div><div><h2>Licence</h2><div class="edu-mschool">Université Catholique d'Afrique Centrale</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
-  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Spécialisation</h4><p>Comptabilité et Finance d'Entreprises</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Analyse financière</li><li>Audit interne et contrôle interne</li><li>Cadre comptable</li><li>Comptabilité approfondie</li><li>Comptabilité de gestion</li><li>Fiscalité des entreprises</li><li>Gestion de la trésorerie</li></ul></div><!--div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Comptabilité générale</span><span>Analyse financière</span><span>Fiscalité</span></div></div--></div>
+  <div class="edu-mh"><div class="mh-stripe"></div><div class="edu-mlogo"><img src="images/logos-edu/ucac.png" alt="UCAC"></div><div><h2>Licence en Comptabilité et Finance d'Entreprises</h2><div class="edu-mschool">Université Catholique d'Afrique Centrale</div></div><button class="m-close"><i class="fas fa-times"></i></button></div>
+  <div class="mb"><div class="mb-block"><h4><i class="fas fa-book"></i>Présentation du programme</h4><p>Cette licence constitue une étapes fondamentale dans mon parcours, car elle m’a permis d’acquérir les bases essentielles en comptabilité, finance, fiscalité et gestion. Cette formation m’a donné les outils nécessaires pour comprendre le fonctionnement financier d’une entreprise, analyser les opérations comptables et interpréter les données financières avec rigueur. Elle a également renforcé mon sens de l’organisation, mon esprit d’analyse et ma capacité à appréhender les enjeux économiques de l’entreprise, posant ainsi des bases solides pour poursuivre vers des études plus spécialisées en comptabilité, finance, audit et contrôle de gestion.</p></div><div class="mb-block"><h4><i class="fas fa-list-ul"></i>Matières principales</h4><ul><li>Analyse financière</li><li>Audit interne et contrôle interne</li><li>Cadre comptable</li><li>Comptabilité approfondie</li><li>Comptabilité de gestion</li><li>Fiscalité des entreprises</li><li>Gestion de la trésorerie</li></ul></div><!--div class="mb-block"><h4><i class="fas fa-star"></i>Compétences</h4><div class="m-tags"><span>Comptabilité générale</span><span>Analyse financière</span><span>Fiscalité</span></div></div--></div>
 </div></div>
 
 <script>
@@ -1299,11 +1359,13 @@ window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY
   function draw(){
     const isDark = document.documentElement.dataset.theme === 'dark';
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const MAX_DIST2 = MAX_DIST * MAX_DIST;
     for(let i=0; i<dots.length; i++){
       for(let j=i+1; j<dots.length; j++){
         const dx=dots[i].x-dots[j].x, dy=dots[i].y-dots[j].y;
-        const d=Math.sqrt(dx*dx+dy*dy);
-        if(d<MAX_DIST){
+        const d2=dx*dx+dy*dy;
+        if(d2<MAX_DIST2){
+          const d=Math.sqrt(d2);
           const a=(1-d/MAX_DIST)*(isDark?.18:.10);
           ctx.beginPath(); ctx.moveTo(dots[i].x,dots[i].y); ctx.lineTo(dots[j].x,dots[j].y);
           ctx.strokeStyle=`rgba(59,130,246,${a})`; ctx.lineWidth=.8; ctx.stroke();
@@ -1322,7 +1384,7 @@ window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY
   }
   resize();
   window.addEventListener('resize', ()=>{ cancelAnimationFrame(rafId); resize(); dots.length=0; Array.from({length:N},mkDot).forEach(d=>dots.push(d)); draw(); });
-  draw();
+  if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches) draw();
 })();
 
 // Stats counter
@@ -1399,28 +1461,32 @@ window.addEventListener('scroll',()=>btt.classList.toggle('visible',scrollY>400)
 // Scroll spy for dock
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.dock a[data-spy]');
-new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      navLinks.forEach(link=>{ link.classList.remove('active'); if(link.dataset.spy===entry.target.id)link.classList.add('active'); });
-    }
-  });
-},{rootMargin:'-50% 0px -50% 0px'}).observe.call(
-  new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        navLinks.forEach(link=>{ link.classList.remove('active'); if(link.dataset.spy===entry.target.id)link.classList.add('active'); });
-      }
-    });
-  },{rootMargin:'-50% 0px -50% 0px'}),
-  ...Array.from(sections)
-);
-// Simplified scroll spy
 window.addEventListener('scroll', ()=>{
   let current='';
   sections.forEach(s=>{ if(scrollY>=s.offsetTop-200)current=s.id; });
   navLinks.forEach(link=>{ link.classList.toggle('active',link.dataset.spy===current); });
 },{passive:true});
+
+// Slider controls
+const slider = document.getElementById('projectsSlider');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+
+if (slider && nextBtn && prevBtn) {
+  const pages = slider.querySelectorAll('.slide-page');
+  if (pages.length <= 1) {
+    nextBtn.classList.add('hidden');
+    prevBtn.classList.add('hidden');
+  }
+
+  nextBtn.addEventListener('click', () => {
+    slider.scrollBy({ left: slider.clientWidth, behavior: 'smooth' });
+  });
+
+  prevBtn.addEventListener('click', () => {
+    slider.scrollBy({ left: -slider.clientWidth, behavior: 'smooth' });
+  });
+}
 </script>
 </body>
 </html>
